@@ -1,0 +1,45 @@
+<div class = "container">
+	<div class = "row">
+		<div class = "col-xs-12 col-md-12">
+			<h3 class = "sub-heading">Post a gig</h3>
+			<div class = "content-inner-detail">
+				<%= form_for @gig do |f| %>
+					<div class = "row">
+						<div class = "col-xs-12 col-md-6">
+							<div class = "form-group">
+								<%= f.label :name %>
+								<%= f.text_field :name, class: "form-control input-lg" %>
+							</div>
+						</div>
+
+						<div class = "col-xs-12 col-md-6">
+							<div class = "form-group">
+								<%= f.label :budget %>
+								<%= f.text_field :budget, class: "form-control input-lg" %>
+								<small class = "help-block">ex: $1,000</small>
+							</div>
+						</div>
+
+						<div class = "col-xs-12 col-md-6">
+							<div class = "form-group">
+								<%= f.label :location %>
+								<%= f.text_field :location, class: "form-control input-lg" %>
+								<small class = "help-block">[Denver, San Francisco, Remote, etc.]</small>
+							</div>
+						</div>
+
+						<div class = "col-xs-12 col-md-6">
+							<div class = "form-group">
+								<%= f.label :description %>
+								<%= f.text_area :description, class: "form-control input-lg" %>
+								<small class = "help-block">Tell us everything about your gig [website, virtual assistant, etc.]</small>
+							</div>
+						</div>
+					</div>
+					<br>
+					<%= f.submit "Post this gig", class: "btn btn-primary" %>
+				<% end %>
+			</div>
+		</div>
+	</div>
+</div>

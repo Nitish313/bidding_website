@@ -1,0 +1,32 @@
+<%= form_for(@user) do |f| %>
+  <%= render 'shared/error_messages' %>
+
+  <%= f.label :name %>
+  <%= f.text_field :name, class: 'form-control' %>
+
+  <%= f.label :email %>
+  <%= f.email_field :email, class: 'form-control' %>
+
+  <%= f.label :password %>
+  <%= f.password_field :password, class: 'form-control' %>
+
+  <%= f.label :password_confirmation, "Confirmation" %>
+  <%= f.password_field :password_confirmation, class: 'form-control' %>
+
+  <%= f.label :education %>(Required for Freelancers)
+  <%= f.text_field :education, class: 'form-control' %>
+
+  <%= f.label :experience %>(Required for Freelancers)
+  <%= f.number_field :experience, class: 'form-control' %>
+
+  <%= f.label :industry %>
+  <%= f.text_field :industry, class: 'form-control' %>
+
+  <%= f.label :profile_picture, "Upload Profile Picture" %>
+  <%= f.file_field :profile_picture, class: 'form-control' %>
+
+  <%= f.label :role %>
+  <%= f.select :role, options_for_select(["Client", "Freelancer"]), class: 'form-control' %>
+
+  <%= f.submit yield(:button_text), class: 'btn btn-primary' %>
+<% end %>
