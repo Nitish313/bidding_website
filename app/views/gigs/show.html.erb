@@ -1,1 +1,124 @@
-<h3 class = "sub-heading"><%= @gig.name %></h3>
+<div class = "container">
+	<div class = "row">
+		<h1 class = "sub-heading">Gig Detail
+			<span class = "pull-right">
+				<small>
+					<%= link_to "&larr; All gigs".html_safe, search_gigs_path %>
+				</small>
+			</span>
+		</h1>
+		<div class = "col-xs-12 col-md-8">
+			<section>
+				<h3 class = "sub-heading"><%= @gig.name %><span class = "text-danger"></span></h3>
+				<p><i class = "glyphicon glyphicon-calendar"></i><%= @gig.created_at.strftime("%m/%d/%Y") %> | <i class = "glyphicon glyphicon-map-marker"></i><%= @gig.location.capitalize %> | <%=  @gig.category.name if @gig.category.present? %> <span class = "label label-success"><%= number_to_currency(@gig.budget, precision: 0) %></span></p>
+				<hr />
+				<legend>Description</legend>
+				<p><%= @gig.description %></p>
+				<legend>Skills Wanted</legend>
+				<ul>
+					<% @gig.skills.each do |skill| %>
+						<li><%= skill.name %></li>
+					<% end %>
+				</ul>
+			</section>
+		</div>
+		<div class = "col-xs-12 col-md-4">
+			<legend>Submit a proposal</legend>
+			<% if logged_in? && @gig.user != current_user && current_user.role == "Freelancer" %>
+				<%= form_for :proposal, url: gig_proposals_path(@gig) do |f| %>
+					<div class = "row">
+						<div class="col-xs-12 col-md-12">
+							<div class="form-group">
+								<%= f.label :bid %>
+								<%= f.text_field :bid, class: "form-control input-lg" %>
+								<small class="help-block">Amount of your bid.</small>
+							</div>
+						</div>
+						<div class="col-xs-12 col-md-12">
+							<div class="form-group">
+								<%= f.label :description %>
+								<%= f.text_area :description, rows: 5, class: "form-control input-lg" %>
+								<small class="help-block">Explain the skills needed for this gig.</small>
+							</div>
+						</div>
+					</div>
+					<hr />
+					<%= f.submit "Submit Proposal", class: "btn btn-primary input-lg" %>
+				<% end %>
+			<% elsif @gig.open == false %>
+			  <h3 class="text-center">This gig is closed!</h3>
+			<% elsif logged_in? && current_user.role == "Client" %>
+				<h3 class="text-center">Clients are not allowed to bid on any of the gigs.</h3>
+			<% elsif !logged_in? %>
+				<h3 class="text-center">Sign in to make a bid</h3>
+				<%= link_to "Sign in", login_path %>
+			<% end %>
+		</div>
+		<div class="col-xs-12 col-md-8">
+			<h3 class="sub-heading">Awarded Proposal</h3>
+			<% if @awarded_proposal.present? %>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<div class="row">
+							<div class="col-md-4">
+								<h3 class="panel-title"><%= @awarded_proposal.user.name if @awarded_proposal.user %></h3>
+							</div>
+							<div class="col-md-4">
+								<span class="panel-title">
+									Bid: <%= number_to_currency(@awarded_proposal.bid, precision: 0) %>
+								</span>
+							</div>
+							<div class="col-md-4">
+								<span class="panel-title">
+									Posted: <%= @awarded_proposal.created_at.strftime("%B %d, %Y") %>
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="panel-body">
+						<%= @awarded_proposal.description %>
+					</div>
+				</div>
+			<% end %>
+		</div>
+		<div class="col-xs-12 col-md-8">
+			<h3 class="sub-heading">Proposals</h3>
+			<% if @proposals.present? %>
+				<% @proposals.each do |proposal| %>
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<div class="row">
+								<div class="col-md-4">
+									<h3 class="panel-title"><%= proposal.user.name if proposal.user %></h3>
+								</div>
+								<div class="col-md-4">
+									<span class="panel-title">
+										Bid: <%= number_to_currency(proposal.bid, precision: 0) %>
+									</span>
+								</div>
+								<div class="col-md-4">
+									<span class="panel-title">
+										Posted: <%= proposal.created_at.strftime("%B %d, %Y") %>
+									</span>
+								</div>
+							</div>
+						</div>
+						<div class="panel-body">
+							<%= proposal.description %>
+						</div>
+						<% if current_user == @gig.user && @gig.awarded_proposal.blank? %>
+							<div class="panel-footer">
+								<%= form_for @gig, method: :put do |f| %>
+									<%= f.hidden_field :awarded_proposal, value: proposal.id %>
+									<%= f.hidden_field :open, value: false %>
+									<%= f.submit "Award Proposal" %>
+								<% end %>
+							</div>
+						<% end %>
+					</div>
+				<% end %>
+			<% else %>
+			<% end %>
+		</div>
+	</div>
+</div>

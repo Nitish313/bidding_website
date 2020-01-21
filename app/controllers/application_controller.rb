@@ -2,13 +2,10 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   include SessionsHelper
 
-  def redirect_to_desired(user)
-    if user.role == "Freelancer"
-      redirect_to freelancer_path(user)
-    elsif user.role == "Client"
-      redirect_to client_path(user)
-    else
-      redirect_to root_path
+  def logged_in_user
+    unless logged_in?
+      flash[:danger] = "Please log in first!"
+      redirect_to login_path
     end
   end
 end

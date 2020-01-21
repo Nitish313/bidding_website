@@ -12,9 +12,9 @@ class User < ApplicationRecord
   
   has_secure_password
   validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
-  validates :education, presence: true
-  validates :role, presence: true
-  validates :industry, :experience, presence: true, if: :role_is_freelancer
+  #validates :education, presence: true
+  validates :role, presence: true, unless: :admin
+  #validates :industry, :experience, presence: true, if: :role_is_freelancer
 
   def User.digest(string)
     cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST :
@@ -66,13 +66,13 @@ class User < ApplicationRecord
     reset_sent_at < 2.hours.ago
   end
 
-  def role_is_freelancer
+=begin def role_is_freelancer
     if role == 'Freelancer'
       return true
     else
       return false
     end
-  end
+=end
 
   private
 

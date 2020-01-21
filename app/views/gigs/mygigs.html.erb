@@ -1,0 +1,34 @@
+<div class="container">
+	<h3>My Gigs<small class="pull-right"><%= @gigs.count %> total</small></h3>
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th class="text-center">Status</th>
+				<th>Name</th>
+				<th>Category</th>
+				<th>Budget</th>
+				<th class="text-center">Proposals</th>
+				<th colspan="3"></th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @gigs.each do |gig| %>
+				<tr>
+				 <td>
+				 	<% if gig.open %>
+				 		Open
+				 	<% else %>
+				 		Closed
+				 	<% end %>
+				 </td>
+				 <td><%= link_to gig.name, gig %></td>
+				 <td><%= gig.category.name %></td>
+				 <td><%= number_to_currency(gig.budget, precision: 0) %></td>
+				 <td class="text-center"><%= gig.proposals.count %></td>
+				 <td><%= link_to "Edit", edit_gig_path(gig)  %></td>
+				 <td><%= link_to "Delete", gig, method: :delete, data: { confirm: "Are you sure?" }  %></td>
+				</tr>
+			<% end %>
+		</tbody>
+	</table>
+</div>

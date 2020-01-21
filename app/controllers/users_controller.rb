@@ -53,13 +53,6 @@ class UsersController < ApplicationController
                                    :education, :experience, :industry, :role)
     end
 
-    def logged_in_user
-      unless logged_in?
-        flash[:danger] = "Please log in first!"
-        redirect_to login_path
-      end
-    end
-
     def correct_user
       @user = User.find(params[:id])
       redirect_to root_path unless (current_user?(@user) || current_user.admin?)

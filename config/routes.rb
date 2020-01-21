@@ -10,7 +10,13 @@ Rails.application.routes.draw do
   resources :account_activations, only: [:edit]
   resources :users
   resources :password_resets, only: [:new, :create, :edit, :update]
-  resources :gigs
-  root to: 'gigs#index'
+  resources :gigs do
+    resource :proposals, except: :index
+    collection do
+      get :search
+    end
+  end
+  root to: 'home#index'
+  get '/mygigs', to: 'gigs#mygigs'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
