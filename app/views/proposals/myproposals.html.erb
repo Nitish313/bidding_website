@@ -1,0 +1,36 @@
+<div class="container">
+	<h3 class="sub-heading">My Proposals<small class="pull-right"><%= @proposals.count %> total</small></h3>
+	<% if current_user.proposals.any? %>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Gig Name</th>
+					<th>Status</th>
+					<th>Category</th>
+					<th>Bid</th>
+					<th>Gig Owner</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% @proposals.each do |proposal| %>
+					<tr>
+						<td><%= link_to proposal.gig.name, proposal.gig %></td>
+					  <td>
+						 	<% if proposal.gig.awarded_proposal %>
+						 		Awarded to you.
+						 	<% elsif !proposal.gig.open %>
+						 		This gig is awarded to somebody else.
+						 	<% elsif proposal.gig.open && !proposal.gig.awarded_proposal %>
+						 		Not yet awarded to anybody
+						 	<% end %>
+					  </td>
+					  <td><%= proposal.gig.category.name %></td>
+					  <td><%= number_to_currency(proposal.bid, precision: 0) %></td>
+					  <td><%= link_to proposal.gig.user.name, proposal.gig.user.name %></td>
+					  <td><%= link_to "Submit project documents", '#' if proposal.gig.awarded_proposal %></td>
+					</tr>
+				<% end %>
+			</tbody>
+		</table>
+	<% end %>
+</div>

@@ -18,5 +18,6 @@ Rails.application.routes.draw do
   end
   root to: 'home#index'
   get '/mygigs', to: 'gigs#mygigs'
+  get '/myproposals', to: 'proposals#myproposals'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

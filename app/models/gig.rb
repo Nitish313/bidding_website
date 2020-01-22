@@ -1,8 +1,8 @@
 class Gig < ApplicationRecord
   belongs_to :user, optional: true
-  has_many :proposals
+  has_many :proposals, dependent: :destroy
   belongs_to :category, optional: true
-  has_many :abilities
+  has_many :abilities, dependent: :destroy
   has_many :skills, through: :abilities
 
   def self.search(params)

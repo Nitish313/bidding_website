@@ -9,7 +9,7 @@
 		</h1>
 		<div class = "col-xs-12 col-md-8">
 			<section>
-				<h3 class = "sub-heading"><%= @gig.name %><span class = "text-danger"></span></h3>
+				<h3 class = "sub-heading"><%= @gig.name %><small class = "text-danger"> By <%= @gig.user.name %></small></h3>
 				<p><i class = "glyphicon glyphicon-calendar"></i><%= @gig.created_at.strftime("%m/%d/%Y") %> | <i class = "glyphicon glyphicon-map-marker"></i><%= @gig.location.capitalize %> | <%=  @gig.category.name if @gig.category.present? %> <span class = "label label-success"><%= number_to_currency(@gig.budget, precision: 0) %></span></p>
 				<hr />
 				<legend>Description</legend>
@@ -24,7 +24,7 @@
 		</div>
 		<div class = "col-xs-12 col-md-4">
 			<legend>Submit a proposal</legend>
-			<% if logged_in? && @gig.user != current_user && current_user.role == "Freelancer" %>
+			<% if logged_in? && @gig.user != current_user && current_user.role == "Freelancer" && @gig.open == true %>
 				<%= form_for :proposal, url: gig_proposals_path(@gig) do |f| %>
 					<div class = "row">
 						<div class="col-xs-12 col-md-12">

@@ -8,8 +8,12 @@
       <ul class="nav navbar-nav navbar-right">
         <li><%= link_to "Home", root_path %></li>
         <% if logged_in? %>
-          <li><%= link_to "Post a gig &rarr;".html_safe, new_gig_path %></li>
-          <li><%= link_to "My Gigs", mygigs_path %></li>
+            <% if current_user.role == "Client" %>
+              <li><%= link_to "Post a gig &rarr;".html_safe, new_gig_path %></li>
+              <li><%= link_to "My Gigs", mygigs_path %></li>
+            <% elsif current_user.role == "Freelancer" %>
+              <li><%= link_to "My Proposals", myproposals_path %></li>
+            <% end %>
           <li><%= link_to "Users", users_path %></li>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
