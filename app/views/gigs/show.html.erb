@@ -1,6 +1,11 @@
 <div class = "container">
 	<div class = "row">
 		<h1 class = "sub-heading">Gig Detail
+			<span class = "pull-left">
+				<small>
+					<%= link_to "Submitted Solutions &rarr;".html_safe, gig_solutions_path(@gig) %>
+				</small>
+			</span>
 			<span class = "pull-right">
 				<small>
 					<%= link_to "&larr; All gigs".html_safe, search_gigs_path %>

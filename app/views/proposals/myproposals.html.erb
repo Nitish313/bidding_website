@@ -17,17 +17,17 @@
 						<td><%= link_to proposal.gig.name, proposal.gig %></td>
 					  <td>
 						 	<% if proposal.gig.awarded_proposal %>
-						 		Awarded to you.
+						 		<p class="label label-success">Awarded to you.</p>
 						 	<% elsif !proposal.gig.open %>
-						 		This gig is awarded to somebody else.
+						 		<p class="label label-danger">This gig is awarded to somebody else.</p>
 						 	<% elsif proposal.gig.open && !proposal.gig.awarded_proposal %>
-						 		Not yet awarded to anybody
+						 		<p class="label label-default">Not yet awarded to anybody</p>
 						 	<% end %>
 					  </td>
 					  <td><%= proposal.gig.category.name %></td>
 					  <td><%= number_to_currency(proposal.bid, precision: 0) %></td>
 					  <td><%= link_to proposal.gig.user.name, proposal.gig.user.name %></td>
-					  <td><%= link_to "Submit project documents", '#' if proposal.gig.awarded_proposal %></td>
+					  <td><%= link_to "View this proposal(Upload your solution here)", proposal_path(proposal) %></td>
 					</tr>
 				<% end %>
 			</tbody>

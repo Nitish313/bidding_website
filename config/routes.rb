@@ -15,7 +15,12 @@ Rails.application.routes.draw do
     collection do
       get :search
     end
+    resources :solutions, only: [:index, :destroy]
   end
+  resources :proposals do
+    resource :solutions, only: [:create]
+  end
+
   root to: 'home#index'
   get '/mygigs', to: 'gigs#mygigs'
   get '/myproposals', to: 'proposals#myproposals'

@@ -4,6 +4,7 @@ class Gig < ApplicationRecord
   belongs_to :category, optional: true
   has_many :abilities, dependent: :destroy
   has_many :skills, through: :abilities
+  has_many :solutions, dependent: :destroy
 
   def self.search(params)
     if params[:category].present?

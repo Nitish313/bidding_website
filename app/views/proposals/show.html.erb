@@ -1,0 +1,74 @@
+<div class = "container">
+	<div class = "row">
+		<h1 class = "sub-heading">Proposal Detail
+			<span class = "pull-left">
+				<small>
+					<%= link_to "My Solutions &rarr;".html_safe, gig_solutions_path(@proposal.gig) %>
+				</small>
+			</span>
+			<span class = "pull-right">
+				<small>
+					<%= link_to "&larr; My proposals".html_safe, myproposals_path %>
+				</small>
+			</span>
+		</h1>
+		<div class = "col-xs-12 col-md-8">
+			<section>
+				<h3 class = "sub-heading">Proposal for <%= @proposal.gig.name %><small class = "text-danger"> By <%= @proposal.user.name %></small></h3>
+				<p><i class = "glyphicon glyphicon-calendar"></i><%= @proposal.created_at.strftime("%m/%d/%Y") %> | <%=  @proposal.gig.category.name if @proposal.gig.category.present? %> <span class = "label label-success"><%= number_to_currency(@proposal.bid, precision: 0) %></span></p>
+				<hr />
+				<legend>Description</legend>
+				<p><%= @proposal.description %></p>
+				<legend>Skills Wanted</legend>
+				<ul>
+					<% @proposal.gig.skills.each do |skill| %>
+						<li><%= skill.name %></li>
+					<% end %>
+				</ul>
+			</section>
+		</div>
+		<div class = "col-xs-12 col-md-4">
+			<legend>Submit the solution</legend>
+			<% if logged_in? && @proposal.user == current_user && current_user.role == "Freelancer" && @proposal.gig.awarded_proposal %>
+				<% if @proposal.solutions.present? %>
+					<b>Want to submit more?</b>
+				<% end %>
+					<%= form_for :solution, url: proposal_solutions_path(@proposal) do |f| %>
+						<div class = "row">
+							<div class="col-xs-12 col-md-12">
+								<div class="form-group">
+									<%= f.label :name %>
+									<%= f.text_field :name, value: "Solution for #{@proposal.gig.name}", class: "form-control input-lg" %>
+								</div>
+							</div>
+							<div class="col-xs-12 col-md-12">
+								<div class="form-group">
+									<%= f.label :attachment_1 %>
+									<%= f.file_field :attachment_1, class: "form-control input-lg" %>
+									<small class="help-block">Upload the solution for the project</small>
+								</div>
+							</div>
+							<div class="col-xs-12 col-md-12">
+								<div class="form-group">
+									<%= f.label :attachment_2 %>
+									<%= f.file_field :attachment_2, class: "form-control input-lg" %>
+									<small class="help-block">Upload more solution documents for the project</small>
+								</div>
+							</div>
+							<div class="col-xs-12 col-md-12">
+								<div class="form-group">
+									<%= f.label :attachment_3 %>
+									<%= f.file_field :attachment_3, class: "form-control input-lg" %>
+									<small class="help-block">Upload more solution documents for the project</small>
+								</div>
+							</div>
+						</div>
+						<hr />
+						<%= f.submit "Submit Solution", class: "btn btn-primary input-lg" %>
+					<% end %>
+			<% else %>
+			  <p>You are not allowed to submit a solution unless you are awarded this gig.</p>
+			<% end %>
+		</div>
+	</div>
+</div>

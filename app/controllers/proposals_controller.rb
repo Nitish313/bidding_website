@@ -14,6 +14,12 @@ class ProposalsController < ApplicationController
   def myproposals
     @proposals = Proposal.where(user_id: current_user.id).order(created_at: :desc)
   end
+
+  def show
+    @proposal = Proposal.find(params[:id])
+    @gig = @proposal.gig
+  end
+
   private
     def proposal_params
       params.require(:proposal).permit(:bid, :description)
