@@ -1,0 +1,17 @@
+%li
+  = link_to notification.notifiable, 'data-behavior': 'notification-link', id: notification.id do
+    .media
+      .media-left.media-middle
+      .media-body
+        %span.small.text-muted= notification.created_at
+        %p
+          %strong= notification.actor.full_name
+          = t("notifications.actions.#{notification.action}")
+          a new
+          = notification.notifiable.class.model_name.human.downcase
+          in
+          %strong= notification.notifiable.gig.name
+        %p.small.text-muted
+          %i= truncate(notification.notifiable.description, length: 40)
+
+%li.divider

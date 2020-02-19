@@ -41,7 +41,7 @@ class SolutionsController < ApplicationController
 
     def correct_user
       @solution = Solution.find(params[:id])
-      unless (current_user.role == "Freelancer" && @solution.proposal.user == current_user) || (current_user.role == "Client" && @solution.gig.user == current_user)
+      unless (current_user.admin?) || (current_user.role == "Freelancer" && @solution.proposal.user == current_user) || (current_user.role == "Client" && @solution.gig.user == current_user)
         flash[:warning] = "Only owners can delete their solutions."
         redirect_to current_user
       end
@@ -50,7 +50,7 @@ class SolutionsController < ApplicationController
     def only_for_owners
       @solutions = Solution.where(gig_id: params[:gig_id])
       if @solutions.any?
-        unless @solutions.first.gig.user == current_user || @solutions.first.proposal.user == current_user
+        unless current_user.admin? || @solutions.first.gig.user == current_user || @solutions.first.proposal.user == current_user
           flash[:warning] = "Only accessible to the owners."
           redirect_to current_user
         end

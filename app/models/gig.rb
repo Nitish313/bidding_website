@@ -5,6 +5,7 @@ class Gig < ApplicationRecord
   has_many :abilities, dependent: :destroy
   has_many :skills, through: :abilities
   has_many :solutions, dependent: :destroy
+  after_update :create_notifications, if: :awarded_proposal?
 
   def self.search(params)
     if params[:category].present?
@@ -43,4 +44,12 @@ class Gig < ApplicationRecord
       order(created_at: :asc)
     end
   end
+
+  private
+    def create_notifications
+      @proposal = Proposal.find_by(id: self.awarded_proposal) if self.awarded_proposal?
+      @recipient = @proposal.user
+      Notification.create(recipient: @recipient, actor: self.user,
+          action: 'awarded', notifiable: self)
+    end
 end

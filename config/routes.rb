@@ -21,6 +21,8 @@ Rails.application.routes.draw do
     resource :solutions, only: [:create]
   end
 
+  resources :notifications, only: :index
+
   root to: 'home#index'
   get '/mygigs', to: 'gigs#mygigs'
   get '/myproposals', to: 'proposals#myproposals'
