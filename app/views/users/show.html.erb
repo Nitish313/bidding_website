@@ -1,11 +1,30 @@
 <%= provide(:title, @user.name) %>
 <div class="row">
-  <aside class="col-md-4">
+  <main class="col-md-8">
     <section class="user_info">
-      <h1>
+      <h3>
         <%= @user.name %>
         <%= gravatar_for @user %>
-      </h1>
+      </h3>
     </section>
+  </main>
+  <aside class="col-md-4">
+  	<% if current_user.id == @user.id %>
+	  	<ul class="nav navbar-nav">
+	  		<li>
+	  			<%= link_to conversations_path, class: "notification" do %>
+					  <span>My Conversations</span>
+					  <span class="badge"><%= @unread_counts if @unread_counts > 0 %></span>
+					<% end %>
+				</li>
+	  	  <li>
+	  			<%= link_to "#", class: "notification" do %>
+					  <span>Notifications</span>
+					  <span class="badge"></span>
+					<% end %>
+				</li>
+	  	</ul>
+	  <% end %>
   </aside>
+
 </div>

@@ -1,7 +1,6 @@
 class User < ApplicationRecord
   has_many :gigs
   has_many :proposals
-  has_many :notifications, foreign_key: :recipient_id
   attr_accessor :remember_token, :activation_token, :reset_token
   before_save :downcase_email
   before_create :create_activation_digest
@@ -16,6 +15,12 @@ class User < ApplicationRecord
   #validates :education, presence: true
   validates :role, presence: true, unless: :admin
   #validates :industry, :experience, presence: true, if: :role_is_freelancer
+
+  acts_as_messageable
+
+  def mailboxer_email(object)
+    nil
+  end
 
   def User.digest(string)
     cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST :

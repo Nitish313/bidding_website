@@ -28,21 +28,6 @@
               </li>
             </ul>
           </li>
-          <li class="dropdown", data-behaviour="notifications">
-            <a class="dropdown-toggle", data-toggle="dropdown", role="button", aria-expanded="false">
-              <span class="glyphicon glyphicon-bell"></span>
-              <span class="badge", data-behaviour="unread-count"></span>
-              <span class="caret">
-            </a>
-            <ul id="notifications", class="dropdown-menu", data-behaviour="notifications-items">
-              <li class="dropdown-header text-uppercase">Notifications</li>
-              <% if current_user.notifications.unread.empty? %>
-                <li class="container-fluid">
-                  <p class="text-center small">No new notifications</p>
-                </li>
-              <% end %>
-            </ul>
-          </li>
         <% else %>
           <li><%= link_to "Sign up now", signup_path %></li>
           <li><%= link_to "Log in", login_path %></li>

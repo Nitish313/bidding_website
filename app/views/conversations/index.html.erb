@@ -1,0 +1,27 @@
+<h1>All conversations</h1>
+<table class="table table-striped">
+	<% if @conversations.any? %>
+		<thead>
+			<tr>
+				<th>Subject</th>
+				<th>Creator</th>
+				<th>Other User</th>
+			</tr>
+		</thead>
+	<% end %>
+	<% @conversations.each do |conversation| %>
+		<tr>
+			<td><%= link_to conversation.subject, conversation_path(conversation) %></td>
+			<td><%= link_to conversation.receipts.first.message.sender.name, user_path(conversation.receipts.first.message.sender) %></td>
+			<td><%= link_to conversation.receipts.first.receiver.name, user_path(conversation.receipts.first.receiver) %></td>
+			<td>
+				<% if conversation.is_unread?(current_user) %>
+      		<%= link_to 'Mark as read', mark_as_read_conversation_path(conversation),
+                  class: 'btn btn-xs btn-info', method: :post %>
+    		<% end %>
+    	</td>
+			<td><%= link_to "Delete this conversation", conversation_path(conversation), method: :delete, data: {confirm: "Are you sure?"} %></td>
+		</tr>
+	<% end %>
+</table>
+<%= link_to 'New Conversation', new_conversation_path %>
