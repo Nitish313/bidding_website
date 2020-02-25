@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_23_064134) do
+ActiveRecord::Schema.define(version: 2020_02_25_071606) do
 
   create_table "abilities", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "gig_id"
@@ -92,6 +92,17 @@ ActiveRecord::Schema.define(version: 2020_02_23_064134) do
     t.index ["receiver_id", "receiver_type"], name: "index_mailboxer_receipts_on_receiver_id_and_receiver_type"
   end
 
+  create_table "notifications", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "actor_id"
+    t.integer "receiver_id"
+    t.string "action"
+    t.integer "notifiable_id"
+    t.boolean "is_read", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "notifiable_type"
+  end
+
   create_table "proposals", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "bid"
     t.text "description"
@@ -99,6 +110,7 @@ ActiveRecord::Schema.define(version: 2020_02_23_064134) do
     t.datetime "updated_at", null: false
     t.bigint "gig_id"
     t.bigint "user_id"
+    t.string "name"
     t.index ["gig_id"], name: "index_proposals_on_gig_id"
     t.index ["user_id"], name: "index_proposals_on_user_id"
   end

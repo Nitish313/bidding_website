@@ -9,7 +9,7 @@
     </section>
   </main>
   <aside class="col-md-4">
-  	<% if current_user.id == @user.id %>
+  	<% if logged_in? && current_user.id == @user.id %>
 	  	<ul class="nav navbar-nav">
 	  		<li>
 	  			<%= link_to conversations_path, class: "notification" do %>
@@ -18,9 +18,9 @@
 					<% end %>
 				</li>
 	  	  <li>
-	  			<%= link_to "#", class: "notification" do %>
+	  			<%= link_to notifications_path, class: "notification" do %>
 					  <span>Notifications</span>
-					  <span class="badge"></span>
+					  <span class="badge"><%= @unread_notification_counts if @unread_notification_counts > 0 %></span>
 					<% end %>
 				</li>
 	  	</ul>

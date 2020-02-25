@@ -18,14 +18,13 @@ class ConversationsController < ApplicationController
   end 
 
   def show
-    @recipient = User.find(params[:user_id])
     @conversation = current_user.mailbox.conversations.find(params[:id])
   end
 
   def mark_as_read
     @conversation = current_user.mailbox.conversations.find(params[:id])
     @conversation.mark_as_read(current_user)
-    flash[:success] = 'The conversation was marked as read.'
+    flash[:success] = 'The conversation is marked as read.'
     redirect_to conversations_path
   end
 

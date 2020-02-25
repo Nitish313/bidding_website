@@ -22,7 +22,7 @@ class ProposalsController < ApplicationController
 
   private
     def proposal_params
-      params.require(:proposal).permit(:bid, :description)
+      params.require(:proposal).permit(:name, :bid, :description)
     end
 
     def only_freelancers

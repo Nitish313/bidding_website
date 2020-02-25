@@ -34,6 +34,13 @@
 					<div class = "row">
 						<div class="col-xs-12 col-md-12">
 							<div class="form-group">
+								<%= f.label :name %>
+								<%= f.text_field :name, class: "form-control input-lg", value: "Proposal for #{@gig.name}" %>
+								<small class="help-block">Name of your proposal</small>
+							</div>
+						</div>
+						<div class="col-xs-12 col-md-12">
+							<div class="form-group">
 								<%= f.label :bid %>
 								<%= f.text_field :bid, class: "form-control input-lg" %>
 								<small class="help-block">Amount of your bid.</small>

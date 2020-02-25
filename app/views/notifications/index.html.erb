@@ -1,0 +1,34 @@
+<h1>All notifications</h1>
+<table class="table table-striped">
+	<% if @notifications.any? %>
+		<thead>
+			<tr>
+				<th>Notified by</th>
+				<th>Action</th>
+				<th>Gig Name / Proposal Name</th>
+			</tr>
+		</thead>
+	<% end %>
+	<% @notifications.each do |notification| %>
+		<tr>
+			<td><%= link_to notification.actor.name, user_path(notification.actor) %></td>
+			<td><%= notification.action %></td>
+			<td>
+				<% if notification.action == "awarded" %>
+					<%= link_to notification.notifiable.name, gig_path(notification.notifiable) %>
+				<% else %>
+					<%= link_to notification.notifiable.name, proposal_path(notification.notifiable) %>
+				<% end %>
+			</td>
+			<td>
+				<% if !notification.is_read? %>
+      		<%= link_to 'Mark as read', mark_as_read_notification_path(notification),
+                  class: 'btn btn-xs btn-info', method: :post %>
+        <% else %>
+          <p class="label label-success">This notification has been read</p>
+    		<% end %>
+    	</td>
+			<td><%= link_to "Delete this notification", notification_path(notification), method: :delete, data: {confirm: "Are you sure?"} %></td>
+		</tr>
+	<% end %>
+</table>
