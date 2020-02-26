@@ -1,9 +1,9 @@
 <h1>New Conversation</h1>
 
-<%= form_tag conversations_path, method: :post do %>
+<%= form_tag user_conversations_path, method: :post do %>
 	<div class="form-group text-center">
 		<%= label_tag "Send to" %>
-		<%= select_tag :user_id, options_from_collection_for_select(@recipients, :id, :name), class: "form-control input-lg" %>
+		<%= select_tag :receiver_id, options_from_collection_for_select(@recipients, :id, :name), class: "form-control input-lg" %>
 	</div>
 
 	<div>

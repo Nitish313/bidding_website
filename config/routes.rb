@@ -25,16 +25,18 @@ Rails.application.routes.draw do
   get '/mygigs', to: 'gigs#mygigs'
   get '/myproposals', to: 'proposals#myproposals'
 
-  resources :conversations do
-    member do
-      post :mark_as_read
+  resources :users do
+    resources :conversations do
+      member do
+        post :mark_as_read
+      end
+      resources :messages
     end
-    resources :messages
-  end
 
-  resources :notifications do
-    member do
-      post :mark_as_read
+    resources :notifications do
+      member do
+        post :mark_as_read
+      end
     end
   end
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

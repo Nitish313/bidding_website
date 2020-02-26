@@ -1,7 +1,9 @@
 class User < ApplicationRecord
-  has_many :gigs
-  has_many :proposals
-  has_many :notifications, foreign_key: :receiver_id
+  mount_uploader :profile_picture, ImageUploader
+
+  has_many :gigs, dependent: :destroy
+  has_many :proposals, dependent: :destroy
+  has_many :notifications, foreign_key: :receiver_id, dependent: :destroy
   attr_accessor :remember_token, :activation_token, :reset_token
   before_save :downcase_email
   before_create :create_activation_digest
@@ -12,11 +14,14 @@ class User < ApplicationRecord
                     uniqueness: { case_sensitive: false }                 
   
   has_secure_password
-  validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
-  #validates :education, presence: true
-  validates :role, presence: true, unless: :admin
-  #validates :industry, :experience, presence: true, if: :role_is_freelancer
 
+  validates :education, :experience, presence: true,
+              if: Proc.new { |u| u.role == "Freelancer" }    
+
+  with_options unless: :admin? do |user|
+    user.validates :industry, :profile_picture, :role, presence: true
+  end
+  
   acts_as_messageable
 
   def mailboxer_email(object)
@@ -73,14 +78,6 @@ class User < ApplicationRecord
     reset_sent_at < 2.hours.ago
   end
 
-=begin def role_is_freelancer
-    if role == 'Freelancer'
-      return true
-    else
-      return false
-    end
-=end
-
   private
 
     def downcase_email
@@ -91,5 +88,4 @@ class User < ApplicationRecord
       self.activation_token = User.new_token
       self.activation_digest = User.digest(activation_token)
     end
-  
 end

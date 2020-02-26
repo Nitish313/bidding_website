@@ -1,24 +1,55 @@
 <%= provide(:title, @user.name) %>
 <div class="row">
-  <main class="col-md-8">
+  <div class="col-md-8">
     <section class="user_info">
       <h3>
+      	<%= link_to image_tag(@user.profile_picture.thumb.url), @user.profile_picture.url if @user.profile_picture.present? %>
         <%= @user.name %>
-        <%= gravatar_for @user %>
       </h3>
+      <table class="table table-striped">
+      	<thead>
+      		<tr>
+	      		<th><big>User Attributes</big></th>
+	      		<th><big>Values</big></th>
+	      	</tr>
+      	</thead>
+      	<tbody>
+      		<% if !@user.admin? %>
+      			<% if @user.role == "Freelancer" %>
+      				<tr>
+      					<td>EDUCATION</td>
+      					<td><%= @user.education.humanize if @user.education.present? %></td>
+      				</tr>
+      				<tr>
+      					<td>EXPERIENCE</td>
+      					<td><%= @user.experience if @user.experience.present? %></td>
+      				</tr>
+      			<% end %>
+      			<tr>
+      				<td>INDUSTRY</td>
+      				<td><%= @user.industry.humanize if @user.industry.present? %></td>
+      			</tr>
+      			<tr>
+      				<td>ROLE</td>
+      				<td><%= @user.role.humanize %></td>
+      			</tr>
+      		<% end %>
+      	</tbody>
+      	</tbody>
+      </table>
     </section>
-  </main>
+  </div>
   <aside class="col-md-4">
-  	<% if logged_in? && current_user.id == @user.id %>
+  	<% if logged_in? && (current_user.id == @user.id || current_user.admin?) %>
 	  	<ul class="nav navbar-nav">
 	  		<li>
-	  			<%= link_to conversations_path, class: "notification" do %>
+	  			<%= link_to user_conversations_path(@user), class: "notification" do %>
 					  <span>My Conversations</span>
 					  <span class="badge"><%= @unread_counts if @unread_counts > 0 %></span>
 					<% end %>
 				</li>
 	  	  <li>
-	  			<%= link_to notifications_path, class: "notification" do %>
+	  			<%= link_to user_notifications_path(@user), class: "notification" do %>
 					  <span>Notifications</span>
 					  <span class="badge"><%= @unread_notification_counts if @unread_notification_counts > 0 %></span>
 					<% end %>
@@ -26,5 +57,4 @@
 	  	</ul>
 	  <% end %>
   </aside>
-
 </div>

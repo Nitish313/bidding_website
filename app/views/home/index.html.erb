@@ -3,3 +3,12 @@
 
   <h2>This is the visitor's page for this App</h2>
 </div>
+<h1>All Freelancers</h1>
+
+<%= will_paginate @freelancers %>
+
+<ul>
+  <%= render 'freelancers' %>
+</ul>
+
+<%= will_paginate @freelancers %>

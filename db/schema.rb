@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_25_071606) do
+ActiveRecord::Schema.define(version: 2020_02_26_054541) do
 
   create_table "abilities", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "gig_id"
@@ -139,7 +139,7 @@ ActiveRecord::Schema.define(version: 2020_02_25_071606) do
     t.string "education"
     t.integer "experience"
     t.string "industry"
-    t.binary "profile_picture"
+    t.string "profile_picture"
     t.string "role"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

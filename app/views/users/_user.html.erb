@@ -1,5 +1,5 @@
-<li>
-  <%= gravatar_for user, size: 50 %>
+<li class="list-group">
+  <%= image_tag user.profile_picture.thumb.url if user.profile_picture.present? %>
   <%= link_to user.name, user %>
   <% if logged_in? %>
 	  <% if current_user.admin? && !current_user?(user) %>

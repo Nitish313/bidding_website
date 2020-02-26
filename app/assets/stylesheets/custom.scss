@@ -99,16 +99,6 @@ aside {
 
 /* users */
 
-.gravatar {
-  float: left;
-  margin-right: 10px;
-}
-
-.gravatar_edit {
-  margin-top: 15px;
-}
-
-
 .notification {
   background-color: #555;
   color: white;
@@ -133,6 +123,24 @@ aside {
   background: red;
   color: white;
 }
+
+.profile_pic {
+  width: auto;
+  height: 100%;
+}
+
+.center {
+  align-items: center;
+  thead {
+    tr {
+      th {
+        text-align: center;
+      }
+    }
+  }
+}
+
+
 
 /* forms */
 input, textarea, select, .uneditable-input {
