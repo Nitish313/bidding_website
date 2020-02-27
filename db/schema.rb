@@ -97,10 +97,10 @@ ActiveRecord::Schema.define(version: 2020_02_26_054541) do
     t.integer "receiver_id"
     t.string "action"
     t.integer "notifiable_id"
+    t.string "notifiable_type"
     t.boolean "is_read", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "notifiable_type"
   end
 
   create_table "proposals", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|

@@ -5,41 +5,13 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
-User.create!(name:  "Example User",
-             email: "example@railstutorial.org",
-             password:              "foobar",
-             password_confirmation: "foobar",
+User.create!(name:  "Admin",
+             email: "admin@rails.org",
+             password:              "password",
+             password_confirmation: "password",
              admin: true,
              activated: true,
              activated_at: Time.zone.now)
-
-25.times do |n|
-  name  = Faker::Name.name
-  email = "example-#{n+1}@railstutorial.org"
-  password = "password"
-  role = "Freelancer"
-  User.create!(name:  name,
-               email: email,
-               password:              password,
-               password_confirmation: password,
-               role: role,
-               activated: true,
-               activated_at: Time.zone.now)
-end
-
-25.times do |n|
-  name  = Faker::Name.name
-  email = "example-#{n+26}@railstutorial.org"
-  password = "password"
-  role = "Client"
-  User.create!(name:  name,
-               email: email,
-               password:              password,
-               password_confirmation: password,
-               role: role,
-               activated: true,
-               activated_at: Time.zone.now)
-end
 
 Category.where(
         name: "Web Development"
@@ -47,51 +19,27 @@ Category.where(
           name: "Web Development"
          )
 Category.where(
-        name: "Design"
+        name: "Web Design"
         ).first_or_create(
-          name: "Design"
+          name: "Web Design"
          )
 Category.where(
-        name: "Finance"
+        name: "Content Writer"
         ).first_or_create(
-          name: "Finance"
+          name: "Content Writer"
          ) 
 Category.where(
-        name: "Engineering"
+        name: "Project Management"
         ).first_or_create(
-          name: "Engineering"
+          name: "Project Management"
          )
 Category.where(
-        name: "Sales"
+        name: "SEO service"
         ).first_or_create(
-          name: "Sales"
+          name: "SEO service"
          )         
 Category.where(
-        name: "Administrative"
+        name: "Marketing/Sales"
         ).first_or_create(
-          name: "Administrative"
+          name: "Marketing/Sales"
          ) 
-
-location = [
-  "New Delhi",
-  "Mumbai",
-  "Kolkata",
-  "Pune",
-  "Chennai",
-  "Bengaluru",
-  "Mysore"
-]
-
-User.where(role: "Client").each do |client|
-  50.times do
-    Gig.create(
-               name: Faker::Job.title,
-               description: Faker::Lorem.paragraph(sentence_count: 5),
-               budget: rand(200..10000),
-               location: location.sample,
-               user_id: client.id,
-               category_id: rand(1..6)
-               )
-
-  end
-end

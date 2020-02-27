@@ -25,8 +25,9 @@
   <%= f.label :profile_picture, "Upload Profile Picture" %>
   <%= f.file_field :profile_picture, class: 'form-control' %>
 
-  <%= f.label :role %>
-  <%= f.select :role, options_for_select(["Client", "Freelancer"]), class: 'form-control' %>
-
+  <% unless @user.admin %>
+    <%= f.label :role %>
+    <%= f.select :role, options_for_select(["Client", "Freelancer"]), class: 'form-control' %>
+  <% end %>  
   <%= f.submit yield(:button_text), class: 'btn btn-primary' %>
 <% end %>

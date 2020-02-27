@@ -3,7 +3,9 @@
 
   <h2>This is the visitor's page for this App</h2>
 </div>
-<h1>All Freelancers</h1>
+<h1>All Freelancers
+	<small class="pull-right"><%= @freelancers.count %> results</small>
+</h1>
 
 <%= will_paginate @freelancers %>
 
