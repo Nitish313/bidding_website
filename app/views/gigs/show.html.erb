@@ -29,7 +29,7 @@
 		</div>
 		<div class = "col-xs-12 col-md-4">
 			<legend>Submit a proposal</legend>
-			<% if logged_in? && @gig.user != current_user && current_user.role == "Freelancer" && @gig.open == true %>
+			<% if logged_in? && @gig.user != current_user && current_user.role == "Freelancer" && @gig.open == true && !@gig.proposals.where(user: current_user).any?  %>
 				<%= form_for :proposal, url: gig_proposals_path(@gig) do |f| %>
 					<div class = "row">
 						<div class="col-xs-12 col-md-12">
@@ -57,6 +57,8 @@
 					<hr />
 					<%= f.submit "Submit Proposal", class: "btn btn-primary input-lg" %>
 				<% end %>
+			<% elsif @gig.proposals.where(user: current_user).any? %>
+				<h3 class="text-center">You have already submitted your proposal.</h3>
 			<% elsif @gig.open == false %>
 			  <h3 class="text-center">This gig is closed!</h3>
 			<% elsif logged_in? && current_user.role == "Client" %>

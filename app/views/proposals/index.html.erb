@@ -1,0 +1,31 @@
+<div class="container">
+	<h3 class="sub-heading">All Proposals<small class="pull-right"><%= @proposals.count %> total</small></h3>
+	<% if @users.any? %>
+		<% @users.each do |user| %>
+			<% if user.proposals.any? %>		
+				<h4><b>Freelancer: </b><%= user.name %></h4>
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Proposed to</th>
+							<th>Gig Name</th>
+						</tr>
+					</thead>
+					<% user.proposals.each do |proposal| %>
+						<tbody>
+							<tr>
+								<td><%= link_to proposal.name, proposal_path(proposal) %></td>
+								<td><%= link_to proposal.gig.user.name, user_path(proposal.gig.user) %></td>
+								<td><%= link_to proposal.gig.name, gig_path(proposal.gig) %></td>
+								<td><%= link_to "Delete this proposal", proposal_path(proposal), method: :delete, data: {confirm: "Are you sure?"} %>
+							</tr>
+						</tbody>
+					<% end %>
+				</table>
+			<% end %>
+		<% end %>
+	<% end %>
+</div>
+
+<%= will_paginate @proposals %>

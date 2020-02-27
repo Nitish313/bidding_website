@@ -18,7 +18,7 @@ Rails.application.routes.draw do
     resources :solutions, only: [:index, :destroy]
   end
   resources :proposals do
-    resource :solutions, only: [:create]
+    resources :solutions, only: [:create]
   end
   
   root to: 'home#index'

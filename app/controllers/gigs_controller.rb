@@ -40,7 +40,11 @@ class GigsController < ApplicationController
   def destroy
     @gig.destroy
     flash[:success] = "Gig successfully deleted."
-    redirect_to :mygigs
+    if current_user.admin?
+      redirect_to gigs_path
+    else
+      redirect_to :mygigs
+    end 
   end
 
   def search
@@ -70,8 +74,8 @@ class GigsController < ApplicationController
 
     def correct_user
       @gig = Gig.find(params[:id])
-      unless current_user == @gig.user
-        flash[:warning] = "You are not the owner of this gig!"
+      unless(current_user == @gig.user || current_user.admin?)
+        flash[:warning] = "You are neither the admin nor the owner of this gig!"
         redirect_to @gig
       end
     end

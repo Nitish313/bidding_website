@@ -40,21 +40,27 @@
 			</h3>
 			<table class = "table table-striped">
 				<tbody>
-					<% @gigs.each do |gig| %>
-						<tr>
-							<td>
-								<p>
-									<%= link_to gig.name, gig_path(gig) %><small class="label label-success"><%= number_to_currency(gig.budget, precision: 0) %></small>
-								</p>
-								<p><%= h truncate(gig.description, length: 500) %></p>
-								<p>Skills: <%= gig.skills.map { |s| s.name }.join(", ") %></p>
-							</td>
-							<td><%= gig.category.name if gig.category.present? %></td>
-							<td class = "job-location">
-								<p><i class = "glyphicon glyphicon-calendar"></i><%= gig.created_at.strftime("%b %d, %Y") %></p>
-								<p><i class = "glyphicon glyphicon-map-marker"></i><%= gig.location %></p>
-							</td>
-						</tr>
+					<% if @gigs.exists? %>
+						<% @gigs.each do |gig| %>
+							<tr>
+								<td>
+									<p>
+										<%= link_to gig.name, gig_path(gig) %><small class="label label-success"><%= number_to_currency(gig.budget, precision: 0) %></small>
+									</p>
+									<p><%= h truncate(gig.description, length: 500) %></p>
+									<p>Skills: <%= gig.skills.map { |s| s.name }.join(", ") %></p>
+								</td>
+								<td><%= gig.category.name if gig.category.present? %></td>
+								<td class = "job-location">
+									<p><i class = "glyphicon glyphicon-calendar"></i><%= gig.created_at.strftime("%b %d, %Y") %></p>
+									<p><i class = "glyphicon glyphicon-map-marker"></i><%= gig.location %></p>
+								</td>
+								<% if logged_in? && (current_user.admin? || gig.user == current_user) %>
+									<td><%= link_to "Edit this gig", edit_gig_path(gig) %></td>
+									<td><%= link_to "Delete this gig", gig_path(gig), method: :delete, data: {confirm: "Are you sure?"} %></td>
+								<% end %>
+							</tr>
+						<% end %>
 					<% end %>
 				</tbody>
 			</table>
