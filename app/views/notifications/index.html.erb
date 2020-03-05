@@ -3,21 +3,23 @@
 	<% if @notifications.any? %>
 		<thead>
 			<tr>
-				<th>Notified by</th>
-				<th>Action</th>
-				<th>Gig Name / Proposal Name</th>
+				<th class="center">Notified by</th>
+				<th class="center">Action</th>
+				<th class="center">Gig Name / Proposal Name</th>
 			</tr>
 		</thead>
 	<% end %>
 	<% @notifications.each do |notification| %>
 		<tr>
-			<td><%= link_to notification.actor.name, user_path(notification.actor) %></td>
-			<td><%= notification.action %></td>
-			<td>
+			<td class="center"><%= link_to notification.actor.name, user_path(notification.actor) %></td>
+			<td class="center"><%= notification.action %></td>
+			<td class="center">
 				<% if notification.action == "awarded" %>
-					<%= link_to notification.notifiable.name, gig_path(notification.notifiable) %>
+					<%= link_to notification.notifiable.name, gig_path(notification.notifiable) %><b> | </b>
+					<%= link_to "Show this proposal to upload solutions", proposal_path(id: notification.notifiable.awarded_proposal) %>
 				<% else %>
-					<%= link_to notification.notifiable.name, proposal_path(notification.notifiable) %>
+					<%= link_to notification.notifiable.name, proposal_path(notification.notifiable) %><b> | </b>
+					<%= link_to "Show this gig to award this project", gig_path(notification.notifiable.gig) %>
 				<% end %>
 			</td>
 			<td>

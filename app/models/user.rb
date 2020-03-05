@@ -1,37 +1,34 @@
 class User < ApplicationRecord
   mount_uploader :profile_picture, ImageUploader
-
   has_many :gigs, dependent: :destroy
   has_many :proposals, dependent: :destroy
   has_many :notifications, foreign_key: :receiver_id, dependent: :destroy
+  
   attr_accessor :remember_token, :activation_token, :reset_token
+  
   before_save :downcase_email
   before_create :create_activation_digest
+  
   validates :name, presence: true, length: {maximum: 50}
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
-  validates :email, presence: true, length: { maximum: 255 },
-                    format: { with: VALID_EMAIL_REGEX },
-                    uniqueness: { case_sensitive: false }                 
+  validates :email, presence: true, length: { maximum: 255 }, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }  
+  validates :education, :experience, presence: true, if: Proc.new { |u| u.role == "Freelancer" }               
   
   has_secure_password
-
-  validates :education, :experience, presence: true, if: Proc.new { |u| u.role == "Freelancer" }    
+  acts_as_messageable
+  
+  scope :activated_freelancers, -> { where(activated: true, role: "Freelancer") }
 
   with_options unless: :admin? do |user|
     user.validates :industry, :profile_picture, :role, presence: true
   end
-
-  scope :activated_freelancers, -> { where(activated: true, role: "Freelancer") }
-  
-  acts_as_messageable
 
   def mailboxer_email(object)
     nil
   end
 
   def User.digest(string)
-    cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST :
-                                                  BCrypt::Engine.cost
+    cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST : BCrypt::Engine.cost
     BCrypt::Password.create(string, cost: cost)
   end
   
@@ -54,23 +51,19 @@ class User < ApplicationRecord
     update_attribute(:remember_digest, nil)
   end
 
-  # Activates an account.
   def activate
     update_columns(activated: true, activated_at: Time.zone.now)
   end
 
-  # Sends activation email.
   def send_activation_email
     UserMailer.account_activation(self).deliver_now
   end
 
-  #sets password reset attribute
   def create_reset_digest
     self.reset_token = User.new_token
     update_columns(reset_digest: User.digest(reset_token), reset_sent_at: Time.zone.now)
   end
 
-  #sends password reset email
   def send_password_reset_email
     UserMailer.password_reset(self).deliver_now
   end

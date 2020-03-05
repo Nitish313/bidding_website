@@ -7,14 +7,14 @@
 					<div class = "row">
 						<div class = "col-xs-12 col-md-6">
 							<div class = "form-group">
-								<%= f.label :name %>
+								<%= f.label :name %><span class="required">*</span>
 								<%= f.text_field :name, class: "form-control input-lg" %>
 							</div>
 						</div>
 
 						<div class = "col-xs-12 col-md-6">
 							<div class = "form-group">
-								<%= f.label :budget %>
+								<%= f.label :budget %><span class="required">*</span>
 								<%= f.text_field :budget, class: "form-control input-lg" %>
 								<small class = "help-block">ex: $1,000</small>
 							</div>
@@ -30,7 +30,7 @@
 
 						<div class = "col-xs-12 col-md-6">
 							<div class = "form-group">
-								<%= f.label :location %>
+								<%= f.label :location %><span class="required">*</span>
 								<%= f.text_field :location, class: "form-control input-lg" %>
 								<small class = "help-block">[New Delhi, Mumbai, etc.]</small>
 							</div>
@@ -38,14 +38,14 @@
 
 						<div class = "col-xs-12 col-md-6">
 							<div class = "form-group">
-								<%= f.label :description %>
+								<%= f.label :description %><span class="required">*</span>
 								<%= f.text_area :description, class: "form-control input-lg" %>
 								<small class = "help-block">Tell us everything about your gig [website, virtual assistant, etc.]</small>
 							</div>
 						</div>
 					</div>
 
-					<legend>List skills required for this gig.</legend>
+					<legend>List skills required for this gig.<span class="required">*</span></legend>
 					<div class="form-group">
 						<%= f.text_area :skill_list, rows: 3, class: "form-control" %>
 						<small class = "help-block">Separate skills with a comma.</small>
@@ -53,6 +53,7 @@
 					<br>
 					<%= f.submit "Post this gig", class: "btn btn-primary" %>
 				<% end %>
+				<small><span class="required">*</span> is for required fields.</small>
 			</div>
 		</div>
 	</div>

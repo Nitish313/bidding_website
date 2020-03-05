@@ -34,21 +34,21 @@
 					<div class = "row">
 						<div class="col-xs-12 col-md-12">
 							<div class="form-group">
-								<%= f.label :name %>
+								<%= f.label :name %><span class="required">*</span>
 								<%= f.text_field :name, class: "form-control input-lg", value: "Proposal for #{@gig.name}" %>
 								<small class="help-block">Name of your proposal</small>
 							</div>
 						</div>
 						<div class="col-xs-12 col-md-12">
 							<div class="form-group">
-								<%= f.label :bid %>
+								<%= f.label :bid %><span class="required">*</span>
 								<%= f.text_field :bid, class: "form-control input-lg" %>
 								<small class="help-block">Amount of your bid.</small>
 							</div>
 						</div>
 						<div class="col-xs-12 col-md-12">
 							<div class="form-group">
-								<%= f.label :description %>
+								<%= f.label :description %><span class="required">*</span>
 								<%= f.text_area :description, rows: 5, class: "form-control input-lg" %>
 								<small class="help-block">Explain the skills needed for this gig.</small>
 							</div>
@@ -56,6 +56,7 @@
 					</div>
 					<hr />
 					<%= f.submit "Submit Proposal", class: "btn btn-primary input-lg" %>
+					<small><span class="required">*</span> is for required fields.</small>
 				<% end %>
 			<% elsif @gig.proposals.where(user: current_user).any? %>
 				<h3 class="text-center">You have already submitted your proposal.</h3>
@@ -69,8 +70,8 @@
 			<% end %>
 		</div>
 		<div class="col-xs-12 col-md-8">
-			<h3 class="sub-heading">Awarded Proposal</h3>
 			<% if @awarded_proposal.present? %>
+				<h3 class="sub-heading">Awarded Proposal</h3>
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<div class="row">
@@ -96,8 +97,8 @@
 			<% end %>
 		</div>
 		<div class="col-xs-12 col-md-8">
-			<h3 class="sub-heading">Proposals</h3>
 			<% if @proposals.present? %>
+				<h3 class="sub-heading">Proposals</h3>
 				<% @proposals.each do |proposal| %>
 					<div class="panel panel-default">
 						<div class="panel-heading">

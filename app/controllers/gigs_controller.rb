@@ -56,7 +56,12 @@ class GigsController < ApplicationController
   end
 
   def mygigs
-    @gigs = Gig.where(user_id: current_user).order_by_date.includes_categories
+    if current_user.role == "Client"
+      @gigs = Gig.where(user_id: current_user).order_by_date.includes_categories
+    else
+      redirect_to user_path(current_user)
+      flash[:warning] = "Freelancers are not allowed to have any gigs."
+    end
   end
 
   private

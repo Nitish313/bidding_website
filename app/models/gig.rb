@@ -1,17 +1,18 @@
 class Gig < ApplicationRecord
-  belongs_to :user, optional: true
-  belongs_to :category, optional: true
+  belongs_to :user
+  belongs_to :category
+  
   has_many :proposals, dependent: :destroy
   has_many :abilities, dependent: :destroy
   has_many :skills, through: :abilities
   has_many :solutions, dependent: :destroy
   has_many :notifications, as: :notifiable
-
   validates_presence_of :name, :description, :budget, :location
-
   after_update :create_notification, only: :awarded_proposal
+  
   scope :order_by_date, -> { order(created_at: :desc) }
   scope :includes_categories, -> { includes(:category) }
+  
   def self.search(params)
     if params[:category].present?
       gigs = Gig.where(category_id: params[:category].to_i)
@@ -46,10 +47,6 @@ class Gig < ApplicationRecord
 
   def create_notification
     @proposal = Proposal.find_by(id: self.awarded_proposal)
-    Notification.create(actor_id: self.user_id,
-                        receiver_id: @proposal.user_id,
-                        action: "awarded",
-                        notifiable: self
-                        )
+    Notification.create(actor_id: self.user_id, receiver_id: @proposal.user_id, action: "awarded", notifiable: self)
   end
 end

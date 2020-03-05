@@ -5,6 +5,7 @@ class UsersController < ApplicationController
   before_action :unread_counts, only: :show, if: :logged_in?
   before_action :unread_notification_counts, only: :show, if: :logged_in?
   before_action :correct_user, only: [:show], if: :logged_in?
+  before_action :set_user, only: [:show, :edit, :update, :destroy]
   def new
     @user = User.new
   end
@@ -14,7 +15,6 @@ class UsersController < ApplicationController
   end
 
   def show
-  	@user = User.find(params[:id])
     redirect_to root_path and return unless @user.activated?
   end
 
@@ -23,18 +23,16 @@ class UsersController < ApplicationController
     if @user.save
       @user.send_activation_email
       flash[:info] = "Please check your email to activate your account"
-      redirect_to @user
+      redirect_to letter_opener_web_path
     else
       render 'new'
     end
   end
 
   def edit 
-    @user = User.find(params[:id])
   end
 
   def update
-    @user = User.find(params[:id])
     if @user.update_attributes(user_params)
       flash[:success] = "Profile updated"
       redirect_to @user
@@ -44,7 +42,7 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    User.find(params[:id]).destroy
+    @user.destroy
     flash[:success] = "User deleted!"
     redirect_to users_path
   end
@@ -53,6 +51,10 @@ class UsersController < ApplicationController
 
     def user_params
       params.require(:user).permit(:name, :email, :password, :password_confirmation,:education, :experience, :industry, :role, :profile_picture)
+    end
+
+    def set_user
+      @user = User.find(params[:id])
     end
 
     def proper_user

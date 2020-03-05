@@ -5,10 +5,10 @@
   <div class="col-md-6 col-md-offset-3">
     <%= form_for(:session, url: login_path) do |f| %>
     
-      <%= f.label :email %>
+      <%= f.label :email %><span class="required">*</span>
       <%= f.email_field :email, class: 'form-control', autofocus: true %>
 
-      <%= f.label :password %>
+      <%= f.label :password %><span class="required">*</span>
       <%= link_to '(Forgot Password)', new_password_reset_path %>
       <%= f.password_field :password, class: 'form-control' %>
 
@@ -19,7 +19,7 @@
 
       <%= f.submit "Log in", class: "btn btn-primary" %>
     <% end %>
-
+    <small><span class="required">*</span> is for required fields.</small>
     <p>New user? <%= link_to "Sign up now!", signup_path %></p>
   </div>
 </div>
