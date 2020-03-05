@@ -1,26 +1,23 @@
 class Gig < ApplicationRecord
   belongs_to :user, optional: true
-  has_many :proposals, dependent: :destroy
   belongs_to :category, optional: true
+  has_many :proposals, dependent: :destroy
   has_many :abilities, dependent: :destroy
   has_many :skills, through: :abilities
   has_many :solutions, dependent: :destroy
   has_many :notifications, as: :notifiable
 
-  after_update :create_notification, only: :awarded_proposal
+  validates_presence_of :name, :description, :budget, :location
 
+  after_update :create_notification, only: :awarded_proposal
+  scope :order_by_date, -> { order(created_at: :desc) }
+  scope :includes_categories, -> { includes(:category) }
   def self.search(params)
     if params[:category].present?
-      gigs = Gig.where(
-                 category_id: params[:category].to_i
-                 )
-      gigs = gigs.where(
-                  "location like ?", "%#{params[:search]}%"
-                  ) if params[:search].present?
+      gigs = Gig.where(category_id: params[:category].to_i)
+      gigs = gigs.where("location like ?", "%#{params[:search]}%") if params[:search].present?
     else
-      gigs = Gig.where(
-                 "name like ? or description like ?", "%#{params[:search]}%", "%#{params[:search]}%"
-                  ) if params[:search].present?
+      gigs = Gig.where("name like ? or description like ?", "%#{params[:search]}%", "%#{params[:search]}%") if params[:search].present?
     end
     gigs
   end

@@ -2,7 +2,7 @@ class NotificationsController < ApplicationController
   before_action :logged_in_user
   before_action :correct_user
   def index
-    @notifications = @user.notifications.order(created_at: :desc)
+    @notifications = @user.notifications.order_by_date.includes_associations
   end
 
   def destroy

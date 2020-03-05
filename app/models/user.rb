@@ -15,12 +15,13 @@ class User < ApplicationRecord
   
   has_secure_password
 
-  validates :education, :experience, presence: true,
-              if: Proc.new { |u| u.role == "Freelancer" }    
+  validates :education, :experience, presence: true, if: Proc.new { |u| u.role == "Freelancer" }    
 
   with_options unless: :admin? do |user|
     user.validates :industry, :profile_picture, :role, presence: true
   end
+
+  scope :activated_freelancers, -> { where(activated: true, role: "Freelancer") }
   
   acts_as_messageable
 

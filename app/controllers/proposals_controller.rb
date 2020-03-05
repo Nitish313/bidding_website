@@ -5,7 +5,7 @@ class ProposalsController < ApplicationController
   before_action :only_admin, only: [:index]
 
   def index
-    @users = User.where(role: "Freelancer", activated: true)
+    @users = User.activated_freelancers
     @proposals = Proposal.paginate(page: params[:page], per_page: 20)
   end
 
@@ -19,12 +19,11 @@ class ProposalsController < ApplicationController
   end
 
   def myproposals
-    @proposals = Proposal.where(user_id: current_user.id).order(created_at: :desc)
+    @proposals = Proposal.where(user_id: current_user.id).order_by_date.includes_associations
   end
 
   def show
-    @proposal = Proposal.find(params[:id])
-    @gig = @proposal.gig
+    @proposal = Proposal.includes_associations.find(params[:id])
   end
 
   def destroy

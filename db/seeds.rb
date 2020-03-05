@@ -13,33 +13,9 @@ User.create!(name:  "Admin",
              activated: true,
              activated_at: Time.zone.now)
 
-Category.where(
-        name: "Web Development"
-        ).first_or_create(
-          name: "Web Development"
-         )
-Category.where(
-        name: "Web Design"
-        ).first_or_create(
-          name: "Web Design"
-         )
-Category.where(
-        name: "Content Writer"
-        ).first_or_create(
-          name: "Content Writer"
-         ) 
-Category.where(
-        name: "Project Management"
-        ).first_or_create(
-          name: "Project Management"
-         )
-Category.where(
-        name: "SEO service"
-        ).first_or_create(
-          name: "SEO service"
-         )         
-Category.where(
-        name: "Marketing/Sales"
-        ).first_or_create(
-          name: "Marketing/Sales"
-         ) 
+Category.where(name: "Web Development").first_or_create(name: "Web Development")
+Category.where(name: "Web Design").first_or_create(name: "Web Design")
+Category.where(name: "Content Writer").first_or_create(name: "Content Writer") 
+Category.where(name: "Project Management").first_or_create(name: "Project Management")
+Category.where(name: "SEO service").first_or_create(name: "SEO service")         
+Category.where(name: "Marketing/Sales").first_or_create(name: "Marketing/Sales") 

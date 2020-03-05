@@ -4,7 +4,7 @@
   <h2>This is the visitor's page for this App</h2>
 </div>
 <h1>All Freelancers
-	<small class="pull-right"><%= @freelancers.count %> results</small>
+	<small class="pull-right"><%= pluralize(@freelancers.count, 'result') %></small>
 </h1>
 
 <%= will_paginate @freelancers %>

@@ -13,6 +13,8 @@
 ActiveRecord::Schema.define(version: 2020_02_26_054541) do
 
   create_table "abilities", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.bigint "gig_id"
     t.bigint "skill_id"
     t.index ["gig_id"], name: "index_abilities_on_gig_id"
@@ -20,14 +22,16 @@ ActiveRecord::Schema.define(version: 2020_02_26_054541) do
   end
 
   create_table "categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "gigs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "name"
-    t.text "description"
-    t.integer "budget"
-    t.string "location"
+    t.string "name", null: false
+    t.text "description", null: false
+    t.integer "budget", null: false
+    t.string "location", null: false
     t.boolean "open", default: true
     t.integer "awarded_proposal"
     t.datetime "created_at", null: false
@@ -93,35 +97,37 @@ ActiveRecord::Schema.define(version: 2020_02_26_054541) do
   end
 
   create_table "notifications", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.integer "actor_id"
-    t.integer "receiver_id"
-    t.string "action"
-    t.integer "notifiable_id"
-    t.string "notifiable_type"
+    t.integer "actor_id", null: false
+    t.integer "receiver_id", null: false
+    t.string "action", null: false
+    t.integer "notifiable_id", null: false
+    t.string "notifiable_type", null: false
     t.boolean "is_read", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "proposals", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.integer "bid"
-    t.text "description"
+    t.integer "bid", null: false
+    t.text "description", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "gig_id"
     t.bigint "user_id"
-    t.string "name"
+    t.string "name", null: false
     t.index ["gig_id"], name: "index_proposals_on_gig_id"
     t.index ["user_id"], name: "index_proposals_on_user_id"
   end
 
   create_table "skills", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "solutions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "name"
-    t.string "attachment_1"
+    t.string "name", null: false
+    t.string "attachment_1", null: false
     t.string "attachment_2"
     t.string "attachment_3"
     t.bigint "gig_id"
@@ -133,9 +139,9 @@ ActiveRecord::Schema.define(version: 2020_02_26_054541) do
   end
 
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "name"
-    t.string "email"
-    t.string "password_digest"
+    t.string "name", null: false
+    t.string "email", null: false
+    t.string "password_digest", null: false
     t.string "education"
     t.integer "experience"
     t.string "industry"

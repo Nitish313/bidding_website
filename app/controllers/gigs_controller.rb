@@ -3,7 +3,7 @@ class GigsController < ApplicationController
   before_action :only_clients, only: [:new, :create]
   before_action :correct_user, only: [:edit, :update, :destroy]
   def index
-    @gigs = Gig.order_list(params[:sort_by]).paginate(page: params[:page])
+    @gigs = Gig.order_list(params[:sort_by]).includes_categories.paginate(page: params[:page])
   end
 
   def new
@@ -24,7 +24,7 @@ class GigsController < ApplicationController
 
   def show
     @gig = Gig.find(params[:id])
-    @proposals = @gig.proposals.order(created_at: :desc)
+    @proposals = @gig.proposals.order_by_date
     @awarded_proposal = Proposal.where(id: @gig.awarded_proposal).first
   end
 
@@ -49,14 +49,14 @@ class GigsController < ApplicationController
 
   def search
     if params[:category].blank? && params[:search].blank?
-      @gigs = Gig.order(created_at: :desc).paginate(page: params[:page])
+      @gigs = Gig.order_by_date.includes_categories.paginate(page: params[:page])
     else
-      @gigs = Gig.search(params).paginate(page: params[:page])
+      @gigs = Gig.search(params).includes_categories.paginate(page: params[:page])
     end
   end
 
   def mygigs
-    @gigs = Gig.where(user_id: current_user).order(created_at: :desc)
+    @gigs = Gig.where(user_id: current_user).order_by_date.includes_categories
   end
 
   private

@@ -2,9 +2,11 @@ class Solution < ApplicationRecord
   mount_uploader :attachment_1, AttachmentUploader
   mount_uploader :attachment_2, AttachmentUploader
   mount_uploader :attachment_3, AttachmentUploader
-  validates :name, presence: true
-  validates :attachment_1, presence: true
+  validates_presence_of :name, :attachment_1
+
+  attr_accessor :gig_id
 
   belongs_to :gig
   belongs_to :proposal
+
 end
