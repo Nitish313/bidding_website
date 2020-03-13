@@ -8,7 +8,7 @@ class Gig < ApplicationRecord
   has_many :solutions, dependent: :destroy
   has_many :notifications, as: :notifiable
   validates_presence_of :name, :description, :budget, :location
-  after_update :create_notification, only: :awarded_proposal
+  after_update :create_notification, if: :saved_change_to_awarded_proposal?
   
   scope :order_by_date, -> { order(created_at: :desc) }
   scope :includes_categories, -> { includes(:category) }
@@ -16,9 +16,8 @@ class Gig < ApplicationRecord
   def self.search(params)
     if params[:category].present?
       gigs = Gig.where(category_id: params[:category].to_i)
-      gigs = gigs.where("location like ?", "%#{params[:search]}%") if params[:search].present?
     else
-      gigs = Gig.where("name like ? or description like ?", "%#{params[:search]}%", "%#{params[:search]}%") if params[:search].present?
+      gigs = Gig.where("name like ? or description like ? or location like ?", "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%") if params[:search].present?
     end
     gigs
   end

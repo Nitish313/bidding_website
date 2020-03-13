@@ -7,10 +7,12 @@
 	</div>
 
 	<div>
+		<%= label_tag :subject %><span class="required">*</span>
 		<%= text_field_tag :subject, nil, placeholder: "Subject", class: "form-control input-lg" %>
 	</div>
 
 	<div>
+		<%= label_tag :body %><span class="required">*</span>
 		<%= text_area_tag :body, nil, placeholder: "Leave a comment", class: "form-control input-lg" %>
 	</div>
 

@@ -1,5 +1,5 @@
 <%= form_for(@user) do |f| %>
-  <%= render 'shared/error_messages' %>
+  <%= render 'shared/error_messages', this_model: @user %>
 
   <%= f.label :name %><span class="required">*</span>
   <%= f.text_field :name, autofocus: true, class: 'form-control' %>

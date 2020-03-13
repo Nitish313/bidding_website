@@ -13,8 +13,12 @@ class ProposalsController < ApplicationController
     @gig = Gig.find(params[:gig_id])
     @proposal = @gig.proposals.build(proposal_params)
     @proposal.user = current_user
-    @proposal.save
-    flash[:success] = "Proposal successfully submitted."
+    if @proposal.valid?
+      @proposal.save
+      flash[:success] = "Proposal successfully submitted."
+    else
+      flash[:danger] = @proposal.errors.full_messages.to_sentence
+    end
     redirect_to @proposal.gig
   end
 

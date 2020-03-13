@@ -1,5 +1,5 @@
 class SolutionsController < ApplicationController
-  before_action :logged_in_user, only: [:index, :create, :destroy]
+  before_action :logged_in_user, only: [:index, :create, :destroy, :my_solutions]
   before_action :only_freelancers, only: [:create]
   before_action :correct_user, only: [:destroy]
   before_action :only_for_owners, only: [:index]
@@ -14,7 +14,7 @@ class SolutionsController < ApplicationController
     if @solution.save
       flash[:success] = "Your solution is successfully submitted."
     else
-      flash[:danger] = "Something went wrong"
+      flash[:danger] = @solution.errors.full_messages.to_sentence
     end 
     redirect_to @proposal
   end
@@ -24,6 +24,10 @@ class SolutionsController < ApplicationController
     @solution.destroy
     flash[:success] = "This solution is deleted."
     redirect_to gig_solutions_path(gig_id: params[:gig_id])
+  end
+
+  def my_solutions
+    @proposals = Proposal.where(user_id: current_user.id)
   end
 
   private

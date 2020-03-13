@@ -12,8 +12,13 @@ class ConversationsController < ApplicationController
 
   def create
     recipient = User.find(params[:receiver_id])
-    receipt = @user.send_message(recipient, params[:body], params[:subject])
-    redirect_to user_conversation_path(id: receipt.conversation.id)
+    if params[:body].present? && params[:subject].present?
+      receipt = @user.send_message(recipient, params[:body], params[:subject])
+      redirect_to user_conversation_path(id: receipt.conversation.id)
+    else
+      flash[:danger] = "Conversation can't be started without a subject and a body."
+      redirect_to new_user_conversation_path
+    end
   end 
 
   def show

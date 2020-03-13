@@ -5,6 +5,7 @@
 			<thead>
 				<tr>
 					<th>Name</th>
+					<th>Gig Name</th>
 					<th colspan="3" class="sol-link">Document links</th>
 				</tr>
 			</thead>
@@ -12,6 +13,7 @@
 				<% @solutions.each do |solution| %>
 					<tr>
 						<td><%= solution.name %></td>
+						<td><%= link_to solution.gig.name, solution.gig %></td>
 					  <td>
 						 	<%= link_to 'View first document', solution.attachment_1_url %>
 					  </td>

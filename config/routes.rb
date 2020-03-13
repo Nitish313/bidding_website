@@ -25,6 +25,7 @@ Rails.application.routes.draw do
   root to: 'home#index'
   get '/mygigs', to: 'gigs#mygigs'
   get '/myproposals', to: 'proposals#myproposals'
+  get '/my_solutions', to: 'solutions#my_solutions'
 
   resources :users do
     resources :conversations do

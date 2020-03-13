@@ -17,7 +17,6 @@ class GigsController < ApplicationController
       flash[:success] = "New Gig posted"
       redirect_to gig_path(@gig)
     else
-      flash[:danger] = "Something went wrong!"
       render 'new'
     end
   end
@@ -33,8 +32,13 @@ class GigsController < ApplicationController
 
   def update
     @gig.update(gig_params)
-    flash[:success] = "Gig successfully updated."
-    redirect_to gig_path(@gig)
+    @gig.user = current_user
+    if @gig.valid?
+      flash[:success] = "Gig successfully updated."
+      redirect_to gig_path(@gig)
+    else
+      render 'edit'
+    end
   end
 
   def destroy

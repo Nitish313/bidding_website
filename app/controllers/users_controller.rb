@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   before_action :proper_user, only: [:edit, :update]
   before_action :admin_user, only: :destroy
   before_action :unread_counts, only: :show, if: :logged_in?
-  before_action :unread_notification_counts, only: :show, if: :logged_in?
+  before_action :unread_notification_counts, if: :logged_in?
   before_action :correct_user, only: [:show], if: :logged_in?
   before_action :set_user, only: [:show, :edit, :update, :destroy]
   def new

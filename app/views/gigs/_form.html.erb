@@ -4,6 +4,7 @@
 			<h3 class = "sub-heading">Post a gig</h3>
 			<div class = "content-inner-detail">
 				<%= form_for @gig do |f| %>
+					<%= render 'shared/error_messages', this_model: @gig %>
 					<div class = "row">
 						<div class = "col-xs-12 col-md-6">
 							<div class = "form-group">
@@ -15,7 +16,7 @@
 						<div class = "col-xs-12 col-md-6">
 							<div class = "form-group">
 								<%= f.label :budget %><span class="required">*</span>
-								<%= f.text_field :budget, class: "form-control input-lg" %>
+								<%= f.number_field :budget, class: "form-control input-lg" %>
 								<small class = "help-block">ex: $1,000</small>
 							</div>
 						</div>
