@@ -44,15 +44,27 @@
 								<small class = "help-block">Tell us everything about your gig [website, virtual assistant, etc.]</small>
 							</div>
 						</div>
+
+						<div class = "col-xs-12 col-md-6">
+							<div class = "form-group">
+								<%= f.label :attachments %>
+								<%= f.file_field :attachments, multiple: true, class: "form-control input-lg" %>
+								<small class = "help-block">Upload the documents for detail description like designs or SRS</small>
+							</div>
+						</div>
 					</div>
 
-					<legend>List skills required for this gig.<span class="required">*</span></legend>
-					<div class="form-group">
-						<%= f.text_area :skill_list, rows: 3, class: "form-control" %>
-						<small class = "help-block">Separate skills with a comma.</small>
+					<div class="col-xs-12 col-md-6">
+						<div class="row form-group">
+						  <legend>Skills required for this gig.<span class="required">*</span></legend>
+						  <%= f.collection_check_boxes :skill_ids, Skill.all, :id, :name do |b| %>
+					    	<div class='col-md-2'><%= b.check_box %></div>
+					      <div class='col-md-10'><%= b.label %></div>
+						  <% end %>
+						</div>
 					</div>
 					<br>
-					<%= f.submit "Post this gig", class: "btn btn-primary" %>
+					<%= f.submit yield(:button), class: "btn btn-primary" %>
 				<% end %>
 				<small><span class="required">*</span> is for required fields.</small>
 			</div>

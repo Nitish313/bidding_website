@@ -56,6 +56,7 @@ class GigsController < ApplicationController
       @gigs = Gig.order_by_date.includes_categories.paginate(page: params[:page])
     else
       @gigs = Gig.search(params).includes_categories.paginate(page: params[:page])
+      @prev_state = params[:category]
     end
   end
 
@@ -71,7 +72,7 @@ class GigsController < ApplicationController
   private
 
     def gig_params
-      params.require(:gig).permit(:name, :description, :budget, :location, :open, :category_id, :skill_list, :awarded_proposal)
+      params.require(:gig).permit(:name, :description, :budget, :location, :open, :category_id, :skill_list, {skill_ids:[]}, :awarded_proposal, {attachments: []})
     end
 
     def only_clients

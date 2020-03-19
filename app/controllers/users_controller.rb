@@ -5,13 +5,13 @@ class UsersController < ApplicationController
   before_action :unread_counts, only: :show, if: :logged_in?
   before_action :unread_notification_counts, if: :logged_in?
   before_action :correct_user, only: [:show], if: :logged_in?
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :deactivate, :activate]
   def new
     @user = User.new
   end
 
   def index
-    @users = User.where(activated: true).paginate(page: params[:page])
+    @users = User.paginate(page: params[:page])
   end
 
   def show
@@ -39,6 +39,18 @@ class UsersController < ApplicationController
     else
       render 'edit'
     end
+  end
+
+  def deactivate
+    @user.update(activated: false)
+    flash[:success] = 'User deactivated'
+    redirect_to users_path
+  end
+
+  def activate
+    @user.update(activated: true)
+    flash[:success] = 'User activated'
+    redirect_to users_path
   end
 
   def destroy

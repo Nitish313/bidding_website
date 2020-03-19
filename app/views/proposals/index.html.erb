@@ -18,7 +18,9 @@
 								<td><%= link_to proposal.name, proposal_path(proposal) %></td>
 								<td><%= link_to proposal.gig.user.name, user_path(proposal.gig.user) %></td>
 								<td><%= link_to proposal.gig.name, gig_path(proposal.gig) %></td>
-								<td><%= link_to "Delete this proposal", proposal_path(proposal), method: :delete, data: {confirm: "Are you sure?"} %>
+								<% if (proposal.gig.awarded_proposal? && proposal.gig.awarded_proposal != proposal.id) || !proposal.gig.awarded_proposal? %>
+									<td><%= link_to "Delete this proposal", proposal_path(proposal), method: :delete, data: {confirm: "Are you sure?"} %></td>
+								<% end %>
 							</tr>
 						</tbody>
 					<% end %>

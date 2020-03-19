@@ -25,6 +25,16 @@
 						<li><%= skill.name %></li>
 					<% end %>
 				</ul>
+				<% if (@awarded_proposal.present? && @awarded_proposal.user == current_user) || @gig.user == current_user || current_user.admin? %>
+					<% if @gig.attachments.present? %>
+						<ul>
+							<legend>Attachments</legend>
+							<% @gig.attachments.each_with_index do |attachment, index| %>
+								<li><%= link_to "Download attachment-#{index + 1}", "#{attachment}" %></li>
+							<% end %>
+						</ul>
+					<% end %>
+				<% end %>
 			</section>
 		</div>
 		<div class = "col-xs-12 col-md-4">

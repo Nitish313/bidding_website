@@ -28,6 +28,11 @@ Rails.application.routes.draw do
   get '/my_solutions', to: 'solutions#my_solutions'
 
   resources :users do
+    member do
+      post :deactivate
+      post :activate
+    end
+
     resources :conversations do
       member do
         post :mark_as_read
@@ -41,5 +46,7 @@ Rails.application.routes.draw do
       end
     end
   end
+
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

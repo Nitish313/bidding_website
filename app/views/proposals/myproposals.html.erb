@@ -28,7 +28,9 @@
 					  <td><%= number_to_currency(proposal.bid, precision: 0) %></td>
 					  <td><%= link_to proposal.gig.user.name, user_path(proposal.gig.user) %></td>
 					  <td><%= link_to "View this proposal(Upload your solution here)", proposal_path(proposal) if proposal.id == proposal.gig.awarded_proposal %></td>
-					  <td><%= link_to "Delete this proposal", proposal_path(proposal), method: :delete, data: {confirm: "Are you sure?"} %></td>
+					  <% if (proposal.gig.awarded_proposal? && proposal.gig.awarded_proposal != proposal.id) || !proposal.gig.awarded_proposal? %>
+							<td><%= link_to "Delete this proposal", proposal_path(proposal), method: :delete, data: {confirm: "Are you sure?"} %></td>
+						<% end %>
 					</tr>
 				<% end %>
 			</tbody>

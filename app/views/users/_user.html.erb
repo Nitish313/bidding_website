@@ -1,11 +1,24 @@
-<li class="list-group">
-  <%= image_tag user.profile_picture.thumb.url if user.profile_picture.present? %>
-  <%= link_to user.name, user %>
+<li class="row list-group">
+	<div class="col-xs-3">
+		<%= image_tag user.profile_picture.thumb.url if user.profile_picture.present? %>
+	</div>
+	<div class="col-xs-3">
+		<%= link_to user.name, user %>
+	</div>
+  
+  
   <% if logged_in? %>
 	  <% if current_user.admin? && !current_user?(user) %>
-	  	| <%= link_to "Delete", user, method: :delete,
-	  								  data: { confirm: "Are you sure?" } %>
-	  	| <%= link_to "Edit", edit_user_path(user) %>							  
+	  	<% if user.proposals.any? || user.gigs.any? %>
+	  		<% if user.activated? %>
+	  			<%= link_to "Deactivate this user", deactivate_user_path(user), class: 'btn btn-info col-xs-2', method: :post %>
+	  		<% elsif !user.activated? %>
+	  			<%= link_to "Activate this user", activate_user_path(user), class: 'btn btn-info col-xs-2', method: :post %>
+	  		<% end %>
+	  	<% else %>	
+	  		<%= link_to "Delete", user, method: :delete, data: { confirm: "Are you sure?" }, class: 'btn btn-info btn-margin col-xs-4' %>
+	  	<% end %>
+	  	<%= link_to "Edit", edit_user_path(user), class: 'btn btn-info btn-margin col-xs-2' %>							  
 	  <% end %>
 	<% end %>
 </li>

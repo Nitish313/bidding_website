@@ -14,6 +14,7 @@ class ConversationsController < ApplicationController
     recipient = User.find(params[:receiver_id])
     if params[:body].present? && params[:subject].present?
       receipt = @user.send_message(recipient, params[:body], params[:subject])
+      Notification.create(actor_id: @user.id, receiver_id: recipient.id, action: 'started a conversation', notifiable: receipt)
       redirect_to user_conversation_path(id: receipt.conversation.id)
     else
       flash[:danger] = "Conversation can't be started without a subject and a body."

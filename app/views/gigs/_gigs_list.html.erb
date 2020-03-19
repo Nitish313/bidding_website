@@ -11,7 +11,7 @@
 			<%= form_tag search_gigs_path, method: :get do |f| %>
 				<div class="form-group">
 					<%= label_tag :category %>
-			  	<%= select_tag :category, options_from_collection_for_select(Category.all, :id, :name), class: "form-control input-lg" %>
+			  	<%= select_tag :category, options_from_collection_for_select(Category.all, :id, :name, @prev_state), class: "form-control input-lg" %>
 			  </div>
 			  <%= submit_tag "Search", class: "btn btn-primary input-lg btn-block" %>
 			  <%= link_to "View All", gigs_path, class: "btn btn-primary btn-block" %>
@@ -54,7 +54,7 @@
 								</td>
 								<% if logged_in? && (current_user.admin? || gig.user == current_user) %>
 									<td><%= link_to "Edit this gig", edit_gig_path(gig) %></td>
-									<td><%= link_to "Delete this gig", gig_path(gig), method: :delete, data: {confirm: "Are you sure?"} %></td>
+									<td><%= link_to "Delete this gig", gig_path(gig), method: :delete, data: {confirm: "Are you sure?"} unless gig.awarded_proposal? %></td>
 								<% end %>
 							</tr>
 						<% end %>

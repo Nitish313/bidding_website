@@ -144,6 +144,10 @@ aside {
   }
 }
 
+.btn-margin {
+  margin-right: 5px;
+  margin-left: 5px;
+}
 
 
 /* forms */
@@ -204,6 +208,10 @@ input, textarea, select, .uneditable-input {
   text-align: center;
   color: $gray-light;
   margin-bottom: 20px;
+}
+
+.inline {
+  display: inline
 }
 
 /* Search */

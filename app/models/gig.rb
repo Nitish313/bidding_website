@@ -6,7 +6,8 @@ class Gig < ApplicationRecord
   has_many :abilities, dependent: :destroy
   has_many :skills, through: :abilities
   has_many :solutions, dependent: :destroy
-  has_many :notifications, as: :notifiable
+  has_many :notifications, as: :notifiable, dependent: :destroy
+  mount_uploaders :attachments, AttachmentUploader
   validates_presence_of :name, :description, :budget, :location
   after_update :create_notification, if: :saved_change_to_awarded_proposal?
   
@@ -20,12 +21,6 @@ class Gig < ApplicationRecord
       gigs = Gig.where("name like ? or description like ? or location like ?", "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%") if params[:search].present?
     end
     gigs
-  end
-
-  def skill_list=(skills_string)
-    skill_names = skills_string.split(",").collect{ |s| s.strip.downcase }.uniq
-    new_or_found_skills = skill_names.collect{ |name| Skill.find_or_create_by(name: name) }
-    self.skills = new_or_found_skills
   end
 
   def skill_list

@@ -3,7 +3,7 @@ class Proposal < ApplicationRecord
   belongs_to :user, optional: true
   
   has_many :solutions, dependent: :destroy
-  has_many :notifications, as: :notifiable
+  has_many :notifications, as: :notifiable, dependent: :destroy
   
   validates_presence_of :name, :bid, :description 
   after_create :create_notification
