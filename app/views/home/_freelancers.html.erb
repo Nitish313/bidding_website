@@ -1,19 +1,18 @@
 <% if @freelancers.any? %>
 	<table class="table table-striped center">
-  	<thead>
-  		<tr>
-    		<th>Profile Picture</th>
-    		<th>Name</th>
-    	</tr>
-  	</thead>
-  	<tbody>
-  		<% @freelancers.each do |freelancer| %>  			
+		<thead>
+			<tr>
+				<th>Profile Picture</th>
+				<th>Name</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @freelancers.each do |freelancer| %>  			
 				<tr>
 					<td><%= image_tag freelancer.profile_picture.thumb.url, class: "profile_pic" if freelancer.profile_picture.present? %></td>
 					<td><%= link_to freelancer.name, user_path(freelancer) %></td>
 				</tr>
-  		<% end %>
-  	</tbody>
-  	</tbody>
-  </table>
+			<% end %>
+		</tbody>
+	</table>
 <% end %>

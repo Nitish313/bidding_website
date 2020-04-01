@@ -9,6 +9,5 @@
 
 <%= form_tag user_conversation_messages_path(conversation_id: @conversation.id), method: :post do %>
 	<%= text_area_tag :body, nil, class: "form-control input-lg" %>
-
 	<%= submit_tag "Send", class: "btn btn-primary input-lg btn-block" %>
 <% end %>

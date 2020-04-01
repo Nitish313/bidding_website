@@ -33,40 +33,40 @@
 				<% if @proposal.solutions.present? %>
 					<b>Want to submit more?</b>
 				<% end %>
-					<%= form_for :solution, url: proposal_solutions_path(@proposal) do |f| %>
-						<div class = "row">
-							<div class="col-xs-12 col-md-12">
-								<div class="form-group">
-									<%= f.label :name %><span class="required">*</span> 
-									<%= f.text_field :name, value: "Solution for #{@proposal.gig.name}", class: "form-control input-lg" %>
-								</div>
-							</div>
-							<div class="col-xs-12 col-md-12">
-								<div class="form-group">
-									<%= f.label :attachment_1 %><span class="required">*</span>
-									<%= f.file_field :attachment_1, class: "form-control input-lg" %>
-									<small class="help-block">Upload the solution for the project</small>
-								</div>
-							</div>
-							<div class="col-xs-12 col-md-12">
-								<div class="form-group">
-									<%= f.label :attachment_2 %>
-									<%= f.file_field :attachment_2, class: "form-control input-lg" %>
-									<small class="help-block">Upload more solution documents for the project</small>
-								</div>
-							</div>
-							<div class="col-xs-12 col-md-12">
-								<div class="form-group">
-									<%= f.label :attachment_3 %>
-									<%= f.file_field :attachment_3, class: "form-control input-lg" %>
-									<small class="help-block">Upload more solution documents for the project</small>
-								</div>
+				<%= form_for :solution, url: proposal_solutions_path(@proposal) do |f| %>
+					<div class = "row">
+						<div class="col-xs-12 col-md-12">
+							<div class="form-group">
+								<%= f.label :name %><span class="required">*</span> 
+								<%= f.text_field :name, value: "Solution for #{@proposal.gig.name}", class: "form-control input-lg" %>
 							</div>
 						</div>
-						<hr />
-						<%= f.submit "Submit Solution", class: "btn btn-primary input-lg" %>
-						<small><span class="required">*</span> is for required fields.</small>
-					<% end %>
+						<div class="col-xs-12 col-md-12">
+							<div class="form-group">
+								<%= f.label :attachment_1 %><span class="required">*</span>
+								<%= f.file_field :attachment_1, class: "form-control input-lg" %>
+								<small class="help-block">Upload the solution for the project</small>
+							</div>
+						</div>
+						<div class="col-xs-12 col-md-12">
+							<div class="form-group">
+								<%= f.label :attachment_2 %>
+								<%= f.file_field :attachment_2, class: "form-control input-lg" %>
+								<small class="help-block">Upload more solution documents for the project</small>
+							</div>
+						</div>
+						<div class="col-xs-12 col-md-12">
+							<div class="form-group">
+								<%= f.label :attachment_3 %>
+								<%= f.file_field :attachment_3, class: "form-control input-lg" %>
+								<small class="help-block">Upload more solution documents for the project</small>
+							</div>
+						</div>
+					</div>
+					<hr />
+					<%= f.submit "Submit Solution", class: "btn btn-primary input-lg" %>
+					<small><span class="required">*</span> is for required fields.</small>
+				<% end %>
 			<% else %>
 			  <p>You are not allowed to submit a solution unless you are awarded this gig.</p>
 			<% end %>

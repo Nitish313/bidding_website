@@ -44,11 +44,7 @@ class GigsController < ApplicationController
   def destroy
     @gig.destroy
     flash[:success] = "Gig successfully deleted."
-    if current_user.admin?
-      redirect_to gigs_path
-    else
-      redirect_to :mygigs
-    end 
+    redirect_back fallback_location: gigs_path
   end
 
   def search
@@ -72,7 +68,7 @@ class GigsController < ApplicationController
   private
 
     def gig_params
-      params.require(:gig).permit(:name, :description, :budget, :location, :open, :category_id, :skill_list, {skill_ids:[]}, :awarded_proposal, {attachments: []})
+      params.require(:gig).permit(:name, :description, :budget, :location, :open, :category_id, :skill_list, :awarded_proposal, {attachments: []})
     end
 
     def only_clients

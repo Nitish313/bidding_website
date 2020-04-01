@@ -71,7 +71,7 @@
 			<% elsif @gig.proposals.where(user: current_user).any? %>
 				<h3 class="text-center">You have already submitted your proposal.</h3>
 			<% elsif @gig.open == false %>
-			  <h3 class="text-center">This gig is closed!</h3>
+				<h3 class="text-center">This gig is closed!</h3>
 			<% elsif logged_in? && current_user.role == "Client" %>
 				<h3 class="text-center">Clients are not allowed to bid on any of the gigs.</h3>
 			<% elsif !logged_in? %>
@@ -142,7 +142,6 @@
 						<% end %>
 					</div>
 				<% end %>
-			<% else %>
 			<% end %>
 		</div>
 	</div>

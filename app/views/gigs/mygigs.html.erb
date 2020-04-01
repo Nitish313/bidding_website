@@ -15,18 +15,18 @@
 			<% @gigs.each do |gig| %>
 				<tr>
 					<td>
-					 	<% if gig.open %>
-					 		Open
-					 	<% else %>
-					 		Closed
-					 	<% end %>
-				  </td>
-				  <td><%= link_to gig.name, gig %></td>
-				  <td><%= gig.category.name %></td>
-				  <td><%= number_to_currency(gig.budget, precision: 0) %></td>
-				  <td class="text-center"><%= gig.proposals.count %></td>
-				  <td><%= link_to "Edit", edit_gig_path(gig)  %></td>
-				  <td><%= link_to "Delete", gig, method: :delete, data: { confirm: "Are you sure?" } unless gig.awarded_proposal? %></td>
+						<% if gig.open %>
+							Open
+						<% else %>
+							Closed
+						<% end %>
+					</td>
+					<td><%= link_to gig.name, gig %></td>
+					<td><%= gig.category.name %></td>
+					<td><%= number_to_currency(gig.budget, precision: 0) %></td>
+					<td class="text-center"><%= gig.proposals.count %></td>
+					<td><%= link_to "Edit", edit_gig_path(gig)  %></td>
+					<td><%= link_to "Delete", gig, method: :delete, data: { confirm: "Are you sure?" } unless gig.awarded_proposal? %></td>
 				</tr>
 			<% end %>
 		</tbody>
