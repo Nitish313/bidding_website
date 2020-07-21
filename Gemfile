@@ -60,6 +60,10 @@ group :development do
   gem 'letter_opener_web'
 end
 
+group :production do 
+  gem 'pg'
+end
+
 group :test do
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '>= 2.15'
