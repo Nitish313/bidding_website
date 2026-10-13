@@ -6,6 +6,19 @@ class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
 
+  FIXTURE_USER_NAMES = YAML.safe_load(ERB.new(Rails.root.join("test/fixtures/users.yml").read).result).keys
+
+  # Fixture users reference avatar.png. Put the file where CarrierWave expects it so
+  # their profile pictures are present and they pass validation. This runs before
+  # every test because destroying a user also deletes its file.
+  setup do
+    FIXTURE_USER_NAMES.each do |name|
+      dir = Rails.root.join("tmp/test_uploads/uploads/user/profile_picture", ActiveRecord::FixtureSet.identify(name).to_s)
+      FileUtils.mkdir_p(dir)
+      FileUtils.cp(Rails.root.join("test/fixtures/files/avatar.png"), dir.join("avatar.png"))
+    end
+  end
+
   # Add more helper methods to be used by all tests here...
 end
 
