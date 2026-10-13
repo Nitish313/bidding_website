@@ -47,4 +47,31 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
     assert_raises(ActiveRecord::RecordNotFound) { reply(@freelancer.id) }
     assert_equal 1, @conversation.messages.count
   end
+
+  test "an admin cannot reply as another user" do
+    log_in_as(users(:admin))
+    assert_no_difference "@conversation.messages.count" do
+      reply(@freelancer.id)
+    end
+    assert_redirected_to user_path(users(:admin))
+    assert_equal "You can only do this from your own account.", flash[:danger]
+  end
+
+  test "an admin replies in their own conversation" do
+    admin = users(:admin)
+    conversation = admin.send_message(@client, "Please update your profile.", "Profile").conversation
+    log_in_as(admin)
+    assert_difference "conversation.messages.count", 1 do
+      post user_conversation_messages_path(admin, conversation), params: { body: "Thanks." }
+    end
+    assert_equal admin, conversation.messages.last.sender
+  end
+
+  test "replying notifies the other participant" do
+    log_in_as(@freelancer)
+    assert_difference "Notification.where(action: 'sent a message').count", 1 do
+      reply(@freelancer.id)
+    end
+    assert_equal @client.id, Notification.last.receiver_id
+  end
 end

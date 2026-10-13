@@ -1,6 +1,7 @@
 class MessagesController < ApplicationController
   before_action :logged_in_user
   before_action :correct_user
+  before_action :own_account_only
   before_action :set_conversation
   def create
     if params[:body].present?

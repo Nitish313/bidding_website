@@ -1,6 +1,7 @@
 class NotificationsController < ApplicationController
   before_action :logged_in_user
   before_action :correct_user
+  before_action :own_account_only, only: [:mark_as_read, :destroy]
   def index
     @notifications = @user.notifications.order_by_date.includes_associations
   end

@@ -27,13 +27,13 @@
 				<% end %>
 			</td>
 			<td>
-				<% if !notification.is_read? %>
-					<%= link_to 'Mark as read', mark_as_read_user_notification_path(id: notification.id), class: 'btn btn-xs btn-info', method: :post %>
-				<% else %>
+				<% if notification.is_read? %>
 					<p class="label label-success">This notification has been read</p>
+				<% elsif current_user?(@user) %>
+					<%= link_to 'Mark as read', mark_as_read_user_notification_path(id: notification.id), class: 'btn btn-xs btn-info', method: :post %>
 				<% end %>
 			</td>
-			<td><%= link_to "Delete this notification", user_notification_path(id: notification.id), method: :delete, data: {confirm: "Are you sure?"} %></td>
+			<td><%= link_to "Delete this notification", user_notification_path(id: notification.id), method: :delete, data: {confirm: "Are you sure?"} if current_user?(@user) %></td>
 		</tr>
 	<% end %>
 </table>
