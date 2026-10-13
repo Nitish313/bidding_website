@@ -1,21 +1,29 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+admin:
+  name: Admin User
+  email: admin@example.com
+  password_digest: <%= User.digest('test-password') %>
+  admin: true
+  activated: true
+  activated_at: <%= Time.zone.now %>
 
-one:
-  name: MyString
-  email: MyString
-  password_digest: MyString
-  education: MyString
-  experience: 1
-  industry: MyString
-  profile_picture: 
-  role: MyString
+freelancer:
+  name: Fiona Freelancer
+  email: fiona@example.com
+  password_digest: <%= User.digest('test-password') %>
+  role: Freelancer
+  industry: Software
+  education: BSc Computer Science
+  experience: 3
+  profile_picture: avatar.png
+  activated: true
+  activated_at: <%= Time.zone.now %>
 
-two:
-  name: MyString
-  email: MyString
-  password_digest: MyString
-  education: MyString
-  experience: 1
-  industry: MyString
-  profile_picture: 
-  role: MyString
+client:
+  name: Carl Client
+  email: carl@example.com
+  password_digest: <%= User.digest('test-password') %>
+  role: Client
+  industry: Retail
+  profile_picture: avatar.png
+  activated: true
+  activated_at: <%= Time.zone.now %>

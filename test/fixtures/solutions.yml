@@ -1,17 +1,5 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  name: MyString
-  attachment-1: MyString
-  attachment-2: MyString
-  attachment-3: MyString
-  gig: one
-  user: one
-
-two:
-  name: MyString
-  attachment-1: MyString
-  attachment-2: MyString
-  attachment-3: MyString
-  gig: two
-  user: two
+landing_page_delivery:
+  name: Landing page delivery
+  attachment_1: site.zip
+  gig: landing_page
+  proposal: landing_page_bid
