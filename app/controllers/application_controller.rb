@@ -20,6 +20,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # Admins may view other users' conversations and notifications, but only act as themselves.
+  def own_account_only
+    return if current_user?(@user)
+
+    flash[:danger] = "You can only do this from your own account."
+    redirect_to current_user
+  end
+
   def unread_counts
     @unread_counts = 0
     current_user.mailbox.conversations.each do |conversation|

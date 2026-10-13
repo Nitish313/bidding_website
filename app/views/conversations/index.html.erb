@@ -15,12 +15,12 @@
 			<td><%= link_to conversation.receipts.first.message.sender.name, user_path(conversation.receipts.first.message.sender) %></td>
 			<td><%= link_to conversation.receipts.first.receiver.name, user_path(conversation.receipts.first.receiver) %></td>
 			<td>
-				<% if conversation.is_unread?(@user) %>
+				<% if conversation.is_unread?(@user) && current_user?(@user) %>
 					<%= link_to 'Mark as read', mark_as_read_user_conversation_path(id: conversation.id), class: 'btn btn-xs btn-info', method: :post %>
 				<% end %>
 			</td>
-			<td><%= link_to "Delete this conversation", user_conversation_path(id: conversation.id), method: :delete, data: {confirm: "Are you sure?"} %></td>
+			<td><%= link_to "Delete this conversation", user_conversation_path(id: conversation.id), method: :delete, data: {confirm: "Are you sure?"} if current_user?(@user) %></td>
 		</tr>
 	<% end %>
 </table>
-<%= link_to 'New Conversation', new_user_conversation_path %>
+<%= link_to 'New Conversation', new_user_conversation_path if current_user?(@user) %>
