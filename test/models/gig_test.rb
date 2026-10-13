@@ -182,7 +182,7 @@ class GigTest < ActiveSupport::TestCase
   test "an award cannot be changed once made" do
     gig = gigs(:landing_page)
     gig.update!(awarded_proposal: proposals(:landing_page_bid).id)
-    second = proposal_on(gig)
+    second = proposal_on(gig, user: users(:inactive))
     assert_not gig.update(awarded_proposal: second.id)
     assert_includes gig.errors[:awarded_proposal], "can't be changed once the gig is awarded"
     assert_equal proposals(:landing_page_bid).id, gig.reload.awarded_proposal
