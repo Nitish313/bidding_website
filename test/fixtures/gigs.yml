@@ -6,3 +6,12 @@ landing_page:
   skill_list: html, css
   category: web_development
   user: client
+
+blog_posts:
+  name: Write five blog posts
+  description: Articles about home gardening.
+  budget: 200
+  location: Berlin
+  skill_list: copywriting, seo
+  category: writing
+  user: client

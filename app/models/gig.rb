@@ -16,19 +16,32 @@ class Gig < ApplicationRecord
   scope :order_by_date, -> { order(created_at: :desc) }
   scope :includes_categories, -> { includes(:category) }
   
+  SKILL_SEPARATORS = /[,;\r\n]+/
+
   def self.search(params)
+    params = normalize_search_params(params)
     if params[:category].present?
-      gigs = Gig.where(category_id: params[:category].to_i)
+      where(category_id: params[:category].to_i)
+    elsif params[:search].present?
+      term = "%#{sanitize_sql_like(params[:search].strip)}%"
+      where("name like :term or description like :term or location like :term or skill_list like :term", term: term)
     else
-      gigs = Gig.where("name like ? or description like ? or location like ? or skill_list like ?", "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%") if params[:search].present?
+      all
     end
-    gigs
   end
 
+  def self.normalize_search_params(params)
+    case params
+    when nil then {}
+    when Hash then params.with_indifferent_access
+    else raise ArgumentError, "search params must be a Hash, got #{params.class}"
+    end
+  end
+  private_class_method :normalize_search_params
+
   def create_skills
-    skill_names = self.skill_list.split(",").collect{ |s| s.strip.downcase }.uniq
-    new_or_found_skills = skill_names.collect{ |name| Skill.find_or_create_by(name: name) }
-    self.skills = new_or_found_skills
+    skill_names = skill_list.to_s.split(SKILL_SEPARATORS).map { |s| s.squish.downcase }.reject(&:blank?).uniq
+    self.skills = skill_names.map { |name| Skill.find_or_create_by(name: name) }
   end
 
 =begin  def skill_list=(skills_string)
