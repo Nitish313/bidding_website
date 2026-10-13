@@ -50,4 +50,16 @@ class SessionsHelperTest < ActionView::TestCase
     forget(@user)
     assert_nil current_user
   end
+
+  test "current_user is nil for a deactivated user in the session" do
+    log_in(@user)
+    @user.update_columns(activated: false)
+    assert_nil current_user
+  end
+
+  test "current_user is nil for a remembered user who has been deactivated" do
+    remember(@user)
+    @user.update_columns(activated: false)
+    assert_nil current_user
+  end
 end

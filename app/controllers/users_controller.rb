@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
-  before_action :logged_in_user, only: [:edit, :update, :destroy]
+  before_action :logged_in_user, only: [:edit, :update, :destroy, :deactivate, :activate]
   before_action :proper_user, only: [:edit, :update]
-  before_action :admin_user, only: :destroy
+  before_action :admin_user, only: [:destroy, :deactivate, :activate]
   before_action :correct_user, only: [:show], if: :logged_in?
   before_action :set_user, only: [:show, :edit, :update, :destroy, :deactivate, :activate]
   def new
@@ -40,13 +40,17 @@ class UsersController < ApplicationController
   end
 
   def deactivate
-    @user.update(activated: false)
-    flash[:success] = 'User deactivated'
+    if current_user?(@user)
+      flash[:danger] = "You can't deactivate your own account"
+    else
+      @user.deactivate
+      flash[:success] = 'User deactivated'
+    end
     redirect_to users_path
   end
 
   def activate
-    @user.update(activated: true)
+    @user.activate
     flash[:success] = 'User activated'
     redirect_to users_path
   end

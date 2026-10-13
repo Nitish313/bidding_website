@@ -10,7 +10,7 @@ A freelance marketplace built with Ruby on Rails. Clients post gigs, freelancers
 - **Solutions**: freelancers upload up to three files per solution against their proposal; the gig owner reviews them.
 - **Messaging**: user-to-user conversations (via the [mailboxer](https://github.com/mailboxer/mailboxer) gem).
 - **Notifications**: in-app notifications for new proposals, awarded gigs and new conversations.
-- **Admin**: admins can edit or delete any gig, list all proposals and delete users.
+- **Admin**: admins can edit or delete any gig, list all proposals, and activate, deactivate or delete other users. Deactivated users are logged out and cannot log in.
 
 ## Tech stack
 

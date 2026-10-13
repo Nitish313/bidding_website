@@ -27,3 +27,12 @@ client:
   profile_picture: avatar.png
   activated: true
   activated_at: <%= Time.zone.now %>
+
+inactive:
+  name: Ivan Inactive
+  email: ivan@example.com
+  password_digest: <%= User.digest('test-password') %>
+  role: Client
+  industry: Retail
+  profile_picture: avatar.png
+  activated: false
