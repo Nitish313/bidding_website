@@ -25,7 +25,7 @@
 						<li><%= skill.name %></li>
 					<% end %>
 				</ul>
-				<% if (@awarded_proposal.present? && @awarded_proposal.user == current_user) || @gig.user == current_user || current_user.admin? %>
+				<% if logged_in? && ((@awarded_proposal.present? && @awarded_proposal.user == current_user) || @gig.user == current_user || current_user.admin?) %>
 					<% if @gig.attachments.present? %>
 						<ul>
 							<legend>Attachments</legend>

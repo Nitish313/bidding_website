@@ -70,4 +70,134 @@ class GigsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to login_path
     assert_nil gigs(:landing_page).reload.awarded_proposal
   end
+
+  # posting and managing gigs
+
+  def gig_params(overrides = {})
+    { name: "Mobile app mockups", description: "Five screens.", budget: 300, location: "Remote",
+      category_id: categories(:web_development).id, skill_list: "figma, ui design" }.merge(overrides)
+  end
+
+  test "posting a gig requires login" do
+    get new_gig_path
+    assert_redirected_to login_path
+  end
+
+  test "a freelancer cannot post a gig" do
+    log_in_as(users(:freelancer))
+    get new_gig_path
+    assert_redirected_to gigs_path
+    assert_no_difference "Gig.count" do
+      post gigs_path, params: { gig: gig_params }
+    end
+  end
+
+  test "a client posts a gig" do
+    log_in_as(users(:client))
+    get new_gig_path
+    assert_response :success
+    assert_difference "Gig.count", 1 do
+      post gigs_path, params: { gig: gig_params }
+    end
+    gig = Gig.last
+    assert_redirected_to gig_path(gig)
+    assert_equal users(:client), gig.user
+    assert_equal ["figma", "ui design"], gig.skills.pluck(:name).sort
+  end
+
+  test "an invalid gig is not posted" do
+    log_in_as(users(:client))
+    assert_no_difference "Gig.count" do
+      post gigs_path, params: { gig: gig_params(name: "") }
+    end
+    assert_response :success
+    assert_select "#error_explanation"
+  end
+
+  test "a gig page is public" do
+    get gig_path(gigs(:landing_page))
+    assert_response :success
+    assert_select "body", text: /Build a landing page/
+  end
+
+  test "gigs can be listed by name" do
+    get gigs_path(sort_by: "name")
+    assert_response :success
+    assert_operator response.body.index("Build a landing page"), :<, response.body.index("Write five blog posts")
+  end
+
+  test "the owner edits their gig" do
+    log_in_as(users(:client))
+    get edit_gig_path(gigs(:landing_page))
+    assert_response :success
+    patch gig_path(gigs(:landing_page)), params: { gig: { name: "Build a product page" } }
+    assert_redirected_to gig_path(gigs(:landing_page))
+    assert_equal "Build a product page", gigs(:landing_page).reload.name
+  end
+
+  test "an invalid gig edit is refused" do
+    log_in_as(users(:client))
+    patch gig_path(gigs(:landing_page)), params: { gig: { name: "" } }
+    assert_response :success
+    assert_select "#error_explanation"
+    assert_equal "Build a landing page", gigs(:landing_page).reload.name
+  end
+
+  test "a user who does not own the gig cannot edit it" do
+    log_in_as(users(:freelancer))
+    get edit_gig_path(gigs(:landing_page))
+    assert_redirected_to gig_path(gigs(:landing_page))
+    patch gig_path(gigs(:landing_page)), params: { gig: { name: "Hacked" } }
+    assert_equal "Build a landing page", gigs(:landing_page).reload.name
+  end
+
+  test "an admin edits any gig without becoming its owner" do
+    log_in_as(users(:admin))
+    patch gig_path(gigs(:landing_page)), params: { gig: { budget: 650 } }
+    assert_redirected_to gig_path(gigs(:landing_page))
+    gigs(:landing_page).reload
+    assert_equal 650, gigs(:landing_page).budget
+    assert_equal users(:client), gigs(:landing_page).user
+  end
+
+  test "the owner deletes a gig that has not been awarded" do
+    log_in_as(users(:client))
+    assert_difference "Gig.count", -1 do
+      delete gig_path(gigs(:blog_posts))
+    end
+    assert_redirected_to gigs_path
+  end
+
+  test "a user who does not own the gig cannot delete it" do
+    log_in_as(users(:freelancer))
+    assert_no_difference "Gig.count" do
+      delete gig_path(gigs(:blog_posts))
+    end
+  end
+
+  test "an awarded gig cannot be deleted" do
+    gigs(:landing_page).update!(awarded_proposal: proposals(:landing_page_bid).id)
+    [users(:client), users(:admin)].each do |user|
+      log_in_as(user)
+      assert_no_difference "Gig.count" do
+        delete gig_path(gigs(:landing_page))
+      end
+      assert_redirected_to gig_path(gigs(:landing_page))
+      assert_equal "An awarded gig can't be deleted.", flash[:danger]
+      delete logout_path
+    end
+  end
+
+  test "a client sees their own gigs" do
+    log_in_as(users(:client))
+    get mygigs_path
+    assert_response :success
+    assert_select "body", text: /Build a landing page/
+  end
+
+  test "a freelancer has no gigs page" do
+    log_in_as(users(:freelancer))
+    get mygigs_path
+    assert_redirected_to user_path(users(:freelancer))
+  end
 end
