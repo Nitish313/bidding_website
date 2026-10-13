@@ -61,22 +61,6 @@ Layout/EmptyLinesAroundModuleBody:
   Exclude:
     - 'app/helpers/sessions_helper.rb'
 
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: native, lf, crlf
-Layout/EndOfLine:
-  Exclude:
-    - 'app/controllers/conversations_controller.rb'
-    - 'app/controllers/gigs_controller.rb'
-    - 'app/controllers/home_controller.rb'
-    - 'app/controllers/messages_controller.rb'
-    - 'app/controllers/notifications_controller.rb'
-    - 'app/controllers/proposals_controller.rb'
-    - 'app/models/ability.rb'
-    - 'app/models/category.rb'
-    - 'app/models/gig.rb'
-    - 'app/models/proposal.rb'
-    - 'app/models/skill.rb'
-
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: AllowMultipleStyles, EnforcedHashRocketStyle, EnforcedColonStyle, EnforcedLastArgumentHashStyle.
 # SupportedHashRocketStyles: key, separator, table

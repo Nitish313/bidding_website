@@ -1,0 +1,2 @@
+# Store text files with LF line endings; git detects binaries automatically.
+* text=auto eol=lf
