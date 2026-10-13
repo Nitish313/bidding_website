@@ -6,6 +6,7 @@ class Proposal < ApplicationRecord
   has_many :notifications, as: :notifiable, dependent: :destroy
   
   validates_presence_of :name, :bid, :description 
+  validate :gig_accepts_proposal_from_user, on: :create
   after_create :create_notification
   
   scope :order_by_date, -> { order(created_at: :desc) }
@@ -13,5 +14,17 @@ class Proposal < ApplicationRecord
   
   def create_notification
     Notification.create(actor_id: self.user.id, receiver_id: self.gig.user.id, action: "proposed", notifiable: self)
+  end
+
+  private
+
+  def gig_accepts_proposal_from_user
+    return if gig.nil?
+
+    if !gig.open?
+      errors.add(:base, "This gig is closed to new proposals.")
+    elsif user && gig.proposals.exists?(user_id: user.id)
+      errors.add(:base, "You have already submitted a proposal for this gig.")
+    end
   end
 end

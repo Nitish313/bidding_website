@@ -2,6 +2,7 @@ class GigsController < ApplicationController
   before_action :logged_in_user, except: [:index, :search, :show]
   before_action :only_clients, only: [:new, :create]
   before_action :correct_user, only: [:edit, :update, :destroy]
+  before_action :not_awarded, only: [:destroy]
   def index
     @gigs = Gig.order_list(params[:sort_by]).includes_categories.paginate(page: params[:page])
   end
@@ -73,6 +74,13 @@ class GigsController < ApplicationController
 
     def search_params
       params.permit(:category, :search).to_h
+    end
+
+    def not_awarded
+      return unless @gig.awarded_proposal?
+
+      flash[:danger] = "An awarded gig can't be deleted."
+      redirect_to @gig
     end
 
     def only_clients

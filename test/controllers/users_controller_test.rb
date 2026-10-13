@@ -63,4 +63,70 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     log_in_as(users(:admin))
     assert_raises(ActiveRecord::RecordNotFound) { delete user_path(id: 0) }
   end
+
+  # profiles
+
+  test "an activated user's profile is public" do
+    get user_path(users(:freelancer))
+    assert_response :success
+    assert_select "body", text: /Fiona Freelancer/
+  end
+
+  test "an unactivated user's profile redirects to the home page" do
+    get user_path(users(:inactive))
+    assert_redirected_to root_path
+  end
+
+  test "the user list is public" do
+    get users_path
+    assert_response :success
+    assert_select "a", text: "Carl Client"
+  end
+
+  test "editing a profile requires login" do
+    get edit_user_path(users(:client))
+    assert_redirected_to login_path
+  end
+
+  test "a user edits their own profile" do
+    log_in_as(users(:client))
+    get edit_user_path(users(:client))
+    assert_response :success
+    patch user_path(users(:client)), params: { user: { name: "Carl Customer" } }
+    assert_redirected_to user_path(users(:client))
+    assert_equal "Profile updated", flash[:success]
+    assert_equal "Carl Customer", users(:client).reload.name
+  end
+
+  test "an invalid profile update is refused" do
+    log_in_as(users(:client))
+    patch user_path(users(:client)), params: { user: { name: "" } }
+    assert_response :success
+    assert_select "#error_explanation"
+    assert_equal "Carl Client", users(:client).reload.name
+  end
+
+  test "a user cannot edit someone else's profile" do
+    log_in_as(users(:client))
+    get edit_user_path(users(:freelancer))
+    assert_redirected_to root_path
+    patch user_path(users(:freelancer)), params: { user: { name: "Hacked" } }
+    assert_redirected_to root_path
+    assert_equal "Fiona Freelancer", users(:freelancer).reload.name
+  end
+
+  test "an admin edits another user's profile" do
+    log_in_as(users(:admin))
+    patch user_path(users(:client)), params: { user: { name: "Carl Corrected" } }
+    assert_redirected_to user_path(users(:client))
+    assert_equal "Carl Corrected", users(:client).reload.name
+  end
+
+  test "a user cannot make themselves an admin or activate themselves" do
+    log_in_as(users(:client))
+    patch user_path(users(:client)), params: { user: { name: "Carl", admin: true, activated: false } }
+    users(:client).reload
+    assert_not users(:client).admin?
+    assert_predicate users(:client), :activated?
+  end
 end
