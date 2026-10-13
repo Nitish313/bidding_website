@@ -56,8 +56,12 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    @user.destroy
-    flash[:success] = "User deleted!"
+    if current_user?(@user)
+      flash[:danger] = "You can't delete your own account"
+    else
+      @user.destroy
+      flash[:success] = "User deleted!"
+    end
     redirect_to users_path
   end
 
