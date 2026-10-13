@@ -4,3 +4,10 @@ landing_page_bid:
   description: Responsive page delivered within a week.
   gig: landing_page
   user: freelancer
+
+rival_bid:
+  name: Competing landing page proposal
+  bid: 400
+  description: Fast turnaround.
+  gig: landing_page
+  user: rival

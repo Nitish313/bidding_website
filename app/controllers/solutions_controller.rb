@@ -1,6 +1,7 @@
 class SolutionsController < ApplicationController
   before_action :logged_in_user, only: [:index, :create, :destroy, :my_solutions]
   before_action :only_freelancers, only: [:create]
+  before_action :only_awarded_proposal_owner, only: [:create]
   before_action :correct_user, only: [:destroy]
   before_action :only_for_owners, only: [:index]
 
@@ -8,7 +9,6 @@ class SolutionsController < ApplicationController
   end
 
   def create
-    @proposal = Proposal.find(params[:proposal_id])
     @solution = @proposal.solutions.build(solution_params)
     @solution.gig = @proposal.gig
     if @solution.save
@@ -40,6 +40,17 @@ class SolutionsController < ApplicationController
       unless current_user.role == "Freelancer"
         flash[:warning] = "Only accessible to the freelancers."
         redirect_to current_user
+      end
+    end
+
+    def only_awarded_proposal_owner
+      @proposal = Proposal.find(params[:proposal_id])
+      if @proposal.user != current_user
+        flash[:warning] = "Only the owner of this proposal can submit solutions."
+        redirect_to current_user
+      elsif @proposal.gig.awarded_proposal != @proposal.id
+        flash[:warning] = "You can submit solutions only after this proposal is awarded."
+        redirect_to @proposal
       end
     end
 

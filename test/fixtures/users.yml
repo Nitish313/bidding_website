@@ -36,3 +36,15 @@ inactive:
   industry: Retail
   profile_picture: avatar.png
   activated: false
+
+rival:
+  name: Rita Rival
+  email: rita@example.com
+  password_digest: <%= User.digest('test-password') %>
+  role: Freelancer
+  industry: Software
+  education: BSc Design
+  experience: 2
+  profile_picture: avatar.png
+  activated: true
+  activated_at: <%= Time.zone.now %>
