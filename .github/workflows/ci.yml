@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build image
+        run: docker compose build web
+
+      - name: Start MySQL
+        run: docker compose up -d --wait db
+
+      - name: Prepare test database
+        run: docker compose run --rm -e RAILS_ENV=test web bin/rails db:create db:schema:load
+
+      - name: Run tests
+        run: docker compose run --rm -e RAILS_ENV=test web bin/rails test
+
+  lint:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build image
+        run: docker compose build web
+
+      - name: Run RuboCop
+        run: docker compose run --rm --no-deps web bundle exec rubocop
