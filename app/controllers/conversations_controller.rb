@@ -4,7 +4,7 @@ class ConversationsController < ApplicationController
   before_action :own_account_only, except: [:index, :show]
   
   def index
-    @conversations = @user.mailbox.conversations
+    @conversations = @user.mailbox.conversations(mailbox_type: "not_trash")
   end 
 
   def new
@@ -39,8 +39,8 @@ class ConversationsController < ApplicationController
 
   def destroy
     @conversation = @user.mailbox.conversations.find(params[:id])
-    @conversation.destroy
-    flash[:success] = "Conversation deleted successfully."
+    @conversation.move_to_trash(@user)
+    flash[:success] = "Conversation moved to trash."
     redirect_to user_conversations_path
   end
 end  

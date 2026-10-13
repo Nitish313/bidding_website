@@ -137,12 +137,73 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
     assert @conversation.reload.is_unread?(@freelancer)
   end
 
-  test "a participant deletes a conversation" do
-    log_in_as(@freelancer)
-    assert_difference "Mailboxer::Conversation.count", -1 do
-      delete user_conversation_path(@freelancer, @conversation)
+  # deleting moves the conversation to the deleting user's trash only
+
+  def trash_as(user)
+    log_in_as(user)
+    delete user_conversation_path(user, @conversation)
+  end
+
+  test "deleting a conversation keeps it in the database" do
+    assert_no_difference "Mailboxer::Conversation.count" do
+      trash_as(@freelancer)
     end
     assert_redirected_to user_conversations_path(@freelancer)
+    assert_equal "Conversation moved to trash.", flash[:success]
+  end
+
+  test "deleting a conversation moves it to trash for the person who deleted it" do
+    trash_as(@freelancer)
+    assert @conversation.reload.is_completely_trashed?(@freelancer)
+    get user_conversations_path(@freelancer)
+    assert_select "a", text: "Landing page", count: 0
+  end
+
+  test "deleting a conversation leaves it untouched for the other participant" do
+    trash_as(@freelancer)
+    delete logout_path
+    assert_not @conversation.reload.is_trashed?(@client)
+    log_in_as(@client)
+    get user_conversations_path(@client)
+    assert_select "a", text: "Landing page"
+    get user_conversation_path(@client, @conversation)
+    assert_select "div", text: /Can you start Monday\?/
+  end
+
+  test "a trashed conversation comes back when the other participant replies" do
+    trash_as(@freelancer)
+    @client.reply_to_conversation(@conversation, "Following up on Monday.")
+    get user_conversations_path(@freelancer)
+    assert_select "a", text: "Landing page"
+    get user_conversation_path(@freelancer, @conversation)
+    assert_select "div", text: /Following up on Monday\./
+  end
+
+  test "a trashed conversation no longer counts as unread" do
+    log_in_as(@freelancer)
+    get user_path(@freelancer)
+    assert_select "span.badge", text: "1"
+    delete user_conversation_path(@freelancer, @conversation)
+    get user_path(@freelancer)
+    assert_select "span.badge", text: ""
+  end
+
+  test "when both participants delete it, it is hidden for both and still kept" do
+    trash_as(@freelancer)
+    delete logout_path
+    assert_no_difference "Mailboxer::Conversation.count" do
+      trash_as(@client)
+    end
+    get user_conversations_path(@client)
+    assert_select "a", text: "Landing page", count: 0
+  end
+
+  test "a user outside the conversation cannot delete it" do
+    log_in_as(users(:rival))
+    assert_raises(ActiveRecord::RecordNotFound) do
+      delete user_conversation_path(users(:rival), @conversation)
+    end
+    assert_not @conversation.reload.is_trashed?(@freelancer)
   end
 
   test "an admin cannot delete another user's conversation" do
