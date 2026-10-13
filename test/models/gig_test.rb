@@ -140,4 +140,66 @@ class GigTest < ActiveSupport::TestCase
     assert_raises(ArgumentError) { Gig.search("landing") }
     assert_raises(ArgumentError) { Gig.search(["landing"]) }
   end
+
+  # awarding
+
+  def proposal_on(gig, user: users(:freelancer))
+    Proposal.create!(name: "Bid", bid: 100, description: "Offer", gig: gig, user: user)
+  end
+
+  def awarded_notifications
+    Notification.where(action: "awarded")
+  end
+
+  test "awarding one of the gig's own proposals notifies the freelancer" do
+    gig = gigs(:landing_page)
+    proposal = proposals(:landing_page_bid)
+    assert_difference "awarded_notifications.count", 1 do
+      assert gig.update(awarded_proposal: proposal.id)
+    end
+    assert_equal proposal.user_id, awarded_notifications.last.receiver_id
+    assert_equal gig, awarded_notifications.last.notifiable
+  end
+
+  test "awarding a proposal that belongs to another gig is invalid" do
+    gig = gigs(:landing_page)
+    other = proposal_on(gigs(:blog_posts))
+    assert_no_difference "awarded_notifications.count" do
+      assert_not gig.update(awarded_proposal: other.id)
+    end
+    assert_includes gig.errors[:awarded_proposal], "must be one of this gig's proposals"
+    assert_nil gig.reload.awarded_proposal
+  end
+
+  test "awarding a proposal that does not exist is invalid" do
+    gig = gigs(:landing_page)
+    assert_no_difference "awarded_notifications.count" do
+      assert_not gig.update(awarded_proposal: 0)
+    end
+    assert_nil gig.reload.awarded_proposal
+  end
+
+  test "an award cannot be changed once made" do
+    gig = gigs(:landing_page)
+    gig.update!(awarded_proposal: proposals(:landing_page_bid).id)
+    second = proposal_on(gig)
+    assert_not gig.update(awarded_proposal: second.id)
+    assert_includes gig.errors[:awarded_proposal], "can't be changed once the gig is awarded"
+    assert_equal proposals(:landing_page_bid).id, gig.reload.awarded_proposal
+  end
+
+  test "an award cannot be removed once made" do
+    gig = gigs(:landing_page)
+    gig.update!(awarded_proposal: proposals(:landing_page_bid).id)
+    assert_not gig.update(awarded_proposal: nil)
+    assert_equal proposals(:landing_page_bid).id, gig.reload.awarded_proposal
+  end
+
+  test "an awarded gig can still be edited in other ways without a new notification" do
+    gig = gigs(:landing_page)
+    gig.update!(awarded_proposal: proposals(:landing_page_bid).id)
+    assert_no_difference "awarded_notifications.count" do
+      assert gig.update(budget: 600)
+    end
+  end
 end
