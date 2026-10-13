@@ -1,5 +1,5 @@
 class ProposalsController < ApplicationController
-  before_action :logged_in_user, only: [:create, :myproposals, :index]
+  before_action :logged_in_user, only: [:create, :myproposals, :index, :destroy]
   before_action :only_freelancers, only: [:create, :myproposals]
   before_action :correct_user, only: [:destroy]
   before_action :only_admin, only: [:index]
