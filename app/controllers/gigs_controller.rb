@@ -51,7 +51,7 @@ class GigsController < ApplicationController
     if params[:category].blank? && params[:search].blank?
       @gigs = Gig.order_by_date.includes_categories.paginate(page: params[:page])
     else
-      @gigs = Gig.search(params).includes_categories.paginate(page: params[:page])
+      @gigs = Gig.search(search_params).includes_categories.paginate(page: params[:page])
       @prev_state = params[:category]
     end
   end
@@ -69,6 +69,10 @@ class GigsController < ApplicationController
 
     def gig_params
       params.require(:gig).permit(:name, :description, :budget, :location, :open, :category_id, :skill_list, :awarded_proposal, {attachments: []})
+    end
+
+    def search_params
+      params.permit(:category, :search).to_h
     end
 
     def only_clients
