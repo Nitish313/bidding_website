@@ -50,6 +50,9 @@ Minitest/EmptyLineBeforeAssertionMethods:
 
 Minitest/MultipleAssertions:
   Max: 5
+  # End-to-end flows check each step.
+  Exclude:
+    - test/integration/**/*
 
 # Tests deliberately put records into specific states.
 Rails/SkipsModelValidations:

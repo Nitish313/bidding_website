@@ -21,7 +21,8 @@ class UsersController < ApplicationController
     if @user.save
       @user.send_activation_email
       flash[:info] = "Please check your email to activate your account"
-      redirect_to letter_opener_web_path
+      # In development, emails are only viewable through letter_opener_web.
+      redirect_to Rails.env.development? ? letter_opener_web_path : root_url
     else
       render 'new'
     end
