@@ -1,0 +1,8 @@
+landing_page:
+  name: Build a landing page
+  description: Single-page marketing site with a contact form.
+  budget: 500
+  location: Remote
+  skill_list: html, css
+  category: web_development
+  user: client

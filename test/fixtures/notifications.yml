@@ -1,15 +1,6 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  actor_id: 1
-  receiver_id: 1
-  action: MyString
-  notifiable: MyString
-  is_read: false
-
-two:
-  actor_id: 1
-  receiver_id: 1
-  action: MyString
-  notifiable: MyString
+proposal_received:
+  actor_id: <%= ActiveRecord::FixtureSet.identify(:freelancer) %>
+  receiver_id: <%= ActiveRecord::FixtureSet.identify(:client) %>
+  action: proposed
+  notifiable: landing_page_bid (Proposal)
   is_read: false
