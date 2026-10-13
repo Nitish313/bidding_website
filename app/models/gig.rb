@@ -9,6 +9,7 @@ class Gig < ApplicationRecord
   has_many :notifications, as: :notifiable, dependent: :destroy
   mount_uploaders :attachments, AttachmentUploader
   validates_presence_of :name, :description, :budget, :location
+  validate :award_is_one_of_this_gigs_proposals, if: :awarded_proposal_changed?
   after_update :create_notification, if: :saved_change_to_awarded_proposal?
   after_create :create_skills
   after_update :create_skills
@@ -70,5 +71,15 @@ class Gig < ApplicationRecord
   def create_notification
     @proposal = Proposal.find_by(id: self.awarded_proposal)
     Notification.create(actor_id: self.user_id, receiver_id: @proposal.user_id, action: "awarded", notifiable: self)
+  end
+
+  private
+
+  def award_is_one_of_this_gigs_proposals
+    if awarded_proposal_was.present?
+      errors.add(:awarded_proposal, "can't be changed once the gig is awarded")
+    elsif !proposals.exists?(id: awarded_proposal)
+      errors.add(:awarded_proposal, "must be one of this gig's proposals")
+    end
   end
 end
