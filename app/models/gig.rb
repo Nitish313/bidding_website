@@ -45,19 +45,6 @@ class Gig < ApplicationRecord
     self.skills = skill_names.map { |name| Skill.find_or_create_by(name: name) }
   end
 
-=begin  def skill_list=(skills_string)
-    skill_names = skills_string.split(",").collect{ |s| s.strip.downcase }.uniq
-    new_or_found_skills = skill_names.collect{ |name| Skill.find_or_create_by(name: name) }
-    self.skills = new_or_found_skills
-  end
-=end
-=begin  def skill_list
-    skill_lists = self.skills.collect do |skill|
-      skill.name
-    end.join(", ")
-    self.skill_list = skill_lists
-  end
-=end
   def self.order_list(sort_order)
     if sort_order == "newest" || sort_order.blank?
       order(created_at: :desc)
