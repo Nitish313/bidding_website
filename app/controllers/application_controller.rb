@@ -5,6 +5,11 @@ class ApplicationController < ActionController::Base
   before_action :unread_counts, only: :show, if: :logged_in?
   before_action :unread_notification_counts, if: :logged_in?
 
+  # True when the logged-in user is the given owner, or an admin.
+  def owner_or_admin?(owner)
+    current_user == owner || current_user.admin?
+  end
+
   def logged_in_user
     unless logged_in?
       flash[:danger] = "Please log in first!"

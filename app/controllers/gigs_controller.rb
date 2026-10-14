@@ -92,7 +92,7 @@ class GigsController < ApplicationController
 
     def correct_user
       @gig = Gig.find(params[:id])
-      unless(current_user == @gig.user || current_user.admin?)
+      unless owner_or_admin?(@gig.user)
         flash[:warning] = "You are neither the admin nor the owner of this gig!"
         redirect_to @gig
       end
