@@ -17,6 +17,9 @@
 /storage/*
 !/storage/.keep
 
+# Local environment overrides (see .env.example)
+/.env
+
 /node_modules
 /yarn-error.log
 
