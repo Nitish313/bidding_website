@@ -42,6 +42,8 @@ Open <http://localhost:3000>.
 
 MySQL runs in its own container and is not published on the host, so it does not clash with a local MySQL on port 3306.
 
+The app container runs as user and group 1000, so files it writes into the project (logs, caches, uploads) belong to you, not root. If your user or group id is not 1000 (check with `id -u` and `id -g`), set `HOST_UID` and `HOST_GID` in `.env`.
+
 ### Emails in development
 
 Outgoing emails (account activation, password reset) are not sent. They are captured by [letter_opener_web](https://github.com/fgrehm/letter_opener_web) and can be read at <http://localhost:3000/letter_opener>. After signing up you are redirected there to click the activation link.
