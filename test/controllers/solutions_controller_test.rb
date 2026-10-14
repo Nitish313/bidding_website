@@ -90,4 +90,60 @@ class SolutionsControllerTest < ActionDispatch::IntegrationTest
       post proposal_solutions_path(proposal_id: 0), params: { solution: { name: "Delivery" } }
     end
   end
+
+  # viewing and deleting
+
+  def solution
+    solutions(:landing_page_delivery)
+  end
+
+  test "the solutions list requires login" do
+    get gig_solutions_path(@gig)
+    assert_redirected_to login_path
+  end
+
+  test "the gig owner, the proposal owner and an admin can see the solutions" do
+    [users(:client), @freelancer, users(:admin)].each do |user|
+      log_in_as(user)
+      get gig_solutions_path(@gig)
+      assert_response :success, user.name
+      delete logout_path
+    end
+  end
+
+  test "other users cannot see the solutions" do
+    log_in_as(users(:rival))
+    get gig_solutions_path(@gig)
+    assert_redirected_to user_path(users(:rival))
+    assert_equal "Only accessible to the owners.", flash[:warning]
+  end
+
+  test "deleting a solution requires login" do
+    assert_no_difference "Solution.count" do
+      delete gig_solution_path(@gig, solution)
+    end
+    assert_redirected_to login_path
+  end
+
+  test "the proposal owner, the gig owner and an admin can delete a solution" do
+    [@freelancer, users(:client), users(:admin)].each do |user|
+      id = Solution.create!(name: "Extra", attachment_1: fixture_file_upload("files/solution.txt", "text/plain"),
+                            gig: @gig, proposal: @proposal).id
+      log_in_as(user)
+      assert_difference "Solution.count", -1, user.name do
+        delete gig_solution_path(@gig, id)
+      end
+      assert_redirected_to gig_solutions_path(@gig)
+      delete logout_path
+    end
+  end
+
+  test "other users cannot delete a solution" do
+    log_in_as(users(:rival))
+    assert_no_difference "Solution.count" do
+      delete gig_solution_path(@gig, solution)
+    end
+    assert_redirected_to user_path(users(:rival))
+    assert_equal "Only owners can delete their solutions.", flash[:warning]
+  end
 end

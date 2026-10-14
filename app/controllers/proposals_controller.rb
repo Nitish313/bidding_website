@@ -56,7 +56,7 @@ class ProposalsController < ApplicationController
 
     def correct_user
       @proposal = Proposal.find(params[:id])
-      unless(current_user == @proposal.user || current_user.admin?)
+      unless owner_or_admin?(@proposal.user)
         flash[:warning] = "You are neither the owner of this proposal nor the admin"
         redirect_to current_user
       end

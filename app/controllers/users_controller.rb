@@ -2,7 +2,6 @@ class UsersController < ApplicationController
   before_action :logged_in_user, only: [:edit, :update, :destroy, :deactivate, :activate]
   before_action :proper_user, only: [:edit, :update]
   before_action :admin_user, only: [:destroy, :deactivate, :activate]
-  before_action :correct_user, only: [:show], if: :logged_in?
   before_action :set_user, only: [:show, :edit, :update, :destroy, :deactivate, :activate]
   def new
     @user = User.new
@@ -78,15 +77,7 @@ class UsersController < ApplicationController
 
     def proper_user
       @user = User.find(params[:id])
-      redirect_to root_path unless (current_user?(@user) || current_user.admin?)
-    end
-
-    def correct_user
-      if current_user.admin?
-        @user = User.find(params[:id])
-      else
-        @user = current_user
-      end
+      redirect_to root_path unless owner_or_admin?(@user)
     end
 
     def admin_user
