@@ -344,11 +344,6 @@ Rails/Validation:
     - 'app/models/proposal.rb'
     - 'app/models/solution.rb'
 
-# This cop supports safe autocorrection (--autocorrect).
-Style/BlockComments:
-  Exclude:
-    - 'app/models/gig.rb'
-
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: nested, compact
