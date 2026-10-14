@@ -62,4 +62,9 @@ Rails.application.configure do
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
+
+  # Inside Docker, browser requests arrive from the Docker network rather than
+  # localhost, so web-console stays disabled for them. Don't log a warning
+  # about it on every request.
+  config.web_console.whiny_requests = false
 end

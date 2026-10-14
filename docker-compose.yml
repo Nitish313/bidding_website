@@ -30,7 +30,8 @@ services:
     volumes:
       - .:/app
     ports:
-      - "3000:3000"
+      # Reachable from this machine only, not from the local network.
+      - "127.0.0.1:3000:3000"
     depends_on:
       db:
         condition: service_healthy
