@@ -65,3 +65,8 @@ Naming/VariableNumber:
     - attachment_1
     - attachment_2
     - attachment_3
+
+# Seeds print the generated admin password to the terminal on purpose.
+Rails/Output:
+  Exclude:
+    - db/seeds.rb

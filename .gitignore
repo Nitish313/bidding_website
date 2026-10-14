@@ -17,6 +17,9 @@
 /storage/*
 !/storage/.keep
 
+# Local environment overrides (see .env.example)
+/.env
+
 # Ignore files uploaded through the app (CarrierWave)
 /public/uploads
 

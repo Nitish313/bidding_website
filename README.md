@@ -48,7 +48,9 @@ Outgoing emails (account activation, password reset) are not sent. They are capt
 
 ### Seed data
 
-`db:seed` creates the job categories and an activated admin user. See [db/seeds.rb](db/seeds.rb) for the credentials.
+`db:seed` creates the job categories and an activated admin user. It is safe to run more than once.
+
+The admin's email and password come from `SEED_ADMIN_EMAIL` (default `admin@example.com`) and `SEED_ADMIN_PASSWORD`. If no password is set, a random one is generated and printed when the admin is created. To choose your own, copy `.env.example` to `.env` and fill it in before seeding; `docker compose` passes `.env` to the app container, and git ignores it.
 
 ## Running the tests
 
