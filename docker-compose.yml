@@ -19,7 +19,11 @@ services:
       - path: .env
         required: false
     command: bash -c "rm -f tmp/pids/server.pid && bin/rails server -b 0.0.0.0"
+    # Run as the host user so files written into the mounted app directory
+    # (tmp/, log/, public/uploads/) belong to you rather than root.
+    user: "${HOST_UID:-1000}:${HOST_GID:-1000}"
     environment:
+      HOME: /tmp
       DB_HOST: db
       DB_USERNAME: root
       DISABLE_SPRING: "1"
