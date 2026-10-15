@@ -146,4 +146,11 @@ class SolutionsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to user_path(users(:rival))
     assert_equal "Only owners can delete their solutions.", flash[:warning]
   end
+
+  test "a freelancer sees the solutions they submitted" do
+    log_in_as(@freelancer)
+    get my_solutions_path
+    assert_response :success
+    assert_select "body", text: /Landing page delivery/
+  end
 end

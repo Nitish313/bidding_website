@@ -200,4 +200,17 @@ class GigsControllerTest < ActionDispatch::IntegrationTest
     get mygigs_path
     assert_redirected_to user_path(users(:freelancer))
   end
+
+  test "gigs are listed newest first by default and oldest first on request" do
+    gigs(:landing_page).update_columns(created_at: 2.days.ago)
+    gigs(:blog_posts).update_columns(created_at: 1.day.ago)
+    newer = "Write five blog posts"
+    older = "Build a landing page"
+    [gigs_path, gigs_path(sort_by: "newest")].each do |path|
+      get path
+      assert_operator response.body.index(newer), :<, response.body.index(older), path
+    end
+    get gigs_path(sort_by: "oldest")
+    assert_operator response.body.index(older), :<, response.body.index(newer)
+  end
 end
