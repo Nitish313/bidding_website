@@ -43,6 +43,7 @@ gem 'bootstrap-will_paginate'
 gem 'mini_magick'
 gem 'carrierwave'
 gem 'mailboxer', github: 'mailboxer/mailboxer'
+gem 'lograge', '~> 0.14.0'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
