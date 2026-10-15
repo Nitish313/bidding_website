@@ -27,6 +27,9 @@
 /yarn-error.log
 
 /public/assets
+
+# Test coverage reports (SimpleCov)
+/coverage
 .byebug_history
 
 # Ignore master key for decrypting credentials and more.
