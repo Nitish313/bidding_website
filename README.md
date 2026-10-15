@@ -62,6 +62,8 @@ docker compose run --rm -e RAILS_ENV=test web bin/rails db:create db:schema:load
 docker compose run --rm -e RAILS_ENV=test web bin/rails test
 ```
 
+Each run writes a coverage report to `coverage/index.html` (git-ignored). The run fails if line coverage drops below the minimum set in [test/test_helper.rb](test/test_helper.rb). CI uploads the report as a `coverage` artifact on every run.
+
 Run a single file, or a single test by its line number:
 
 ```bash

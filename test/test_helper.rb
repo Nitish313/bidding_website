@@ -1,3 +1,9 @@
+require "simplecov"
+SimpleCov.start "rails" do
+  # The test run fails if line coverage drops below this. Raise it as coverage grows.
+  minimum_coverage 92
+end
+
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
 require 'rails/test_help'
