@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.7.2'
+ruby '3.3.12'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 7.0.8'
@@ -11,7 +11,7 @@ gem 'concurrent-ruby', '< 1.3.5'
 # Use mysql as the database for Active Record
 gem 'mysql2', '>= 0.4.4', '< 0.6.0'
 # Use Puma as the app server
-gem 'puma', '~> 4.3'
+gem 'puma', '~> 6.4'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -40,7 +40,6 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'bootsnap', '>= 1.4.2', require: false
 gem 'bootstrap-sass'
 gem 'jquery-rails'
-gem 'faker'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'mini_magick'
@@ -60,8 +59,6 @@ group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
   gem 'web-console', '>= 4.1.0'
   gem 'listen', '~> 3.5'
-  # ffi 1.17+ needs Ruby 3; Bundler 2.1 does not check that. Remove once on Ruby 3.
-  gem 'ffi', '< 1.17'
   gem 'letter_opener_web'
 end
 
@@ -73,8 +70,6 @@ group :test do
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '>= 2.15'
   gem 'selenium-webdriver'
-  # Easy installation and use of chromedriver to run system tests with Chrome
-  gem 'chromedriver-helper'
   gem 'simplecov', '~> 0.22.0', require: false
 end
 
