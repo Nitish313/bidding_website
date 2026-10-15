@@ -1,7 +1,7 @@
 services:
   db:
     image: mysql:8.0.39
-    # mysql2 0.5.3 built against Debian buster's client library needs native auth.
+    # Native password auth works with every MySQL/MariaDB client library mysql2 may be built against.
     command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"

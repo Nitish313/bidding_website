@@ -6,6 +6,21 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- Upgraded Rails 5.2 → 6.0 → 6.1 → 7.0, moving to each version's framework defaults in its own step ([#60](https://github.com/Nitish313/bidding_website/pull/60), [#62](https://github.com/Nitish313/bidding_website/pull/62), [#63](https://github.com/Nitish313/bidding_website/pull/63), [#64](https://github.com/Nitish313/bidding_website/pull/64), [#65](https://github.com/Nitish313/bidding_website/pull/65), [#66](https://github.com/Nitish313/bidding_website/pull/66)).
+- Switched to the Zeitwerk autoloader ([#61](https://github.com/Nitish313/bidding_website/pull/61)).
+- Upgraded Ruby 2.7 → 3.3 on a supported Debian (bookworm) base image, with Bundler 2.5 and Puma 6.
+- Moving to the Rails 7.0 defaults rotates cookies to the new key derivation, so nobody is logged out ([#66](https://github.com/Nitish313/bidding_website/pull/66)).
+
+### Security
+
+- Cookies are sent with `SameSite=Lax`, CSRF tokens are URL-safe, and redirects never leave the site ([#64](https://github.com/Nitish313/bidding_website/pull/64), [#66](https://github.com/Nitish313/bidding_website/pull/66)).
+
+### Removed
+
+- Spring, the unused `faker` and `chromedriver-helper` gems, and the end-of-life `archive.debian.org` package source.
+
 ## [1.0.0] - 2026-10-15
 
 First versioned release. The application itself dates from 2020; this release

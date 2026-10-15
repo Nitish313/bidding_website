@@ -16,8 +16,8 @@ A freelance marketplace built with Ruby on Rails. Clients post gigs, freelancers
 
 | | |
 |---|---|
-| Language | Ruby 2.7.2 |
-| Framework | Rails 5.2 |
+| Language | Ruby 3.3.12 |
+| Framework | Rails 7.0 |
 | Database | MySQL 8 (development and test) |
 | Uploads | CarrierWave + MiniMagick (ImageMagick) |
 | Front end | Sprockets, Bootstrap 3 (`bootstrap-sass`), jQuery, CoffeeScript |
@@ -94,10 +94,10 @@ Existing offenses are recorded in [.rubocop_todo.yml](.rubocop_todo.yml); new co
 
 ## Running without Docker
 
-Requirements: Ruby 2.7.2, Bundler 2.1.4, MySQL, ImageMagick, Node.js (for asset compilation) and `shared-mime-info`.
+Requirements: Ruby 3.3.12, Bundler 2.5.22, MySQL, ImageMagick, Node.js (for asset compilation) and `shared-mime-info`.
 
 ```bash
-gem install bundler -v 2.1.4
+gem install bundler -v 2.5.22
 bundle install
 bin/rails db:setup
 bin/rails server
