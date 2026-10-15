@@ -42,7 +42,6 @@ gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'mini_magick'
 gem 'carrierwave'
-gem 'notifications'
 gem 'mailboxer', github: 'mailboxer/mailboxer'
 
 group :development, :test do
