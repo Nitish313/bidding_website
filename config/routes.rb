@@ -23,6 +23,7 @@ Rails.application.routes.draw do
   end
   
   root to: 'home#index'
+  get '/health', to: 'health#show'
   get '/mygigs', to: 'gigs#mygigs'
   get '/myproposals', to: 'proposals#myproposals'
   get '/my_solutions', to: 'solutions#my_solutions'

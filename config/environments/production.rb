@@ -54,7 +54,6 @@ Rails.application.configure do
   config.log_level = :debug
 
   # Prepend all log lines with the following tags.
-  config.log_tags = [ :request_id ]
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
@@ -77,7 +76,15 @@ Rails.application.configure do
   config.active_support.deprecation = :notify
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
-  config.log_formatter = ::Logger::Formatter.new
+  # One JSON line per request (lograge) instead of Rails' multi-line request logs.
+  # The request id goes inside the JSON, so lines are printed without any prefix.
+  config.lograge.enabled = true
+  config.lograge.formatter = Lograge::Formatters::Json.new
+  config.lograge.ignore_actions = ["HealthController#show"]
+  config.lograge.custom_payload do |controller|
+    { request_id: controller.request.request_id, user_id: controller.session[:user_id] }.compact
+  end
+  config.log_formatter = proc { |_severity, _time, _progname, message| "#{message}\n" }
 
   # Use a different logger for distributed setups.
   # require 'syslog/logger'

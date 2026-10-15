@@ -54,6 +54,12 @@ Outgoing emails (account activation, password reset) are not sent. They are capt
 
 The admin's email and password come from `SEED_ADMIN_EMAIL` (default `admin@example.com`) and `SEED_ADMIN_PASSWORD`. If no password is set, a random one is generated and printed when the admin is created. To choose your own, copy `.env.example` to `.env` and fill it in before seeding; `docker compose` passes `.env` to the app container, and git ignores it.
 
+### Health check and logs
+
+`GET /health` returns `{"status":"ok","database":"ok"}` when the app can reach its database, and HTTP 503 with `"database":"unavailable"` when it cannot. It needs no login, so load balancers and uptime monitors can poll it.
+
+In production, each request is logged as a single JSON line ([lograge](https://github.com/roidrage/lograge)) with method, path, status, duration and `request_id`. Health checks are left out of the log. Set `RAILS_LOG_TO_STDOUT=1` to log to standard output, for example in a container.
+
 ## Running the tests
 
 ```bash
