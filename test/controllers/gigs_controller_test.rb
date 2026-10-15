@@ -213,4 +213,13 @@ class GigsControllerTest < ActionDispatch::IntegrationTest
     get gigs_path(sort_by: "oldest")
     assert_operator response.body.index(older), :<, response.body.index(newer)
   end
+
+  test "a gig with a negative budget is refused with a message" do
+    log_in_as(users(:client))
+    assert_no_difference "Gig.count" do
+      post gigs_path, params: { gig: gig_params(budget: -100) }
+    end
+    assert_response :success
+    assert_select "#error_explanation", text: /Budget must be greater than 0/
+  end
 end

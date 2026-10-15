@@ -7,6 +7,9 @@ class Proposal < ApplicationRecord
   
   validates_presence_of :name, :bid, :description 
   validate :gig_accepts_proposal_from_user, on: :create
+  validates :bid, numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: Gig::MAX_AMOUNT },
+                  allow_nil: true
+  validates :name, length: { maximum: 255 }
   after_create :create_notification
   
   scope :order_by_date, -> { order(created_at: :desc) }

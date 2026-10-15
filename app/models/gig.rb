@@ -9,6 +9,12 @@ class Gig < ApplicationRecord
   has_many :notifications, as: :notifiable, dependent: :destroy
   mount_uploaders :attachments, AttachmentUploader
   validates_presence_of :name, :description, :budget, :location
+  # Amounts are whole currency units; the cap keeps them inside the integer column.
+  MAX_AMOUNT = 1_000_000_000
+  validates :budget, numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: MAX_AMOUNT },
+                     allow_nil: true
+  validates :name, :location, length: { maximum: 255 }
+  validate :skill_names_fit
   validate :award_is_one_of_this_gigs_proposals, if: :awarded_proposal_changed?
   after_update :create_notification, if: :saved_change_to_awarded_proposal?
   after_create :create_skills
@@ -40,8 +46,11 @@ class Gig < ApplicationRecord
   end
   private_class_method :normalize_search_params
 
+  def skill_names
+    skill_list.to_s.split(SKILL_SEPARATORS).map { |s| s.squish.downcase }.reject(&:blank?).uniq
+  end
+
   def create_skills
-    skill_names = skill_list.to_s.split(SKILL_SEPARATORS).map { |s| s.squish.downcase }.reject(&:blank?).uniq
     self.skills = skill_names.map { |name| Skill.find_or_create_by(name: name) }
   end
 
@@ -61,6 +70,11 @@ class Gig < ApplicationRecord
   end
 
   private
+
+  def skill_names_fit
+    too_long = skill_names.select { |name| name.length > 255 }
+    errors.add(:skill_list, "contains a skill longer than 255 characters") if too_long.any?
+  end
 
   def award_is_one_of_this_gigs_proposals
     if awarded_proposal_was.present?
