@@ -8,7 +8,7 @@ gem 'rails', '~> 7.1.5'
 # Use mysql as the database for Active Record
 gem 'mysql2', '>= 0.4.4', '< 0.6.0'
 # Use Puma as the app server
-gem 'puma', '~> 6.4'
+gem 'puma', '~> 7.2'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -36,11 +36,11 @@ gem 'bcrypt', '~> 3.1.7'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
 gem 'bootstrap-sass'
-gem 'jquery-rails'
+gem 'jquery-rails', '~> 4.6'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'mini_magick'
-gem 'carrierwave'
+gem 'carrierwave', '~> 2.2', '>= 2.2.5'
 gem 'mailboxer', github: 'mailboxer/mailboxer'
 gem 'lograge', '~> 0.14.0'
 
@@ -66,9 +66,6 @@ end
 group :test do
   # Minitest 6 drops minitest/mock and is not supported by Rails 7.1's test runner.
   gem 'minitest', '~> 5.25'
-  # Adds support for Capybara system testing and selenium driver
-  gem 'capybara', '>= 2.15'
-  gem 'selenium-webdriver'
   gem 'simplecov', '~> 0.22.0', require: false
 end
 
