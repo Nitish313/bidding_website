@@ -102,4 +102,13 @@ class InputValidationTest < ActiveSupport::TestCase
     solution.name = LONG
     assert_invalid solution, :name
   end
+
+  # uploads
+
+  test "a profile picture must be an image file" do
+    user = users(:client)
+    user.profile_picture = Rack::Test::UploadedFile.new(file_fixture("solution.txt"), "text/plain")
+    assert_invalid user, :profile_picture
+    assert_match "not allowed", user.errors[:profile_picture].join
+  end
 end
