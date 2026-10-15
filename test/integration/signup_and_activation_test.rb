@@ -8,7 +8,7 @@ class SignupAndActivationTest < ActionDispatch::IntegrationTest
   def signup_params(overrides = {})
     { name: "Nina New", email: "Nina@Example.com", password: "s3cret-pass", password_confirmation: "s3cret-pass",
       role: "Client", industry: "Retail",
-      profile_picture: fixture_file_upload("files/avatar.png", "image/png") }.merge(overrides)
+      profile_picture: fixture_file_upload("avatar.png", "image/png") }.merge(overrides)
   end
 
   def sign_up(overrides = {})
