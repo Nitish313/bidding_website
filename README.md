@@ -112,6 +112,10 @@ The database connection is configured with environment variables:
 | `DB_HOST` | unset | MySQL host; when unset, the local socket `/var/run/mysqld/mysqld.sock` is used |
 | `DB_PORT` | `3306` | MySQL port, used only with `DB_HOST` |
 
+## Contributing and changes
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for how to make and submit changes, and [CHANGELOG.md](CHANGELOG.md) for what changed in each release.
+
 ## Project structure
 
 ```
