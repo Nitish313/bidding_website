@@ -11,7 +11,7 @@ inherit_mode:
 
 AllCops:
   TargetRubyVersion: 3.3
-  TargetRailsVersion: 7.0
+  TargetRailsVersion: 7.1
   NewCops: enable
   SuggestExtensions: false
   Exclude:
