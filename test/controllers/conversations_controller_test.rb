@@ -213,4 +213,12 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
     end
     assert_redirected_to user_path(@admin)
   end
+
+  test "the new conversation form lists everyone except the user" do
+    log_in_as(@freelancer)
+    get new_user_conversation_path(@freelancer)
+    assert_response :success
+    assert_select "select[name=receiver_id] option", text: "Carl Client"
+    assert_select "select[name=receiver_id] option", text: "Fiona Freelancer", count: 0
+  end
 end

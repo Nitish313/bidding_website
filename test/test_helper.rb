@@ -1,7 +1,7 @@
 require "simplecov"
 SimpleCov.start "rails" do
   # The test run fails if line coverage drops below this. Raise it as coverage grows.
-  minimum_coverage 92
+  minimum_coverage 96
 end
 
 ENV['RAILS_ENV'] ||= 'test'

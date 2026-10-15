@@ -112,4 +112,39 @@ class ProposalsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "body", text: /Build a landing page/
   end
+
+  # admin list and proposal page
+
+  test "an admin sees the list of all proposals" do
+    log_in_as(users(:admin))
+    get proposals_path
+    assert_response :success
+    assert_select "body", text: /Landing page proposal/
+  end
+
+  test "the list of all proposals is refused to non-admins" do
+    log_in_as(users(:client))
+    get proposals_path
+    assert_redirected_to user_path(users(:client))
+    assert_equal "Only accessible to admins.", flash[:warning]
+  end
+
+  test "a proposal page is public" do
+    get proposal_path(@proposal)
+    assert_response :success
+    assert_select "h3", text: /Proposal for Build a landing page/
+    assert_select "p", text: "Responsive page delivered within a week."
+    assert_select "form", count: 0
+  end
+
+  test "the awarded freelancer sees the solution upload form on their proposal" do
+    gigs(:landing_page).update_columns(awarded_proposal: @proposal.id)
+    log_in_as(users(:freelancer))
+    get proposal_path(@proposal)
+    assert_select "form[action=?]", proposal_solutions_path(@proposal)
+  end
+
+  test "a missing proposal raises not found" do
+    assert_raises(ActiveRecord::RecordNotFound) { get proposal_path(id: 0) }
+  end
 end
