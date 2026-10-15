@@ -4,10 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '3.3.12'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 7.0.8'
-# concurrent-ruby 1.3.5+ no longer loads Logger, which Rails < 7.1 needs at boot.
-# Remove this pin once the app is on Rails 7.1 or newer.
-gem 'concurrent-ruby', '< 1.3.5'
+gem 'rails', '~> 7.1.5'
 # Use mysql as the database for Active Record
 gem 'mysql2', '>= 0.4.4', '< 0.6.0'
 # Use Puma as the app server
@@ -67,6 +64,8 @@ group :production do
 end
 
 group :test do
+  # Minitest 6 drops minitest/mock and is not supported by Rails 7.1's test runner.
+  gem 'minitest', '~> 5.25'
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '>= 2.15'
   gem 'selenium-webdriver'
