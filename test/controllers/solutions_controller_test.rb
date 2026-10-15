@@ -11,7 +11,7 @@ class SolutionsControllerTest < ActionDispatch::IntegrationTest
     proposal.gig.update_columns(awarded_proposal: proposal.id)
   end
 
-  def submit_solution(proposal, attachment: fixture_file_upload("files/solution.txt", "text/plain"))
+  def submit_solution(proposal, attachment: fixture_file_upload("solution.txt", "text/plain"))
     post proposal_solutions_path(proposal), params: { solution: { name: "Delivery", attachment_1: attachment } }
   end
 
@@ -127,7 +127,7 @@ class SolutionsControllerTest < ActionDispatch::IntegrationTest
 
   test "the proposal owner, the gig owner and an admin can delete a solution" do
     [@freelancer, users(:client), users(:admin)].each do |user|
-      id = Solution.create!(name: "Extra", attachment_1: fixture_file_upload("files/solution.txt", "text/plain"),
+      id = Solution.create!(name: "Extra", attachment_1: fixture_file_upload("solution.txt", "text/plain"),
                             gig: @gig, proposal: @proposal).id
       log_in_as(user)
       assert_difference "Solution.count", -1, user.name do
