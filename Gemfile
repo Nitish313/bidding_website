@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '2.7.2'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 6.1.7'
+gem 'rails', '~> 7.0.8'
 # concurrent-ruby 1.3.5+ no longer loads Logger, which Rails < 7.1 needs at boot.
 # Remove this pin once the app is on Rails 7.1 or newer.
 gem 'concurrent-ruby', '< 1.3.5'
