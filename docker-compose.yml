@@ -26,7 +26,6 @@ services:
       HOME: /tmp
       DB_HOST: db
       DB_USERNAME: root
-      DISABLE_SPRING: "1"
     volumes:
       - .:/app
     ports:

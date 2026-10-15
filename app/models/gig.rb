@@ -47,7 +47,7 @@ class Gig < ApplicationRecord
   private_class_method :normalize_search_params
 
   def skill_names
-    skill_list.to_s.split(SKILL_SEPARATORS).map { |s| s.squish.downcase }.reject(&:blank?).uniq
+    skill_list.to_s.split(SKILL_SEPARATORS).map { |s| s.squish.downcase }.compact_blank.uniq
   end
 
   def create_skills
