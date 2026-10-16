@@ -61,7 +61,7 @@ group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
   gem 'web-console', '>= 4.1.0'
   gem 'listen', '~> 3.5'
-  gem 'letter_opener_web'
+  gem 'letter_opener_web', '~> 3.0'
 end
 
 group :production do 

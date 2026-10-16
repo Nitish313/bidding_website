@@ -54,6 +54,13 @@ jobs:
       - name: Run RuboCop
         run: docker compose run --rm --no-deps web bundle exec rubocop
 
+      # Tests run in the test environment only; these catch breaks in the other two.
+      - name: Boot in development mode
+        run: docker compose run --rm --no-deps web bin/rails runner 'puts "development boots"'
+
+      - name: Precompile production assets
+        run: docker compose run --rm --no-deps -e RAILS_ENV=production -e SECRET_KEY_BASE_DUMMY=1 web bin/rails assets:precompile
+
   audit:
     runs-on: ubuntu-24.04
     steps:
