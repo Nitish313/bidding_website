@@ -536,3 +536,20 @@ Style/SymbolProc:
 # URISchemes: http, https
 Layout/LineLength:
   Max: 189
+
+# Newer rubocop-rails rules; fixed in a follow-up pull request.
+Rails/RedirectBackOrTo:
+  Exclude:
+    - 'app/controllers/gigs_controller.rb'
+
+# Newer rubocop-rails rules; fixed in a follow-up pull request.
+Rails/StrongParametersExpect:
+  Exclude:
+    - 'app/controllers/application_controller.rb'
+    - 'app/controllers/conversations_controller.rb'
+    - 'app/controllers/gigs_controller.rb'
+    - 'app/controllers/messages_controller.rb'
+    - 'app/controllers/notifications_controller.rb'
+    - 'app/controllers/proposals_controller.rb'
+    - 'app/controllers/solutions_controller.rb'
+    - 'app/controllers/users_controller.rb'
