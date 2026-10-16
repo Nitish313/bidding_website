@@ -51,9 +51,9 @@ gem 'lograge', '~> 0.14.0'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  gem 'rubocop', '~> 1.64.1', require: false
-  gem 'rubocop-rails', '~> 2.29.1', require: false
-  gem 'rubocop-minitest', '~> 0.37.0', require: false
+  gem 'rubocop', '~> 1.92.0', require: false
+  gem 'rubocop-rails', '~> 2.38.0', require: false
+  gem 'rubocop-minitest', '~> 0.41.0', require: false
   gem 'bundler-audit', '~> 0.9', require: false
 end
 
