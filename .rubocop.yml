@@ -11,7 +11,7 @@ inherit_mode:
 
 AllCops:
   TargetRubyVersion: 3.3
-  TargetRailsVersion: 8.0
+  TargetRailsVersion: 8.1
   NewCops: enable
   SuggestExtensions: false
   Exclude:
