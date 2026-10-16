@@ -87,10 +87,17 @@ Existing offenses are recorded in [.rubocop_todo.yml](.rubocop_todo.yml); new co
 
 ## Continuous integration
 
-[GitHub Actions](.github/workflows/ci.yml) runs on every pull request and every push to `master`, with two jobs:
+[GitHub Actions](.github/workflows/ci.yml) runs on every pull request, every push to `master` and once a week, with three jobs:
 
 - **test**: builds the Docker image, starts MySQL, loads the schema and runs the test suite.
 - **lint**: runs RuboCop.
+- **audit**: checks every gem in `Gemfile.lock` against the [Ruby Advisory Database](https://github.com/rubysec/ruby-advisory-db) with bundler-audit. The weekly run catches advisories published between pull requests.
+
+Run the audit locally with:
+
+```bash
+docker compose run --rm --no-deps web bundle exec bundle-audit check --update
+```
 
 ## Running without Docker
 

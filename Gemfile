@@ -50,6 +50,7 @@ group :development, :test do
   gem 'rubocop', '~> 1.64.1', require: false
   gem 'rubocop-rails', '~> 2.29.1', require: false
   gem 'rubocop-minitest', '~> 0.37.0', require: false
+  gem 'bundler-audit', '~> 0.9', require: false
 end
 
 group :development do
