@@ -33,7 +33,7 @@ class SolutionsController < ApplicationController
   private
 
     def solution_params
-      params.require(:solution).permit(:name, :attachment_1, :attachment_2, :attachment_3)
+      params.expect(solution: [:name, :attachment_1, :attachment_2, :attachment_3])
     end
 
     def only_freelancers

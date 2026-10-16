@@ -44,7 +44,7 @@ class ProposalsController < ApplicationController
 
   private
     def proposal_params
-      params.require(:proposal).permit(:name, :bid, :description)
+      params.expect(proposal: [:name, :bid, :description])
     end
 
     def only_freelancers

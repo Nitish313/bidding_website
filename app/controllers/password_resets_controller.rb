@@ -7,7 +7,7 @@ class PasswordResetsController < ApplicationController
   end
 
   def create
-    @user = User.find_by(email: params[:password_reset][:email].downcase)
+    @user = User.find_by(email: params.expect(password_reset: [:email])[:email].to_s.downcase)
 
     if @user
       @user.create_reset_digest
@@ -24,7 +24,7 @@ class PasswordResetsController < ApplicationController
   end
 
   def update
-    if params[:user][:password].empty?
+    if user_params[:password].blank?
       @user.errors.add(:password, "can't be empty")
       render 'edit'
     elsif @user.update(user_params)
@@ -49,7 +49,7 @@ class PasswordResetsController < ApplicationController
     end
 
     def user_params
-      params.require(:user).permit(:password, :password_confirmation)
+      params.expect(user: [:password, :password_confirmation])
     end
 
     def check_expiration

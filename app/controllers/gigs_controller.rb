@@ -69,7 +69,7 @@ class GigsController < ApplicationController
   private
 
     def gig_params
-      params.require(:gig).permit(:name, :description, :budget, :location, :open, :category_id, :skill_list, :awarded_proposal, {attachments: []})
+      params.expect(gig: [:name, :description, :budget, :location, :open, :category_id, :skill_list, :awarded_proposal, { attachments: [] }])
     end
 
     def search_params
