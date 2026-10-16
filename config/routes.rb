@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   resources :users
   resources :password_resets, only: [:new, :create, :edit, :update]
   resources :gigs do
-    resource :proposals, except: :index
+    resource :proposals
     collection do
       get :search
     end
