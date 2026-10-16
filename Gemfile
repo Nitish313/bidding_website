@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '3.3.12'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 8.0.5'
+gem 'rails', '~> 8.1.3'
 # Rails 8 no longer depends on Sprockets; the asset pipeline here still uses it.
 gem 'sprockets-rails', '~> 3.5'
 # Use mysql as the database for Active Record

@@ -8,7 +8,7 @@ All notable changes to this project are documented here. The format follows
 
 ### Changed
 
-- Upgraded Rails 5.2 → 6.0 → 6.1 → 7.0 → 7.1 → 7.2 → 8.0, moving to each version's framework defaults in its own step ([#60](https://github.com/Nitish313/bidding_website/pull/60), [#62](https://github.com/Nitish313/bidding_website/pull/62), [#63](https://github.com/Nitish313/bidding_website/pull/63), [#64](https://github.com/Nitish313/bidding_website/pull/64), [#65](https://github.com/Nitish313/bidding_website/pull/65), [#66](https://github.com/Nitish313/bidding_website/pull/66)).
+- Upgraded Rails 5.2 → 6.0 → 6.1 → 7.0 → 7.1 → 7.2 → 8.0 → 8.1, moving to each version's framework defaults in its own step ([#60](https://github.com/Nitish313/bidding_website/pull/60), [#62](https://github.com/Nitish313/bidding_website/pull/62), [#63](https://github.com/Nitish313/bidding_website/pull/63), [#64](https://github.com/Nitish313/bidding_website/pull/64), [#65](https://github.com/Nitish313/bidding_website/pull/65), [#66](https://github.com/Nitish313/bidding_website/pull/66)).
 - Switched to the Zeitwerk autoloader ([#61](https://github.com/Nitish313/bidding_website/pull/61)).
 - Upgraded Ruby 2.7 → 3.3 on a supported Debian (bookworm) base image, with Bundler 2.5 and Puma 6.
 - Moving to the Rails 7.0 defaults rotates cookies to the new key derivation, so nobody is logged out ([#66](https://github.com/Nitish313/bidding_website/pull/66)).

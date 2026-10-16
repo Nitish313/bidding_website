@@ -49,7 +49,6 @@ class RailsDefaultsTest < ActionDispatch::IntegrationTest
 
   test "the app runs on the Rails 8.0 framework defaults" do
     assert_equal "8.0", Rails.application.config.loaded_config_version.to_s
-    assert_equal :zone, ActiveSupport.to_time_preserves_timezone
     assert_equal OpenSSL::Digest::SHA256, Rails.application.config.active_support.key_generator_hash_digest_class
     assert Rails.application.config.active_support.use_message_serializer_for_metadata
   end
