@@ -43,7 +43,9 @@ gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'mini_magick'
 gem 'carrierwave', '~> 3.1'
-gem 'mailboxer', github: 'mailboxer/mailboxer'
+# The last rubygems.org release (0.15.1, 2017) predates fixes this app relies on; pin the
+# tested commit from GitHub so `bundle update` never pulls in untested code.
+gem 'mailboxer', github: 'mailboxer/mailboxer', ref: '3e148858879110c3258b46152b11e5bfc514dc04'
 gem 'lograge', '~> 0.14.0'
 
 group :development, :test do
