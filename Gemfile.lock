@@ -1,6 +1,7 @@
 GIT
   remote: https://github.com/mailboxer/mailboxer.git
   revision: 3e148858879110c3258b46152b11e5bfc514dc04
+  ref: 3e148858879110c3258b46152b11e5bfc514dc04
   specs:
     mailboxer (0.15.1)
       carrierwave (>= 0.5.8)
