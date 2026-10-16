@@ -4,15 +4,17 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '3.3.12'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 7.2.3'
+gem 'rails', '~> 8.0.5'
+# Rails 8 no longer depends on Sprockets; the asset pipeline here still uses it.
+gem 'sprockets-rails', '~> 3.5'
 # Use mysql as the database for Active Record
 gem 'mysql2', '>= 0.4.4', '< 0.6.0'
 # Use Puma as the app server
 gem 'puma', '~> 7.2'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
-# Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 1.3.0'
+# Use Terser to minify JavaScript assets in production
+gem 'terser', '~> 1.2'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'mini_racer', platforms: :ruby
 

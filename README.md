@@ -17,7 +17,7 @@ A freelance marketplace built with Ruby on Rails. Clients post gigs, freelancers
 | | |
 |---|---|
 | Language | Ruby 3.3.12 |
-| Framework | Rails 7.2 |
+| Framework | Rails 8.0 |
 | Database | MySQL 8 (development and test) |
 | Uploads | CarrierWave + MiniMagick (ImageMagick) |
 | Front end | Sprockets, Bootstrap 3 (`bootstrap-sass`), jQuery, CoffeeScript |

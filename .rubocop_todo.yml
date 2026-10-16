@@ -536,3 +536,12 @@ Style/SymbolProc:
 # URISchemes: http, https
 Layout/LineLength:
   Max: 189
+
+# Adopt params.expect in a follow-up pull request with tests for malformed input.
+Rails/StrongParametersExpect:
+  Exclude:
+    - 'app/controllers/gigs_controller.rb'
+    - 'app/controllers/password_resets_controller.rb'
+    - 'app/controllers/proposals_controller.rb'
+    - 'app/controllers/solutions_controller.rb'
+    - 'app/controllers/users_controller.rb'
