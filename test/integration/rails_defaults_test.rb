@@ -47,10 +47,20 @@ class RailsDefaultsTest < ActionDispatch::IntegrationTest
     assert_response :success, "remember-me cookie (#{digest.name})"
   end
 
-  test "the app runs on the Rails 7.1 framework defaults" do
-    assert_equal "7.1", Rails.application.config.loaded_config_version.to_s
+  test "the app runs on the Rails 7.2 framework defaults" do
+    assert_equal "7.2", Rails.application.config.loaded_config_version.to_s
     assert_equal OpenSSL::Digest::SHA256, Rails.application.config.active_support.key_generator_hash_digest_class
     assert Rails.application.config.active_support.use_message_serializer_for_metadata
+  end
+
+  test "Ruby's YJIT compiler is enabled" do
+    assert_predicate RubyVM::YJIT, :enabled?
+  end
+
+  test "every migration has a valid timestamp" do
+    assert Rails.application.config.active_record.validate_migration_timestamps
+    migrations = ActiveRecord::Base.connection_pool.migration_context.migrations
+    assert_equal Rails.root.glob("db/migrate/*.rb").size, migrations.size
   end
 
   test "responses carry the current security headers" do
