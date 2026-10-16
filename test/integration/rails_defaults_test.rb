@@ -47,10 +47,18 @@ class RailsDefaultsTest < ActionDispatch::IntegrationTest
     assert_response :success, "remember-me cookie (#{digest.name})"
   end
 
-  test "the app runs on the Rails 7.2 framework defaults" do
-    assert_equal "7.2", Rails.application.config.loaded_config_version.to_s
+  test "the app runs on the Rails 8.0 framework defaults" do
+    assert_equal "8.0", Rails.application.config.loaded_config_version.to_s
+    assert_equal :zone, ActiveSupport.to_time_preserves_timezone
     assert_equal OpenSSL::Digest::SHA256, Rails.application.config.active_support.key_generator_hash_digest_class
     assert Rails.application.config.active_support.use_message_serializer_for_metadata
+  end
+
+  test "slow regular expressions are cut off after one second" do
+    assert_in_delta 1.0, Regexp.timeout
+    # The backreference stops Ruby's own regex optimisations, so without the
+    # timeout this match would take years.
+    assert_raises(Regexp::TimeoutError) { /^(a|a?)+\1$/.match?("#{"a" * 40}!") }
   end
 
   test "Ruby's YJIT compiler is enabled" do
