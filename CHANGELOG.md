@@ -16,6 +16,7 @@ All notable changes to this project are documented here. The format follows
 
 ### Fixed
 
+- Development mode failed to boot (`cannot load such file -- rexml/document`): letter_opener_web 1.4 relied on `rexml` without declaring it. Upgraded to letter_opener_web 3.0, and CI now boots development mode and precompiles production assets on every run.
 - Production asset precompilation failed: Uglifier could not minify the modern JavaScript in Active Storage's script. JavaScript is now minified with Terser, and the unused Active Storage script is no longer loaded.
 
 ### Security
