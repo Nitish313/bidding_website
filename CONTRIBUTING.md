@@ -25,6 +25,7 @@ Run the same checks as CI:
 docker compose up -d db
 docker compose run --rm -e RAILS_ENV=test web bin/rails test
 docker compose run --rm --no-deps web bundle exec rubocop
+docker compose run --rm --no-deps web bundle exec bundle-audit check --update
 ```
 
 - All tests must pass, and line coverage must stay above the minimum in [test/test_helper.rb](test/test_helper.rb).

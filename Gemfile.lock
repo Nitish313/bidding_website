@@ -100,6 +100,9 @@ GEM
     bootstrap-will_paginate (1.0.0)
       will_paginate
     builder (3.3.0)
+    bundler-audit (0.9.3)
+      bundler (>= 1.2.0)
+      thor (~> 1.0)
     byebug (13.0.0)
       reline (>= 0.6.0)
     carrierwave (2.2.7)
@@ -371,6 +374,7 @@ DEPENDENCIES
   bootsnap (>= 1.4.2)
   bootstrap-sass
   bootstrap-will_paginate
+  bundler-audit (~> 0.9)
   byebug
   carrierwave (~> 2.2, >= 2.2.5)
   coffee-rails (~> 5.0)
