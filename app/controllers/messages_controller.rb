@@ -17,6 +17,6 @@ class MessagesController < ApplicationController
   private
 
     def set_conversation
-      @conversation = @user.mailbox.conversations.find(params[:conversation_id]) 
+      @conversation = @user.mailbox.conversations.find(params.expect(:conversation_id)) 
     end 
 end

@@ -72,11 +72,11 @@ class UsersController < ApplicationController
     end
 
     def set_user
-      @user = User.find(params[:id])
+      @user = User.find(params.expect(:id))
     end
 
     def proper_user
-      @user = User.find(params[:id])
+      @user = User.find(params.expect(:id))
       redirect_to root_path unless owner_or_admin?(@user)
     end
 

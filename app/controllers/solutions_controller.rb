@@ -20,7 +20,7 @@ class SolutionsController < ApplicationController
   end
 
   def destroy
-    @solution = Solution.find(params[:id])
+    @solution = Solution.find(params.expect(:id))
     @solution.destroy
     flash[:success] = "This solution is deleted."
     redirect_to gig_solutions_path(gig_id: params[:gig_id])
@@ -44,7 +44,7 @@ class SolutionsController < ApplicationController
     end
 
     def only_awarded_proposal_owner
-      @proposal = Proposal.find(params[:proposal_id])
+      @proposal = Proposal.find(params.expect(:proposal_id))
       if @proposal.user != current_user
         flash[:warning] = "Only the owner of this proposal can submit solutions."
         redirect_to current_user
@@ -55,7 +55,7 @@ class SolutionsController < ApplicationController
     end
 
     def correct_user
-      @solution = Solution.find(params[:id])
+      @solution = Solution.find(params.expect(:id))
       unless owner_or_admin?(@solution.proposal.user) || owner_or_admin?(@solution.gig.user)
         flash[:warning] = "Only owners can delete their solutions."
         redirect_to current_user

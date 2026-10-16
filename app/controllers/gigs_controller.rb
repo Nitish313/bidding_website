@@ -23,7 +23,7 @@ class GigsController < ApplicationController
   end
 
   def show
-    @gig = Gig.find(params[:id])
+    @gig = Gig.find(params.expect(:id))
     @proposals = @gig.proposals.order_by_date
     @awarded_proposal = Proposal.where(id: @gig.awarded_proposal).first
   end
@@ -45,7 +45,7 @@ class GigsController < ApplicationController
   def destroy
     @gig.destroy
     flash[:success] = "Gig successfully deleted."
-    redirect_back fallback_location: gigs_path
+    redirect_back_or_to(gigs_path)
   end
 
   def search
@@ -91,7 +91,7 @@ class GigsController < ApplicationController
     end
 
     def correct_user
-      @gig = Gig.find(params[:id])
+      @gig = Gig.find(params.expect(:id))
       unless owner_or_admin?(@gig.user)
         flash[:warning] = "You are neither the admin nor the owner of this gig!"
         redirect_to @gig

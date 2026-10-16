@@ -98,6 +98,27 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "You can't start a conversation with yourself.", flash[:danger]
   end
 
+  test "starting a conversation needs exactly one receiver" do
+    log_in_as(@freelancer)
+    assert_no_difference "Mailboxer::Conversation.count" do
+      assert_raises(ActionController::ParameterMissing) do
+        post user_conversations_path(@freelancer), params: { subject: "Hello", body: "Are you available?" }
+      end
+      assert_raises(ActionController::ParameterMissing) do
+        start_conversation(@freelancer, receiver_id: [@client.id, users(:rival).id])
+      end
+    end
+  end
+
+  test "a list of receivers cannot be used to message yourself" do
+    log_in_as(@freelancer)
+    assert_no_difference "Mailboxer::Conversation.count" do
+      assert_raises(ActionController::ParameterMissing) do
+        start_conversation(@freelancer, receiver_id: [@freelancer.id])
+      end
+    end
+  end
+
   test "starting a conversation with a missing user raises not found" do
     log_in_as(@freelancer)
     assert_raises(ActiveRecord::RecordNotFound) { start_conversation(@freelancer, receiver_id: 0) }
