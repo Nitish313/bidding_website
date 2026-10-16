@@ -14,6 +14,8 @@ class Gig < ApplicationRecord
   validates :budget, numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: MAX_AMOUNT },
                      allow_nil: true
   validates :name, :location, length: { maximum: 255 }
+  MAX_SKILLS = 20
+  validates :skill_list, length: { maximum: 1000 }
   validate :skill_names_fit
   validate :award_is_one_of_this_gigs_proposals, if: :awarded_proposal_changed?
   after_update :create_notification, if: :saved_change_to_awarded_proposal?
@@ -72,8 +74,9 @@ class Gig < ApplicationRecord
   private
 
   def skill_names_fit
-    too_long = skill_names.select { |name| name.length > 255 }
-    errors.add(:skill_list, "contains a skill longer than 255 characters") if too_long.any?
+    names = skill_names
+    errors.add(:skill_list, "can list at most #{MAX_SKILLS} skills") if names.size > MAX_SKILLS
+    errors.add(:skill_list, "contains a skill longer than 255 characters") if names.any? { |name| name.length > 255 }
   end
 
   def award_is_one_of_this_gigs_proposals

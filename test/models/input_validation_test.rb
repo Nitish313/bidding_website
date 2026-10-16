@@ -37,6 +37,45 @@ class InputValidationTest < ActiveSupport::TestCase
     assert_invalid gig(location: LONG), :location
   end
 
+  def skills(count, prefix: "skill")
+    (1..count).map { |n| "#{prefix}#{n}" }.join(", ")
+  end
+
+  # Skills short enough for the per-skill limit, joined to an exact total length.
+  def skill_list_of_length(total)
+    list = (1..20).map { |n| format("skill%02d-", n).ljust(49, "x") }.join(", ")
+    list.length >= total ? list[0, total] : list
+  end
+
+  test "a gig may list up to 20 skills in up to 1,000 characters" do
+    assert_predicate gig(skill_list: skills(20)), :valid?
+    list = skill_list_of_length(1000)
+    assert_equal 1000, list.length
+    assert_predicate gig(skill_list: list), :valid?
+  end
+
+  test "a gig skill list over 1,000 characters is refused" do
+    record = gig(skill_list: skill_list_of_length(1001))
+    assert_invalid record, :skill_list
+    assert_includes record.errors[:skill_list], "is too long (maximum is 1000 characters)"
+  end
+
+  test "a gig may not list more than 20 different skills" do
+    record = gig(skill_list: skills(21))
+    assert_invalid record, :skill_list
+    assert_includes record.errors[:skill_list], "can list at most 20 skills"
+  end
+
+  test "repeated skills only count once toward the limit" do
+    assert_predicate gig(skill_list: "#{skills(20)}, skill1, SKILL2"), :valid?
+  end
+
+  test "a huge skill list is refused without crashing or creating skills" do
+    assert_no_difference "Skill.count" do
+      assert_not gig(skill_list: skills(10_000)).save
+    end
+  end
+
   test "a skill longer than 255 characters makes the gig invalid instead of crashing" do
     assert_not gig(skill_list: "ruby, #{LONG}").save
   end

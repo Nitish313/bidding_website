@@ -222,4 +222,14 @@ class GigsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "#error_explanation", text: /Budget must be greater than 0/
   end
+
+  test "a gig with too many skills is refused with a message" do
+    log_in_as(users(:client))
+    many = (1..21).map { |n| "skill#{n}" }.join(", ")
+    assert_no_difference "Gig.count" do
+      post gigs_path, params: { gig: gig_params(skill_list: many) }
+    end
+    assert_response :success
+    assert_select "#error_explanation", text: /Skill list can list at most 20 skills/
+  end
 end
