@@ -1,0 +1,25 @@
+#!/usr/bin/env ruby
+# Fails (exit 1) when the last test run's line coverage is below the minimum set in
+# .simplecov. CI runs this as its own step so the coverage gate is visible.
+#
+#   bin/check-coverage [path/to/.last_run.json]
+require "json"
+
+root = File.expand_path("..", __dir__)
+result_path = ARGV[0] || File.join(root, "coverage", ".last_run.json")
+minimum = File.read(File.join(root, ".simplecov"))[/^\s*minimum_coverage\s+(\d+(?:\.\d+)?)/, 1]
+abort "No minimum_coverage found in .simplecov" unless minimum
+
+unless File.exist?(result_path)
+  abort "No coverage result at #{result_path}. Run the test suite first."
+end
+
+coverage = JSON.parse(File.read(result_path)).dig("result", "line").to_f
+minimum = minimum.to_f
+message = "Line coverage #{coverage.round(2)}% (minimum #{minimum.to_s.delete_suffix('.0')}%)"
+
+if coverage < minimum
+  abort "#{message}: below the minimum"
+else
+  puts "#{message}: ok"
+end

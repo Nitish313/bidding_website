@@ -28,7 +28,7 @@ docker compose run --rm --no-deps web bundle exec rubocop
 docker compose run --rm --no-deps web bundle exec bundle-audit check --update
 ```
 
-- All tests must pass, and line coverage must stay above the minimum in [test/test_helper.rb](test/test_helper.rb).
+- All tests must pass, and line coverage must stay above the minimum in [.simplecov](.simplecov).
 - RuboCop must report no offenses. When you fix an offense listed in [.rubocop_todo.yml](.rubocop_todo.yml), remove its entry.
 - If you change behaviour users or operators will notice, add a line under **Unreleased** in [CHANGELOG.md](CHANGELOG.md).
 

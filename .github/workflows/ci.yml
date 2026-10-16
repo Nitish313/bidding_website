@@ -29,6 +29,9 @@ jobs:
       - name: Run tests
         run: docker compose run --rm -e RAILS_ENV=test web bin/rails test
 
+      - name: Check coverage minimum
+        run: docker compose run --rm --no-deps web bin/check-coverage
+
       - name: Upload coverage report
         if: always()
         uses: actions/upload-artifact@v4
