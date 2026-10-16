@@ -19,7 +19,7 @@ class ApplicationController < ActionController::Base
 
   def correct_user
     if current_user.admin?
-      @user = User.find(params[:user_id])
+      @user = User.find(params.expect(:user_id))
     else
       @user = current_user
     end

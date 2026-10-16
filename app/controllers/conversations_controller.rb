@@ -12,7 +12,7 @@ class ConversationsController < ApplicationController
   end
 
   def create
-    recipient = User.find(params[:receiver_id])
+    recipient = User.find(params.expect(:receiver_id))
     if recipient == @user
       flash[:danger] = "You can't start a conversation with yourself."
       redirect_to new_user_conversation_path
@@ -27,18 +27,18 @@ class ConversationsController < ApplicationController
   end 
 
   def show
-    @conversation = @user.mailbox.conversations.find(params[:id])
+    @conversation = @user.mailbox.conversations.find(params.expect(:id))
   end
 
   def mark_as_read
-    @conversation = @user.mailbox.conversations.find(params[:id])
+    @conversation = @user.mailbox.conversations.find(params.expect(:id))
     @conversation.mark_as_read(@user)
     flash[:success] = 'The conversation is marked as read.'
     redirect_to user_conversations_path
   end
 
   def destroy
-    @conversation = @user.mailbox.conversations.find(params[:id])
+    @conversation = @user.mailbox.conversations.find(params.expect(:id))
     @conversation.move_to_trash(@user)
     flash[:success] = "Conversation moved to trash."
     redirect_to user_conversations_path

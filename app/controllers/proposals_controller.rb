@@ -10,7 +10,7 @@ class ProposalsController < ApplicationController
   end
 
   def create
-    @gig = Gig.find(params[:gig_id])
+    @gig = Gig.find(params.expect(:gig_id))
     @proposal = @gig.proposals.build(proposal_params)
     @proposal.user = current_user
     if @proposal.valid?
@@ -27,11 +27,11 @@ class ProposalsController < ApplicationController
   end
 
   def show
-    @proposal = Proposal.includes_associations.find(params[:id])
+    @proposal = Proposal.includes_associations.find(params.expect(:id))
   end
 
   def destroy
-    @proposal = Proposal.find(params[:id])
+    @proposal = Proposal.find(params.expect(:id))
     @proposal.destroy
     flash[:success] = "Proposal successfully deleted."
     if current_user == @proposal.user
@@ -55,7 +55,7 @@ class ProposalsController < ApplicationController
     end
 
     def correct_user
-      @proposal = Proposal.find(params[:id])
+      @proposal = Proposal.find(params.expect(:id))
       unless owner_or_admin?(@proposal.user)
         flash[:warning] = "You are neither the owner of this proposal nor the admin"
         redirect_to current_user
