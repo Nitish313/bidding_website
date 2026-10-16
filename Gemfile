@@ -42,7 +42,7 @@ gem 'jquery-rails', '~> 4.6'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'mini_magick'
-gem 'carrierwave', '~> 2.2', '>= 2.2.5'
+gem 'carrierwave', '~> 3.1'
 gem 'mailboxer', github: 'mailboxer/mailboxer'
 gem 'lograge', '~> 0.14.0'
 
