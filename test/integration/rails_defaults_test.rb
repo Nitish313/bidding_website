@@ -47,8 +47,9 @@ class RailsDefaultsTest < ActionDispatch::IntegrationTest
     assert_response :success, "remember-me cookie (#{digest.name})"
   end
 
-  test "the app runs on the Rails 8.0 framework defaults" do
-    assert_equal "8.0", Rails.application.config.loaded_config_version.to_s
+  test "the app runs on the Rails 8.1 framework defaults" do
+    assert_equal "8.1", Rails.application.config.loaded_config_version.to_s
+    assert_equal :raise, Rails.application.config.action_controller.action_on_path_relative_redirect
     assert_equal OpenSSL::Digest::SHA256, Rails.application.config.active_support.key_generator_hash_digest_class
     assert Rails.application.config.active_support.use_message_serializer_for_metadata
   end
@@ -60,8 +61,15 @@ class RailsDefaultsTest < ActionDispatch::IntegrationTest
     assert_raises(Regexp::TimeoutError) { /^(a|a?)+\1$/.match?("#{"a" * 40}!") }
   end
 
-  test "Ruby's YJIT compiler is enabled" do
-    assert_predicate RubyVM::YJIT, :enabled?
+  test "Ruby's YJIT compiler is enabled only outside development and test" do
+    assert_not Rails.application.config.yjit
+    assert_not_predicate RubyVM::YJIT, :enabled?
+  end
+
+  test "hidden form fields no longer carry autocomplete attributes" do
+    get login_path
+    assert_select "input[type=hidden]", minimum: 1
+    assert_select "input[type=hidden][autocomplete]", count: 0
   end
 
   test "every migration has a valid timestamp" do
