@@ -3,20 +3,25 @@ class MessagesController < ApplicationController
   before_action :correct_user
   before_action :own_account_only
   before_action :set_conversation
+
   def create
     if params[:body].present?
-      receipt = @user.reply_to_conversation(@conversation, params[:body])
-      Notification.create(actor_id: @user.id, receiver_id: @conversation.messages.last.recipients.first.id, action: 'sent a message', notifiable: receipt)
-      redirect_to user_conversation_path(id: receipt.conversation.id)
+      message = @conversation.reply(sender: @user, body: params[:body])
+      recipient = @conversation.other_participant(@user)
+      Notification.create(actor_id: @user.id, receiver_id: recipient.id, action: "sent a message", notifiable: message) if recipient
+      redirect_to user_conversation_path(id: @conversation.id)
     else
       flash[:danger] = "A message reply should have a body"
       redirect_to user_conversations_path
     end
+  rescue ActiveRecord::RecordInvalid => e
+    flash[:danger] = e.record.errors.full_messages.to_sentence
+    redirect_to user_conversation_path(id: @conversation.id)
   end
 
   private
 
-    def set_conversation
-      @conversation = @user.mailbox.conversations.find(params.expect(:conversation_id)) 
-    end 
+  def set_conversation
+    @conversation = Conversation.involving(@user).find(params.expect(:conversation_id))
+  end
 end

@@ -143,4 +143,34 @@ class ConversationTest < ActiveSupport::TestCase
     assert_nil conversation.messages.last.sender
     assert_includes Conversation.visible_to(@client), conversation
   end
+
+  # unread counts
+
+  test "unread_by finds only conversations with messages the user has not read" do
+    unread = start(subject: "Unread").conversation
+    read = start(subject: "Read").conversation
+    read.mark_as_read(@freelancer)
+    trashed = start(subject: "Trashed").conversation
+    trashed.move_to_trash(@freelancer)
+    own = start(sender: @freelancer, recipient: @client, subject: "Own").conversation
+
+    assert_equal [unread], Conversation.unread_by(@freelancer).to_a
+    assert_equal [own], Conversation.unread_by(@client).where(id: own.id).to_a
+    [unread, read, trashed, own].each do |conversation|
+      assert_equal conversation.unread_for?(@freelancer), Conversation.unread_by(@freelancer).include?(conversation),
+                   conversation.subject
+    end
+  end
+
+  test "counting unread conversations takes one query however many there are" do
+    5.times { |n| start(subject: "Topic #{n}") }
+    assert_queries_count(1) { Conversation.unread_by(@freelancer).count }
+  end
+
+  test "a message from a since-deleted user still counts as unread" do
+    conversation = start(sender: @rival, recipient: @freelancer).conversation
+    @rival.destroy
+    assert conversation.reload.unread_for?(@freelancer)
+    assert_equal 1, Conversation.unread_by(@freelancer).count
+  end
 end

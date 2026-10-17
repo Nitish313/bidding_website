@@ -34,10 +34,7 @@ class ApplicationController < ActionController::Base
   end
 
   def unread_counts
-    @unread_counts = 0
-    current_user.mailbox.conversations.each do |conversation|
-      @unread_counts+=1 if conversation.is_unread?(current_user)
-    end
+    @unread_counts = Conversation.unread_by(current_user).count
   end
 
   def unread_notification_counts

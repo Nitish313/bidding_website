@@ -5,7 +5,7 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
     @admin = users(:admin)
     @client = users(:client)
     @freelancer = users(:freelancer)
-    @conversation = @client.send_message(@freelancer, "Can you start Monday?", "Landing page").conversation
+    @conversation = Conversation.start(sender: @client, recipient: @freelancer, subject: "Landing page", body: "Can you start Monday?").conversation
   end
 
   def start_conversation(as_user, receiver_id:, subject: "Hello", body: "Are you available?")
@@ -69,12 +69,12 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
 
   test "a user starts a conversation and the receiver is notified" do
     log_in_as(@freelancer)
-    assert_difference "Mailboxer::Conversation.count", 1 do
+    assert_difference "Conversation.count", 1 do
       assert_difference "Notification.where(action: 'started a conversation').count", 1 do
         start_conversation(@freelancer, receiver_id: users(:rival).id)
       end
     end
-    conversation = Mailboxer::Conversation.last
+    conversation = Conversation.last
     assert_redirected_to user_conversation_path(@freelancer, conversation)
     assert_equal @freelancer, conversation.originator
     assert_equal users(:rival).id, Notification.last.receiver_id
@@ -82,7 +82,7 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
 
   test "starting a conversation without a subject or body is refused" do
     log_in_as(@freelancer)
-    assert_no_difference "Mailboxer::Conversation.count" do
+    assert_no_difference "Conversation.count" do
       start_conversation(@freelancer, receiver_id: @client.id, subject: "")
       start_conversation(@freelancer, receiver_id: @client.id, body: "")
     end
@@ -91,7 +91,7 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
 
   test "a user cannot start a conversation with themselves" do
     log_in_as(@freelancer)
-    assert_no_difference "Mailboxer::Conversation.count" do
+    assert_no_difference "Conversation.count" do
       start_conversation(@freelancer, receiver_id: @freelancer.id)
     end
     assert_redirected_to new_user_conversation_path(@freelancer)
@@ -100,7 +100,7 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
 
   test "starting a conversation needs exactly one receiver" do
     log_in_as(@freelancer)
-    assert_no_difference "Mailboxer::Conversation.count" do
+    assert_no_difference "Conversation.count" do
       assert_raises(ActionController::ParameterMissing) do
         post user_conversations_path(@freelancer), params: { subject: "Hello", body: "Are you available?" }
       end
@@ -112,7 +112,7 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
 
   test "a list of receivers cannot be used to message yourself" do
     log_in_as(@freelancer)
-    assert_no_difference "Mailboxer::Conversation.count" do
+    assert_no_difference "Conversation.count" do
       assert_raises(ActionController::ParameterMissing) do
         start_conversation(@freelancer, receiver_id: [@freelancer.id])
       end
@@ -126,7 +126,7 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
 
   test "an admin cannot start a conversation as another user" do
     log_in_as(@admin)
-    assert_no_difference "Mailboxer::Conversation.count" do
+    assert_no_difference "Conversation.count" do
       start_conversation(@freelancer, receiver_id: @client.id)
     end
     assert_redirected_to user_path(@admin)
@@ -135,27 +135,27 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
 
   test "an admin starts a conversation from their own account" do
     log_in_as(@admin)
-    assert_difference "Mailboxer::Conversation.count", 1 do
+    assert_difference "Conversation.count", 1 do
       start_conversation(@admin, receiver_id: @client.id)
     end
-    assert_equal @admin, Mailboxer::Conversation.last.originator
+    assert_equal @admin, Conversation.last.originator
   end
 
   # mark as read and delete
 
   test "a participant marks a conversation as read" do
     log_in_as(@freelancer)
-    assert @conversation.is_unread?(@freelancer)
+    assert @conversation.unread_for?(@freelancer)
     post mark_as_read_user_conversation_path(@freelancer, @conversation)
     assert_redirected_to user_conversations_path(@freelancer)
-    assert_not @conversation.reload.is_unread?(@freelancer)
+    assert_not @conversation.reload.unread_for?(@freelancer)
   end
 
   test "an admin cannot mark another user's conversation as read" do
     log_in_as(@admin)
     post mark_as_read_user_conversation_path(@freelancer, @conversation)
     assert_redirected_to user_path(@admin)
-    assert @conversation.reload.is_unread?(@freelancer)
+    assert @conversation.reload.unread_for?(@freelancer)
   end
 
   # deleting moves the conversation to the deleting user's trash only
@@ -166,7 +166,7 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "deleting a conversation keeps it in the database" do
-    assert_no_difference "Mailboxer::Conversation.count" do
+    assert_no_difference "Conversation.count" do
       trash_as(@freelancer)
     end
     assert_redirected_to user_conversations_path(@freelancer)
@@ -175,7 +175,7 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
 
   test "deleting a conversation moves it to trash for the person who deleted it" do
     trash_as(@freelancer)
-    assert @conversation.reload.is_completely_trashed?(@freelancer)
+    assert_predicate @conversation.reload.participant_for(@freelancer), :trashed?
     get user_conversations_path(@freelancer)
     assert_select "a", text: "Landing page", count: 0
   end
@@ -183,7 +183,7 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
   test "deleting a conversation leaves it untouched for the other participant" do
     trash_as(@freelancer)
     delete logout_path
-    assert_not @conversation.reload.is_trashed?(@client)
+    assert_not @conversation.reload.participant_for(@client).trashed?
     log_in_as(@client)
     get user_conversations_path(@client)
     assert_select "a", text: "Landing page"
@@ -193,7 +193,7 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
 
   test "a trashed conversation comes back when the other participant replies" do
     trash_as(@freelancer)
-    @client.reply_to_conversation(@conversation, "Following up on Monday.")
+    @conversation.reply(sender: @client, body: "Following up on Monday.")
     get user_conversations_path(@freelancer)
     assert_select "a", text: "Landing page"
     get user_conversation_path(@freelancer, @conversation)
@@ -212,7 +212,7 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
   test "when both participants delete it, it is hidden for both and still kept" do
     trash_as(@freelancer)
     delete logout_path
-    assert_no_difference "Mailboxer::Conversation.count" do
+    assert_no_difference "Conversation.count" do
       trash_as(@client)
     end
     get user_conversations_path(@client)
@@ -224,12 +224,12 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
     assert_raises(ActiveRecord::RecordNotFound) do
       delete user_conversation_path(users(:rival), @conversation)
     end
-    assert_not @conversation.reload.is_trashed?(@freelancer)
+    assert_not @conversation.reload.participant_for(@freelancer).trashed?
   end
 
   test "an admin cannot delete another user's conversation" do
     log_in_as(@admin)
-    assert_no_difference "Mailboxer::Conversation.count" do
+    assert_no_difference "Conversation.count" do
       delete user_conversation_path(@freelancer, @conversation)
     end
     assert_redirected_to user_path(@admin)
@@ -241,5 +241,42 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "select[name=receiver_id] option", text: "Carl Client"
     assert_select "select[name=receiver_id] option", text: "Fiona Freelancer", count: 0
+  end
+
+  test "a subject that is too long is refused with a message" do
+    log_in_as(@freelancer)
+    assert_no_difference "Conversation.count" do
+      start_conversation(@freelancer, receiver_id: @client.id, subject: "x" * 256)
+    end
+    assert_redirected_to new_user_conversation_path(@freelancer)
+    assert_match "Subject is too long", flash[:danger]
+  end
+
+  test "the conversation list names the creator and the other participant" do
+    log_in_as(@freelancer)
+    get user_conversations_path(@freelancer)
+    assert_select "td a", text: "Carl Client", count: 2
+  end
+
+  test "messages from a deleted user are shown without a name" do
+    @conversation.reply(sender: @freelancer, body: "Yes, Monday works.")
+    @freelancer.destroy
+    log_in_as(@client)
+    get user_conversation_path(@client, @conversation)
+    assert_response :success
+    assert_select "div", text: /Deleted user says:/
+  end
+
+  test "the conversation list runs the same number of queries however long it is" do
+    log_in_as(@freelancer)
+    queries = lambda do
+      count = 0
+      counter = ->(*, payload) { count += 1 unless payload[:name] == "SCHEMA" || payload[:cached] }
+      ActiveSupport::Notifications.subscribed(counter, "sql.active_record") { get user_conversations_path(@freelancer) }
+      count
+    end
+    with_one = queries.call
+    4.times { |n| Conversation.start(sender: @client, recipient: @freelancer, subject: "Topic #{n}", body: "Hi") }
+    assert_equal with_one, queries.call
   end
 end

@@ -4,7 +4,7 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
   def setup
     @client = users(:client)
     @freelancer = users(:freelancer)
-    @conversation = @client.send_message(@freelancer, "Can you start Monday?", "Landing page").conversation
+    @conversation = Conversation.start(sender: @client, recipient: @freelancer, subject: "Landing page", body: "Can you start Monday?").conversation
   end
 
   def reply(as_user_id, body: "Yes, Monday works.")
@@ -59,7 +59,7 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
 
   test "an admin replies in their own conversation" do
     admin = users(:admin)
-    conversation = admin.send_message(@client, "Please update your profile.", "Profile").conversation
+    conversation = Conversation.start(sender: admin, recipient: @client, subject: "Profile", body: "Please update your profile.").conversation
     log_in_as(admin)
     assert_difference "conversation.messages.count", 1 do
       post user_conversation_messages_path(admin, conversation), params: { body: "Thanks." }
@@ -73,5 +73,14 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
       reply(@freelancer.id)
     end
     assert_equal @client.id, Notification.last.receiver_id
+  end
+
+  test "a reply that is too long is refused with a message" do
+    log_in_as(@freelancer)
+    assert_no_difference "@conversation.messages.count" do
+      reply(@freelancer.id, body: "x" * 32_001)
+    end
+    assert_redirected_to user_conversation_path(@freelancer, @conversation)
+    assert_match "Body is too long", flash[:danger]
   end
 end

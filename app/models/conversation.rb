@@ -13,6 +13,15 @@ class Conversation < ApplicationRecord
   scope :visible_to, lambda { |user|
     involving(user).where(conversation_participants: { trashed: false }).order(updated_at: :desc, id: :desc)
   }
+  # Visible conversations with a message from someone else (including a since-deleted
+  # user) that arrived after the user last read it. One query, however many there are.
+  scope :unread_by, lambda { |user|
+    unread_messages = Message.where("messages.conversation_id = conversations.id")
+                             .where("messages.sender_id IS NULL OR messages.sender_id <> ?", user.id)
+                             .where("conversation_participants.last_read_at IS NULL " \
+                                    "OR messages.created_at > conversation_participants.last_read_at")
+    visible_to(user).where(unread_messages.arel.exists)
+  }
 
   # Creates the conversation, both participants and the first message. Returns the message.
   def self.start(sender:, recipient:, subject:, body:)
@@ -44,8 +53,9 @@ class Conversation < ApplicationRecord
     participants.find_by(user_id: user.id)
   end
 
+  # Uses the already loaded participants when the caller preloaded them.
   def other_participant(user)
-    users.where.not(id: user.id).first
+    users.find { |participant| participant.id != user.id }
   end
 
   def originator
@@ -53,12 +63,7 @@ class Conversation < ApplicationRecord
   end
 
   def unread_for?(user)
-    participant = participant_for(user)
-    return false if participant.nil? || participant.trashed?
-
-    unread = messages.where.not(sender_id: user.id)
-    unread = unread.where("messages.created_at > ?", participant.last_read_at) if participant.last_read_at
-    unread.exists?
+    Conversation.unread_by(user).exists?(id)
   end
 
   def mark_as_read(user)
