@@ -6,27 +6,43 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-10-17
+
+Brings the app from Rails 5.2 and Ruby 2.7 to Rails 8.1 and Ruby 3.3, running on the
+Rails 8.1 framework defaults, with no known gem vulnerabilities.
+
 ### Changed
 
-- Upgraded Rails 5.2 → 6.0 → 6.1 → 7.0 → 7.1 → 7.2 → 8.0 → 8.1, moving to each version's framework defaults in its own step ([#60](https://github.com/Nitish313/bidding_website/pull/60), [#62](https://github.com/Nitish313/bidding_website/pull/62), [#63](https://github.com/Nitish313/bidding_website/pull/63), [#64](https://github.com/Nitish313/bidding_website/pull/64), [#65](https://github.com/Nitish313/bidding_website/pull/65), [#66](https://github.com/Nitish313/bidding_website/pull/66)).
+- Upgraded Rails 5.2 → 6.0 → 6.1 → 7.0 → 7.1 → 7.2 → 8.0 → 8.1, one version at a time, each followed by its own switch to that version's framework defaults ([#60](https://github.com/Nitish313/bidding_website/pull/60), [#62](https://github.com/Nitish313/bidding_website/pull/62), [#63](https://github.com/Nitish313/bidding_website/pull/63), [#64](https://github.com/Nitish313/bidding_website/pull/64), [#65](https://github.com/Nitish313/bidding_website/pull/65), [#66](https://github.com/Nitish313/bidding_website/pull/66), [#69](https://github.com/Nitish313/bidding_website/pull/69), [#71](https://github.com/Nitish313/bidding_website/pull/71), [#73](https://github.com/Nitish313/bidding_website/pull/73), [#75](https://github.com/Nitish313/bidding_website/pull/75), [#76](https://github.com/Nitish313/bidding_website/pull/76), [#77](https://github.com/Nitish313/bidding_website/pull/77), [#79](https://github.com/Nitish313/bidding_website/pull/79), [#84](https://github.com/Nitish313/bidding_website/pull/84)).
 - Switched to the Zeitwerk autoloader ([#61](https://github.com/Nitish313/bidding_website/pull/61)).
-- Upgraded Ruby 2.7 → 3.3 on a supported Debian (bookworm) base image, with Bundler 2.5 and Puma 6.
-- Upgraded carrierwave 2.2 → 3.1, which no longer relies on `String#mb_chars` (removed in Rails 8.2); image resizing now goes through `image_processing`.
-- Moving to the Rails 7.0 defaults rotates cookies to the new key derivation, so nobody is logged out ([#66](https://github.com/Nitish313/bidding_website/pull/66)).
+- Upgraded Ruby 2.7 → 3.3 on a supported Debian (bookworm) base image with Bundler 2.5 ([#67](https://github.com/Nitish313/bidding_website/pull/67)).
+- Moving to the Rails 7.0 and 7.1 defaults rotates cookies to the new key derivation and format, so nobody is logged out ([#66](https://github.com/Nitish313/bidding_website/pull/66), [#71](https://github.com/Nitish313/bidding_website/pull/71)).
+- Upgraded carrierwave 2.2 → 3.1, which no longer relies on `String#mb_chars` (removed in Rails 8.2); image resizing now goes through `image_processing` ([#80](https://github.com/Nitish313/bidding_website/pull/80)).
+- Pinned the `mailboxer` gem to the tested GitHub commit ([#83](https://github.com/Nitish313/bidding_website/pull/83)).
+- Upgraded RuboCop to 1.92 with rubocop-rails 2.38 and rubocop-minitest 0.41 ([#85](https://github.com/Nitish313/bidding_website/pull/85)).
+
+### Added
+
+- CI `audit` job checking every gem against the Ruby Advisory Database on each pull request and weekly ([#74](https://github.com/Nitish313/bidding_website/pull/74)).
+- CI step that checks the 96% coverage minimum on its own; coverage settings live in `.simplecov` ([#81](https://github.com/Nitish313/bidding_website/pull/81)).
+- CI steps that boot development mode and precompile production assets ([#86](https://github.com/Nitish313/bidding_website/pull/86)).
 
 ### Fixed
 
-- Development mode failed to boot (`cannot load such file -- rexml/document`): letter_opener_web 1.4 relied on `rexml` without declaring it. Upgraded to letter_opener_web 3.0, and CI now boots development mode and precompiles production assets on every run.
-- Production asset precompilation failed: Uglifier could not minify the modern JavaScript in Active Storage's script. JavaScript is now minified with Terser, and the unused Active Storage script is no longer loaded.
+- Malformed or missing form fields (for example a plain string where a set of fields is expected) return 400 instead of crashing with a 500 ([#78](https://github.com/Nitish313/bidding_website/pull/78)).
+- A conversation could be sent to a list of receivers, including yourself, before crashing; exactly one receiver is now required ([#87](https://github.com/Nitish313/bidding_website/pull/87)).
+- A gig's skill list is limited to 20 skills and 1,000 characters; oversized lists crashed the save ([#82](https://github.com/Nitish313/bidding_website/pull/82)).
+- Development mode failed to boot (`cannot load such file -- rexml/document`) because letter_opener_web 1.4 relied on `rexml` without declaring it; upgraded to letter_opener_web 3.0 ([#86](https://github.com/Nitish313/bidding_website/pull/86)).
+- Production asset precompilation failed because Uglifier could not minify modern JavaScript; JavaScript is now minified with Terser and the unused Active Storage script is no longer loaded ([#76](https://github.com/Nitish313/bidding_website/pull/76)).
 
 ### Security
 
-- Cleared every known gem vulnerability reported by bundler-audit: Rails 7.2.3.2, Puma 7.2, carrierwave 2.2.7 and jquery-rails 4.6, and removed unused browser-test gems ([#72](https://github.com/Nitish313/bidding_website/pull/72)).
-- Cookies are sent with `SameSite=Lax`, CSRF tokens are URL-safe, and redirects never leave the site ([#64](https://github.com/Nitish313/bidding_website/pull/64), [#66](https://github.com/Nitish313/bidding_website/pull/66)).
+- Cleared every known gem vulnerability reported by bundler-audit, including Rails, Puma (now 7.2), carrierwave and jquery-rails, and removed unused browser-test gems ([#72](https://github.com/Nitish313/bidding_website/pull/72), [#73](https://github.com/Nitish313/bidding_website/pull/73)).
+- Cookies are sent with `SameSite=Lax`, CSRF tokens are URL-safe, redirects never leave the site, and slow regular expressions time out after one second ([#64](https://github.com/Nitish313/bidding_website/pull/64), [#66](https://github.com/Nitish313/bidding_website/pull/66), [#77](https://github.com/Nitish313/bidding_website/pull/77)).
 
 ### Removed
 
-- Spring, the unused `faker` and `chromedriver-helper` gems, and the end-of-life `archive.debian.org` package source.
+- Spring, the unused `faker`, `chromedriver-helper`, `capybara` and `selenium-webdriver` gems, and the end-of-life `archive.debian.org` package source ([#65](https://github.com/Nitish313/bidding_website/pull/65), [#67](https://github.com/Nitish313/bidding_website/pull/67), [#72](https://github.com/Nitish313/bidding_website/pull/72)).
 
 ## [1.0.0] - 2026-10-15
 
@@ -85,5 +101,6 @@ and a series of security and correctness fixes.
 - Empty `package.json` and Yarn wiring ([#50](https://github.com/Nitish313/bidding_website/pull/50)).
 - Commented-out and unused code ([#48](https://github.com/Nitish313/bidding_website/pull/48), [#56](https://github.com/Nitish313/bidding_website/pull/56)).
 
-[Unreleased]: https://github.com/Nitish313/bidding_website/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/Nitish313/bidding_website/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/Nitish313/bidding_website/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/Nitish313/bidding_website/releases/tag/v1.0.0
