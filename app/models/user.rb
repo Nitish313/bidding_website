@@ -3,6 +3,7 @@ class User < ApplicationRecord
   has_many :gigs, dependent: :destroy
   has_many :proposals, dependent: :destroy
   has_many :notifications, foreign_key: :receiver_id, dependent: :destroy
+  has_many :conversation_participants, dependent: :destroy
   
   attr_accessor :remember_token, :activation_token, :reset_token
   
