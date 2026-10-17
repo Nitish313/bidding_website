@@ -6,6 +6,18 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- Messaging now runs on the app's own `Conversation`, `ConversationParticipant` and `Message` models instead of the unmaintained mailboxer gem. Existing conversations, messages, read and trash state, and notifications were copied over with their ids, and the unread count is a single query ([#89](https://github.com/Nitish313/bidding_website/pull/89), [#90](https://github.com/Nitish313/bidding_website/pull/90), [#91](https://github.com/Nitish313/bidding_website/pull/91)).
+
+### Fixed
+
+- A message from a since-deleted user now counts as unread, and messages from deleted users show as "Deleted user" ([#91](https://github.com/Nitish313/bidding_website/pull/91)).
+
+### Removed
+
+- The mailboxer gem, its initializer and its database tables.
+
 ## [1.1.0] - 2026-10-17
 
 Brings the app from Rails 5.2 and Ruby 2.7 to Rails 8.1 and Ruby 3.3, running on the

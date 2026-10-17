@@ -21,16 +21,11 @@ class User < ApplicationRecord
   validates :education, :industry, length: { maximum: 255 }               
   
   has_secure_password
-  acts_as_messageable
   
   scope :activated_freelancers, -> { where(activated: true, role: "Freelancer") }
 
   with_options unless: :admin? do |user|
     user.validates :industry, :profile_picture, :role, presence: true
-  end
-
-  def mailboxer_email(object)
-    nil
   end
 
   def User.digest(string)
