@@ -2,6 +2,7 @@
 class Message < ApplicationRecord
   belongs_to :conversation, touch: true, inverse_of: :messages
   belongs_to :sender, class_name: "User", optional: true
+  has_many :notifications, as: :notifiable, dependent: :destroy
 
   validates :body, presence: true, length: { maximum: 32_000 }
   validates :sender, presence: true, on: :create

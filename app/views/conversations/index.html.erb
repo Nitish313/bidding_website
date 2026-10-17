@@ -12,10 +12,10 @@
 	<% @conversations.each do |conversation| %>
 		<tr>
 			<td><%= link_to conversation.subject, user_conversation_path(id: conversation.id ) %></td>
-			<td><%= link_to conversation.receipts.first.message.sender.name, user_path(conversation.receipts.first.message.sender) %></td>
-			<td><%= link_to conversation.receipts.first.receiver.name, user_path(conversation.receipts.first.receiver) %></td>
+			<td><%= link_to_user_or_deleted(conversation.originator) %></td>
+			<td><%= link_to_user_or_deleted(conversation.other_participant(@user)) %></td>
 			<td>
-				<% if conversation.is_unread?(@user) && current_user?(@user) %>
+				<% if @unread_ids.include?(conversation.id) && current_user?(@user) %>
 					<%= link_to 'Mark as read', mark_as_read_user_conversation_path(id: conversation.id), class: 'btn btn-xs btn-info', method: :post %>
 				<% end %>
 			</td>
