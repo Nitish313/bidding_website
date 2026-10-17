@@ -34,9 +34,6 @@ second maintainer can take over or share the work without relying on tribal know
 
 ## Known areas to watch
 
-- **`mailboxer`** (messaging) is pinned to a 2018 GitHub commit and is no longer actively
-  maintained. Replacing it with in-app conversation and message models would remove the
-  dependency.
 - **Front-end assets** still use Sprockets with `sass-rails` (Ruby Sass) and CoffeeScript.
   Moving to `dartsass-sprockets` or Propshaft is a candidate for future work.
 
