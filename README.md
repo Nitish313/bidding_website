@@ -121,7 +121,7 @@ The database connection is configured with environment variables:
 
 ## Contributing and changes
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for how to make and submit changes, and [CHANGELOG.md](CHANGELOG.md) for what changed in each release.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for how to make and submit changes, [CHANGELOG.md](CHANGELOG.md) for what changed in each release, and [MAINTAINERS.md](MAINTAINERS.md) for who maintains the project and how.
 
 ## Project structure
 
