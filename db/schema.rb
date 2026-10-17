@@ -2,17 +2,16 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# Note that this schema.rb definition is the authoritative source for your
-# database schema. If you need to create the application database on another
-# system, you should be using db:schema:load, not running all the migrations
-# from scratch. The latter is a flawed and unsustainable approach (the more migrations
-# you'll amass, the slower it'll run and the greater likelihood for issues).
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
+# be faster and is potentially less error prone than running all of your
+# migrations from scratch. Old migrations may fail to apply correctly if those
+# migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_31_170352) do
-
-  create_table "abilities", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+ActiveRecord::Schema[8.1].define(version: 2026_10_17_173602) do
+  create_table "abilities", charset: "utf8mb3", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "gig_id"
@@ -21,13 +20,31 @@ ActiveRecord::Schema.define(version: 2020_03_31_170352) do
     t.index ["skill_id"], name: "index_abilities_on_skill_id"
   end
 
-  create_table "categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "categories", charset: "utf8mb3", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "gigs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "conversation_participants", charset: "utf8mb3", force: :cascade do |t|
+    t.bigint "conversation_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "last_read_at"
+    t.boolean "trashed", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["conversation_id", "user_id"], name: "index_conversation_participants_on_conversation_id_and_user_id", unique: true
+    t.index ["conversation_id"], name: "index_conversation_participants_on_conversation_id"
+    t.index ["user_id"], name: "index_conversation_participants_on_user_id"
+  end
+
+  create_table "conversations", charset: "utf8mb3", force: :cascade do |t|
+    t.string "subject", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "gigs", charset: "utf8mb3", force: :cascade do |t|
     t.string "name", null: false
     t.text "description", null: false
     t.integer "budget", null: false
@@ -44,7 +61,7 @@ ActiveRecord::Schema.define(version: 2020_03_31_170352) do
     t.index ["user_id"], name: "index_gigs_on_user_id"
   end
 
-  create_table "mailboxer_conversation_opt_outs", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "mailboxer_conversation_opt_outs", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.string "unsubscriber_type"
     t.integer "unsubscriber_id"
     t.integer "conversation_id"
@@ -52,13 +69,13 @@ ActiveRecord::Schema.define(version: 2020_03_31_170352) do
     t.index ["unsubscriber_id", "unsubscriber_type"], name: "index_mailboxer_conversation_opt_outs_on_unsubscriber_id_type"
   end
 
-  create_table "mailboxer_conversations", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "mailboxer_conversations", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.string "subject", default: ""
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "mailboxer_notifications", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "mailboxer_notifications", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.string "type"
     t.text "body"
     t.string "subject", default: ""
@@ -81,7 +98,7 @@ ActiveRecord::Schema.define(version: 2020_03_31_170352) do
     t.index ["type"], name: "index_mailboxer_notifications_on_type"
   end
 
-  create_table "mailboxer_receipts", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "mailboxer_receipts", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.string "receiver_type"
     t.integer "receiver_id"
     t.integer "notification_id", null: false
@@ -98,7 +115,17 @@ ActiveRecord::Schema.define(version: 2020_03_31_170352) do
     t.index ["receiver_id", "receiver_type"], name: "index_mailboxer_receipts_on_receiver_id_and_receiver_type"
   end
 
-  create_table "notifications", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "messages", charset: "utf8mb3", force: :cascade do |t|
+    t.bigint "conversation_id", null: false
+    t.bigint "sender_id"
+    t.text "body", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["conversation_id"], name: "index_messages_on_conversation_id"
+    t.index ["sender_id"], name: "index_messages_on_sender_id"
+  end
+
+  create_table "notifications", charset: "utf8mb3", force: :cascade do |t|
     t.integer "actor_id", null: false
     t.integer "receiver_id", null: false
     t.string "action", null: false
@@ -109,7 +136,7 @@ ActiveRecord::Schema.define(version: 2020_03_31_170352) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "proposals", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "proposals", charset: "utf8mb3", force: :cascade do |t|
     t.integer "bid", null: false
     t.text "description", null: false
     t.datetime "created_at", null: false
@@ -121,13 +148,13 @@ ActiveRecord::Schema.define(version: 2020_03_31_170352) do
     t.index ["user_id"], name: "index_proposals_on_user_id"
   end
 
-  create_table "skills", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "skills", charset: "utf8mb3", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "solutions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "solutions", charset: "utf8mb3", force: :cascade do |t|
     t.string "name", null: false
     t.string "attachment_1", null: false
     t.string "attachment_2"
@@ -140,7 +167,7 @@ ActiveRecord::Schema.define(version: 2020_03_31_170352) do
     t.index ["proposal_id"], name: "index_solutions_on_proposal_id"
   end
 
-  create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "users", charset: "utf8mb3", force: :cascade do |t|
     t.string "name", null: false
     t.string "email", null: false
     t.string "password_digest", null: false
@@ -161,9 +188,13 @@ ActiveRecord::Schema.define(version: 2020_03_31_170352) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "conversation_participants", "conversations"
+  add_foreign_key "conversation_participants", "users"
   add_foreign_key "mailboxer_conversation_opt_outs", "mailboxer_conversations", column: "conversation_id", name: "mb_opt_outs_on_conversations_id"
   add_foreign_key "mailboxer_notifications", "mailboxer_conversations", column: "conversation_id", name: "notifications_on_conversation_id"
   add_foreign_key "mailboxer_receipts", "mailboxer_notifications", column: "notification_id", name: "receipts_on_notification_id"
+  add_foreign_key "messages", "conversations"
+  add_foreign_key "messages", "users", column: "sender_id", on_delete: :nullify
   add_foreign_key "solutions", "gigs"
   add_foreign_key "solutions", "proposals"
 end
