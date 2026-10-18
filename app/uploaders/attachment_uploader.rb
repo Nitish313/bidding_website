@@ -44,4 +44,14 @@ class AttachmentUploader < CarrierWave::Uploader::Base
   # def filename
   #   "something.jpg" if original_filename
   # end
+
+  # Attachments are served from this site, so only allow types a browser will not run
+  # as a page (no HTML, SVG or scripts).
+  def extension_allowlist
+    %w[pdf doc docx xls xlsx ppt pptx odt ods odp rtf txt csv zip png jpg jpeg gif]
+  end
+
+  def size_range
+    1..(20.megabytes)
+  end
 end

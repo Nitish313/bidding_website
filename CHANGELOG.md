@@ -14,6 +14,10 @@ All notable changes to this project are documented here. The format follows
 
 - A message from a since-deleted user now counts as unread, and messages from deleted users show as "Deleted user" ([#91](https://github.com/Nitish313/bidding_website/pull/91)).
 
+### Security
+
+- Gig and solution attachments only accept document, archive and image types (no HTML or SVG, which would run as pages on this site) and are limited to 20 MB. Profile pictures must be real images, not other files renamed to `.png`.
+
 ### Removed
 
 - The mailboxer gem, its initializer and its database tables.

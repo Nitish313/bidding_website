@@ -3,6 +3,9 @@ class ImageUploader < CarrierWave::Uploader::Base
   # include CarrierWave::RMagick
   include CarrierWave::MiniMagick
 
+  # The extension alone can be faked, so check that ImageMagick can actually read the file.
+  before :cache, :ensure_real_image
+
   # Choose what kind of storage to use for this uploader:
   storage :file
   # storage :fog
@@ -44,4 +47,12 @@ class ImageUploader < CarrierWave::Uploader::Base
   # def filename
   #   "something.jpg" if original_filename
   # end
+
+  private
+
+  def ensure_real_image(file)
+    return if MiniMagick::Image.new(file.path).valid?
+
+    raise CarrierWave::IntegrityError, "is not a valid image"
+  end
 end
