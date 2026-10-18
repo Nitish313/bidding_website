@@ -6,6 +6,10 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- Error reporting with Sentry (`sentry-ruby`, `sentry-rails`), switched on by `SENTRY_DSN`. Reports include the user's id only; 404s and 400s are not reported.
+
 ### Changed
 
 - Messaging now runs on the app's own `Conversation`, `ConversationParticipant` and `Message` models instead of the unmaintained mailboxer gem. Existing conversations, messages, read and trash state, and notifications were copied over with their ids, and the unread count is a single query ([#89](https://github.com/Nitish313/bidding_website/pull/89), [#90](https://github.com/Nitish313/bidding_website/pull/90), [#91](https://github.com/Nitish313/bidding_website/pull/91)).

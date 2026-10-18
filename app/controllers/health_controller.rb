@@ -1,7 +1,7 @@
 # Liveness and readiness check for load balancers and monitoring.
 # Skips the unread-count filters so it never loads a user or touches the session.
 class HealthController < ApplicationController
-  skip_before_action :unread_counts, :unread_notification_counts
+  skip_before_action :unread_counts, :unread_notification_counts, :tag_error_reports_with_user
 
   def show
     response.headers["Cache-Control"] = "no-store"
