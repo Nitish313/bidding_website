@@ -60,6 +60,10 @@ The admin's email and password come from `SEED_ADMIN_EMAIL` (default `admin@exam
 
 In production, each request is logged as a single JSON line ([lograge](https://github.com/roidrage/lograge)) with method, path, status, duration and `request_id`. Health checks are left out of the log. Set `RAILS_LOG_TO_STDOUT=1` to log to standard output, for example in a container.
 
+### Error tracking
+
+Unexpected errors are reported to [Sentry](https://sentry.io) (or a Sentry-compatible service such as GlitchTip) when `SENTRY_DSN` is set; without it nothing is sent. Reports carry the logged-in user's id but no personal data. Routine errors such as missing records (404) and malformed requests (400) are not reported. Optional: `SENTRY_TRACES_SAMPLE_RATE` (0 to 1) for performance tracing and `SENTRY_RELEASE` to tag reports with a version.
+
 ## Running the tests
 
 ```bash

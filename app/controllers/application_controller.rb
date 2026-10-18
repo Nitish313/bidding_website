@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
 
   before_action :unread_counts, only: :show, if: :logged_in?
   before_action :unread_notification_counts, if: :logged_in?
+  before_action :tag_error_reports_with_user, if: :logged_in?
 
   # True when the logged-in user is the given owner, or an admin.
   def owner_or_admin?(owner)
@@ -42,5 +43,12 @@ class ApplicationController < ActionController::Base
     current_user.notifications.each do |notification|
       @unread_notification_counts+=1 if !notification.is_read?
     end
+  end
+
+  private
+
+  # Lets an error report say which account hit it, by id only.
+  def tag_error_reports_with_user
+    Sentry.set_user(id: current_user.id)
   end
 end
