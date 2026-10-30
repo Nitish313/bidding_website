@@ -34,7 +34,33 @@ docker compose run --rm --no-deps web bundle exec bundle-audit check --update
 
 ## Commit messages
 
-Use the imperative mood and say what changes, for example `Validate gig awards against the gig's own proposals`. Explain *why* in the body when it is not obvious.
+Use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/): a type, a colon, and a short imperative summary of what changes.
+
+```
+type: summary in the imperative mood
+```
+
+| Type | Use for |
+|---|---|
+| `feat` | a new feature or user-visible behaviour |
+| `fix` | a bug fix |
+| `test` | adding or correcting tests only |
+| `refactor` | code changes that do not change behaviour |
+| `perf` | performance improvements |
+| `docs` | documentation only |
+| `build` | dependencies, Gemfile, Dockerfile |
+| `ci` | GitHub Actions workflow changes |
+| `chore` | anything else that does not touch app code |
+
+Examples:
+
+```
+fix: return 422 when a gig form is invalid
+feat: limit a gig's skill list to 20 skills
+build: upgrade Rails to 8.1
+```
+
+A fix or feature and the tests that prove it go in the **same** commit. Explain *why* in the body when it is not obvious. Commits made before this convention was adopted use plain sentences.
 
 ## Pull requests
 
