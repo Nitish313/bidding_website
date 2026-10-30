@@ -17,7 +17,7 @@ class SessionsController < ApplicationController
       end
     else
       flash.now[:danger] = "Invalid login credentials!"
-      render 'new'
+      render 'new', status: :unprocessable_entity
     end
   end
 

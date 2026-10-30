@@ -38,7 +38,7 @@ class SignupAndActivationTest < ActionDispatch::IntegrationTest
     assert_no_difference "User.count" do
       sign_up(role: "Freelancer")
     end
-    assert_response :success
+    assert_response :unprocessable_entity
     assert_select "#error_explanation", text: /Education can't be blank/
   end
 
@@ -48,7 +48,7 @@ class SignupAndActivationTest < ActionDispatch::IntegrationTest
       assert_no_difference "User.count", bad.inspect do
         sign_up(bad)
       end
-      assert_response :success
+      assert_response :unprocessable_entity
       assert_select "#error_explanation"
     end
     assert_empty ActionMailer::Base.deliveries

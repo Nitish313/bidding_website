@@ -101,7 +101,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   test "an invalid profile update is refused" do
     log_in_as(users(:client))
     patch user_path(users(:client)), params: { user: { name: "" } }
-    assert_response :success
+    assert_response :unprocessable_entity
     assert_select "#error_explanation"
     assert_equal "Carl Client", users(:client).reload.name
   end

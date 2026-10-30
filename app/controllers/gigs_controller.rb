@@ -18,7 +18,7 @@ class GigsController < ApplicationController
       flash[:success] = "New Gig posted"
       redirect_to gig_path(@gig)
     else
-      render 'new'
+      render 'new', status: :unprocessable_entity
     end
   end
 
@@ -38,7 +38,7 @@ class GigsController < ApplicationController
       flash[:success] = "Gig successfully updated."
       redirect_to gig_path(@gig)
     else
-      render 'edit'
+      render 'edit', status: :unprocessable_entity
     end
   end
 
