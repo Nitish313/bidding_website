@@ -14,14 +14,14 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
   test "logging in with a wrong password shows an error and does not log in" do
     log_in_as(users(:freelancer), password: "wrong-password")
-    assert_response :success
+    assert_response :unprocessable_entity
     assert_equal "Invalid login credentials!", flash[:danger]
     assert_nil session[:user_id]
   end
 
   test "logging in with an unknown email shows an error" do
     post login_path, params: { session: { email: "nobody@example.com", password: "test-password" } }
-    assert_response :success
+    assert_response :unprocessable_entity
     assert_select "div", text: /Invalid login credentials!/
     assert_nil session[:user_id]
   end

@@ -12,6 +12,7 @@ All notable changes to this project are documented here. The format follows
 
 ### Changed
 
+- Forms that fail validation (signup, profile, gigs, login, password reset) now answer HTTP 422 Unprocessable Entity instead of 200, as current Rails expects.
 - Messaging now runs on the app's own `Conversation`, `ConversationParticipant` and `Message` models instead of the unmaintained mailboxer gem. Existing conversations, messages, read and trash state, and notifications were copied over with their ids, and the unread count is a single query ([#89](https://github.com/Nitish313/bidding_website/pull/89), [#90](https://github.com/Nitish313/bidding_website/pull/90), [#91](https://github.com/Nitish313/bidding_website/pull/91)).
 
 ### Fixed
