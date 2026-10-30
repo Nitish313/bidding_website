@@ -58,7 +58,7 @@ The admin's email and password come from `SEED_ADMIN_EMAIL` (default `admin@exam
 
 `GET /health` returns `{"status":"ok","database":"ok"}` when the app can reach its database, and HTTP 503 with `"database":"unavailable"` when it cannot. It needs no login, so load balancers and uptime monitors can poll it.
 
-In production, each request is logged as a single JSON line ([lograge](https://github.com/roidrage/lograge)) with method, path, status, duration and `request_id`. Health checks are left out of the log. Set `RAILS_LOG_TO_STDOUT=1` to log to standard output, for example in a container.
+Outside development, each request is logged as a single JSON line ([lograge](https://github.com/roidrage/lograge), configured in [config/initializers/lograge.rb](config/initializers/lograge.rb)) with method, path, status, duration and `request_id`. Health checks are left out of the log. Set `RAILS_LOG_TO_STDOUT=1` to log to standard output, for example in a container.
 
 ### Error tracking
 

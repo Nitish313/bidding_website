@@ -76,14 +76,8 @@ Rails.application.configure do
   config.active_support.deprecation = :notify
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
-  # One JSON line per request (lograge) instead of Rails' multi-line request logs.
-  # The request id goes inside the JSON, so lines are printed without any prefix.
-  config.lograge.enabled = true
-  config.lograge.formatter = Lograge::Formatters::Json.new
-  config.lograge.ignore_actions = ["HealthController#show"]
-  config.lograge.custom_payload do |controller|
-    { request_id: controller.request.request_id, user_id: controller.session[:user_id] }.compact
-  end
+  # Request logs are JSON lines (config/initializers/lograge.rb) that carry their own
+  # request id, so print each log line as-is, without Rails' prefix.
   config.log_formatter = proc { |_severity, _time, _progname, message| "#{message}\n" }
 
   # Use a different logger for distributed setups.
