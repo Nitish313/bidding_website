@@ -53,7 +53,7 @@ class GigsControllerTest < ActionDispatch::IntegrationTest
                              gig: gigs(:blog_posts), user: users(:freelancer))
     log_in_as(users(:client))
     award(gigs(:landing_page), other.id)
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
     assert_select "#error_explanation"
     assert_nil gigs(:landing_page).reload.awarded_proposal
   end
@@ -110,7 +110,7 @@ class GigsControllerTest < ActionDispatch::IntegrationTest
     assert_no_difference "Gig.count" do
       post gigs_path, params: { gig: gig_params(name: "") }
     end
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
     assert_select "#error_explanation"
   end
 
@@ -138,7 +138,7 @@ class GigsControllerTest < ActionDispatch::IntegrationTest
   test "an invalid gig edit is refused" do
     log_in_as(users(:client))
     patch gig_path(gigs(:landing_page)), params: { gig: { name: "" } }
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
     assert_select "#error_explanation"
     assert_equal "Build a landing page", gigs(:landing_page).reload.name
   end
@@ -219,7 +219,7 @@ class GigsControllerTest < ActionDispatch::IntegrationTest
     assert_no_difference "Gig.count" do
       post gigs_path, params: { gig: gig_params(budget: -100) }
     end
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
     assert_select "#error_explanation", text: /Budget must be greater than 0/
   end
 
@@ -229,7 +229,7 @@ class GigsControllerTest < ActionDispatch::IntegrationTest
     assert_no_difference "Gig.count" do
       post gigs_path, params: { gig: gig_params(skill_list: many) }
     end
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
     assert_select "#error_explanation", text: /Skill list can list at most 20 skills/
   end
 end
