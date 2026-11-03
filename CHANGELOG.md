@@ -9,6 +9,7 @@ All notable changes to this project are documented here. The format follows
 ### Added
 
 - Error reporting with Sentry (`sentry-ruby`, `sentry-rails`), switched on by `SENTRY_DSN`. Reports include the user's id only; 404s and 400s are not reported.
+- An end-to-end test of a gig's whole lifecycle: two users sign up and activate, then the gig is posted, found by search, bid on, awarded, discussed in messages and delivered, with the notifications checked at each step.
 
 ### Changed
 
