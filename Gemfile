@@ -12,7 +12,7 @@ gem 'mysql2', '>= 0.4.4', '< 0.6.0'
 # Use Puma as the app server
 gem 'puma', '~> 7.2'
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 5.0'
+gem 'sass-rails', '~> 6.0'
 # Use Terser to minify JavaScript assets in production
 gem 'terser', '~> 1.2'
 # See https://github.com/rails/execjs#readme for more supported runtimes

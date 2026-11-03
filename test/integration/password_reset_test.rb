@@ -20,7 +20,7 @@ class PasswordResetTest < ActionDispatch::IntegrationTest
 
   test "requesting a reset for an unknown email sends nothing" do
     request_reset("nobody@example.com")
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
     assert_equal "Email address not found", flash[:danger]
     assert_empty ActionMailer::Base.deliveries
   end
@@ -64,10 +64,10 @@ class PasswordResetTest < ActionDispatch::IntegrationTest
     request_reset(@user.email)
     token = reset_token
     submit_new_password(token, "")
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
     assert_select "#error_explanation", text: /Password can't be empty/
     submit_new_password(token, "new-pass-1", "new-pass-2")
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
     assert_select "#error_explanation"
     assert @user.reload.authenticate("test-password")
   end
