@@ -34,8 +34,8 @@ second maintainer can take over or share the work without relying on tribal know
 
 ## Known areas to watch
 
-- **Front-end assets** still use Sprockets with `sass-rails` (Ruby Sass) and CoffeeScript.
-  Moving to `dartsass-sprockets` or Propshaft is a candidate for future work.
+- **Front-end assets** still use Sprockets with `sass-rails` (SassC, whose LibSass is deprecated), Bootstrap 3 and Turbolinks.
+  Moving to `dartsass-sprockets` or Propshaft, Bootstrap 5 and Turbo are candidates for future work.
 
 ## Reporting a security issue
 
