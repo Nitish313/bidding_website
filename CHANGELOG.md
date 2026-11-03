@@ -29,6 +29,7 @@ All notable changes to this project are documented here. The format follows
 ### Removed
 
 - The mailboxer gem, its initializer and its database tables.
+- CoffeeScript: the six empty `.coffee` stubs and the `coffee-rails` gem. All front-end code is plain JavaScript.
 
 ## [1.1.0] - 2026-10-17
 

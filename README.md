@@ -20,7 +20,7 @@ A freelance marketplace built with Ruby on Rails. Clients post gigs, freelancers
 | Framework | Rails 8.1 |
 | Database | MySQL 8 (development and test) |
 | Uploads | CarrierWave + MiniMagick (ImageMagick) |
-| Front end | Sprockets, Bootstrap 3 (`bootstrap-sass`), jQuery, CoffeeScript |
+| Front end | Sprockets, Bootstrap 3 (`bootstrap-sass`), jQuery |
 | Tests | Minitest |
 | Lint | RuboCop with `rubocop-rails` and `rubocop-minitest` |
 
