@@ -20,6 +20,7 @@ All notable changes to this project are documented here. The format follows
 
 ### Fixed
 
+- Replying to a conversation marks it as read for the person replying, so their own inbox no longer shows it as unread.
 - A message from a since-deleted user now counts as unread, and messages from deleted users show as "Deleted user" ([#91](https://github.com/Nitish313/bidding_website/pull/91)).
 
 ### Security

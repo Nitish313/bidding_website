@@ -96,6 +96,17 @@ class ConversationTest < ActiveSupport::TestCase
     assert conversation.unread_for?(@client)
   end
 
+  test "replying marks the conversation as read for the person replying" do
+    conversation = start.conversation
+    assert conversation.unread_for?(@freelancer)
+
+    travel 1.second do
+      conversation.reply(sender: @freelancer, body: "Yes, Monday works.")
+    end
+    assert_not conversation.unread_for?(@freelancer)
+    assert conversation.unread_for?(@client)
+  end
+
   # trash
 
   test "moving a conversation to trash hides it only for that user" do

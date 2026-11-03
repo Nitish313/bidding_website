@@ -73,7 +73,6 @@ class GigLifecycleTest < ActionDispatch::IntegrationTest
     }
     conversation = Conversation.involving(client).sole
     assert conversation.unread_for?(client)
-    client_browser.post mark_as_read_user_conversation_path(client, conversation)
     client_browser.post user_conversation_messages_path(client, conversation), params: { body: "Green and white." }
     assert_equal ["Any brand colours?", "Green and white."], conversation.messages.map(&:body)
     assert_equal ["proposed", "started a conversation"], actions_notified_to(client)

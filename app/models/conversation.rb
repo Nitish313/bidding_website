@@ -39,11 +39,12 @@ class Conversation < ApplicationRecord
     end
   end
 
-  # Adds a message from a participant. A reply brings the conversation back for
-  # anyone who had moved it to trash.
+  # Adds a message from a participant, who has read everything up to their own reply.
+  # A reply brings the conversation back for anyone who had moved it to trash.
   def reply(sender:, body:)
     transaction do
       message = messages.create!(sender: sender, body: body)
+      participant_for(sender).update!(last_read_at: message.created_at)
       participants.where(trashed: true).find_each { |participant| participant.update!(trashed: false) }
       message
     end
