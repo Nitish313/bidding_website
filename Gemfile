@@ -71,7 +71,7 @@ end
 group :test do
   # Minitest 6 drops minitest/mock and is not supported by Rails 7.1's test runner.
   gem 'minitest', '~> 5.25'
-  gem 'simplecov', '~> 0.22.0', require: false
+  gem 'simplecov', '~> 1.3.2', require: false
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
