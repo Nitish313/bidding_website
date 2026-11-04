@@ -18,9 +18,9 @@ Rails.application.configure do
   # or in config/master.key. This key is used to decrypt credentials (and other encrypted files).
   # config.require_master_key = true
 
-  # Disable serving static files from the `/public` folder by default since
-  # Apache or NGINX already handles this.
-  config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
+  # Serve precompiled assets from /public: hosts such as Render put no separate web
+  # server in front of the app.
+  config.public_file_server.enabled = true
 
   # Compress JavaScripts and CSS.
   config.assets.js_compressor = :terser
@@ -46,12 +46,13 @@ Rails.application.configure do
   # config.action_cable.url = 'wss://example.com/cable'
   # config.action_cable.allowed_request_origins = [ 'http://example.com', /http:\/\/example.*/ ]
 
-  # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  # config.force_ssl = true
+  # The host (Render) ends HTTPS and redirects plain HTTP itself, then forwards requests
+  # to the app over HTTP. Treat every request as HTTPS, send Strict-Transport-Security,
+  # and mark cookies secure.
+  config.assume_ssl = true
+  config.force_ssl = true
 
-  # Use the lowest log level to ensure availability of diagnostic information
-  # when problems arise.
-  config.log_level = :debug
+  config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
 
   # Prepend all log lines with the following tags.
 
@@ -64,9 +65,26 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
 
-  # Ignore bad email addresses and do not raise email delivery errors.
-  # Set this to true and configure the email server for immediate delivery to raise delivery errors.
-  # config.action_mailer.raise_delivery_errors = false
+  # Links in emails point at APP_HOST, or on Render at the service's own address.
+  config.action_mailer.default_url_options = {
+    host: ENV["APP_HOST"].presence || ENV.fetch("RENDER_EXTERNAL_HOSTNAME", "localhost"),
+    protocol: "https"
+  }
+
+  # Account activation and password reset emails go out through any SMTP provider
+  # (Brevo, Mailgun, Gmail, ...). Delivery failures are raised so they get reported.
+  if ENV["SMTP_ADDRESS"].present?
+    config.action_mailer.delivery_method = :smtp
+    config.action_mailer.smtp_settings = {
+      address: ENV["SMTP_ADDRESS"],
+      port: ENV.fetch("SMTP_PORT", 587).to_i,
+      user_name: ENV.fetch("SMTP_USERNAME"),
+      password: ENV.fetch("SMTP_PASSWORD"),
+      authentication: :plain,
+      enable_starttls_auto: true
+    }
+    config.action_mailer.raise_delivery_errors = true
+  end
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).

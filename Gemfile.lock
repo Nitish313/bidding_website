@@ -113,11 +113,30 @@ GEM
     drb (2.2.3)
     erb (6.0.7)
     erubi (1.13.1)
+    excon (1.10.0)
     execjs (2.10.2)
       json (>= 2)
     ffi (1.17.4)
     ffi (1.17.4-aarch64-linux-gnu)
     ffi (1.17.4-x86_64-linux-gnu)
+    fog-aws (3.33.5)
+      base64 (>= 0.2, < 0.4)
+      fog-core (~> 2.6)
+      fog-json (~> 1.1)
+      fog-xml (~> 0.1)
+    fog-core (2.6.0)
+      builder
+      excon (~> 1.0)
+      formatador (>= 0.2, < 2.0)
+      mime-types
+    fog-json (1.5.0)
+      fog-core
+      json (>= 2.19, < 4)
+    fog-xml (0.1.5)
+      fog-core
+      nokogiri (>= 1.5.11, < 2.0.0)
+    formatador (1.2.3)
+      reline
     globalid (1.4.0)
       activesupport (>= 6.1)
     i18n (1.15.2)
@@ -171,6 +190,10 @@ GEM
       net-pop
       net-smtp
     marcel (1.2.1)
+    mime-types (3.7.0)
+      logger
+      mime-types-data (~> 3.2025, >= 3.2025.0507)
+    mime-types-data (3.2026.1103)
     mini_magick (5.4.0)
       logger
     mini_mime (1.1.5)
@@ -200,9 +223,6 @@ GEM
     parser (3.3.13.0)
       ast (~> 2.4.1)
       racc
-    pg (1.7.0)
-    pg (1.7.0-aarch64-linux)
-    pg (1.7.0-x86_64-linux)
     pp (0.6.4)
       prettyprint
     prettyprint (0.2.1)
@@ -362,6 +382,7 @@ DEPENDENCIES
   bundler-audit (~> 0.9)
   byebug
   carrierwave (~> 3.1)
+  fog-aws (~> 3.33)
   jbuilder (~> 2.5)
   jquery-rails (~> 4.6)
   letter_opener_web (~> 3.0)
@@ -370,7 +391,6 @@ DEPENDENCIES
   mini_magick
   minitest (~> 5.25)
   mysql2 (>= 0.4.4, < 0.6.0)
-  pg
   puma (~> 8.0)
   rails (~> 8.1.4, >= 8.1.4.1)
   rubocop (~> 1.92.2)

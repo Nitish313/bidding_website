@@ -6,9 +6,8 @@ class ImageUploader < CarrierWave::Uploader::Base
   # The extension alone can be faked, so check that ImageMagick can actually read the file.
   before :cache, :ensure_real_image
 
-  # Choose what kind of storage to use for this uploader:
-  storage :file
-  # storage :fog
+  # Storage (local files or S3-compatible object storage) is set in
+  # config/initializers/carrier_wave.rb.
 
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:

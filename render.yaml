@@ -1,0 +1,46 @@
+# Render Blueprint for the web service. See "Deploying" in README.md for the one-time
+# setup: the Aiven MySQL database, the object storage bucket, the SMTP account and the
+# deploy hook that CI calls after every green push to master.
+services:
+  - type: web
+    name: bidding-website
+    runtime: docker
+    dockerfilePath: ./Dockerfile.prod
+    plan: free
+    # Pick the region closest to your Aiven database; every request talks to it.
+    region: singapore
+    healthCheckPath: /health
+    # CI deploys through the deploy hook once all checks pass, so pushes alone don't.
+    autoDeploy: false
+    envVars:
+      - key: SECRET_KEY_BASE
+        generateValue: true
+      - key: RAILS_MAX_THREADS
+        value: "5"
+      # Values below are filled in on Render's dashboard when the Blueprint is created.
+      - key: DATABASE_URL
+        sync: false
+      - key: SEED_ADMIN_EMAIL
+        sync: false
+      - key: SEED_ADMIN_PASSWORD
+        sync: false
+      - key: STORAGE_BUCKET
+        sync: false
+      - key: STORAGE_ENDPOINT
+        sync: false
+      - key: STORAGE_ACCESS_KEY_ID
+        sync: false
+      - key: STORAGE_SECRET_ACCESS_KEY
+        sync: false
+      - key: SMTP_ADDRESS
+        sync: false
+      - key: SMTP_PORT
+        sync: false
+      - key: SMTP_USERNAME
+        sync: false
+      - key: SMTP_PASSWORD
+        sync: false
+      - key: MAIL_FROM
+        sync: false
+      - key: SENTRY_DSN
+        sync: false

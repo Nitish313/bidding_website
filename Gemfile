@@ -41,6 +41,8 @@ gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'mini_magick'
 gem 'carrierwave', '~> 3.1'
+# S3-compatible object storage for uploads in production (Cloudflare R2, AWS S3, ...).
+gem 'fog-aws', '~> 3.33'
 gem 'lograge', '~> 0.15.1'
 # Error reporting; does nothing until SENTRY_DSN is set.
 gem 'sentry-ruby', '~> 7.2'
@@ -60,10 +62,6 @@ group :development do
   gem 'web-console', '>= 4.1.0'
   gem 'listen', '~> 3.5'
   gem 'letter_opener_web', '~> 3.0'
-end
-
-group :production do 
-  gem 'pg'
 end
 
 group :test do

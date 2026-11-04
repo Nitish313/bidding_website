@@ -8,6 +8,7 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- Deployment to Render with MySQL on Aiven: a production image (`Dockerfile.prod`) that precompiles assets, runs as a non-root user and prepares the database on start; a `render.yaml` Blueprint; encrypted database connections from `DATABASE_URL`; uploads in S3-compatible object storage (Cloudflare R2, AWS S3, ...) behind signed, expiring links; emails over any SMTP provider; and HTTPS-only cookies with HSTS. CI builds and boots the production image on every run and deploys `master` through a Render deploy hook once all checks pass. See "Deploying" in the README.
 - Error reporting with Sentry (`sentry-ruby`, `sentry-rails`) from production only, switched on by `SENTRY_DSN`. Reports include the user's id only; 404s and 400s are not reported.
 - An end-to-end test of a gig's whole lifecycle: two users sign up and activate, then the gig is posted, found by search, bid on, awarded, discussed in messages and delivered, with the notifications checked at each step.
 
@@ -32,6 +33,7 @@ All notable changes to this project are documented here. The format follows
 
 ### Removed
 
+- The unused `pg` gem. The app runs on MySQL, and `pg` would have needed PostgreSQL's client library in the production image.
 - The mailboxer gem, its initializer and its database tables.
 - CoffeeScript: the six empty `.coffee` stubs and the `coffee-rails` gem. All front-end code is plain JavaScript.
 
