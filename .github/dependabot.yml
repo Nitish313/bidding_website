@@ -1,4 +1,6 @@
 # Weekly pull requests for outdated dependencies. CI runs on each one.
+# Commit messages and PR titles follow Conventional Commits, e.g.
+# "build(deps): bump puma from 7.2.1 to 8.0.2".
 version: 2
 updates:
   - package-ecosystem: bundler
@@ -6,8 +8,14 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    commit-message:
+      prefix: build
+      include: scope
 
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
       interval: weekly
+    commit-message:
+      prefix: ci
+      include: scope
