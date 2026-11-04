@@ -1,4 +1,5 @@
-require "simplecov" # settings, including the coverage minimum, are in .simplecov
+require "simplecov"
+SimpleCov.start # settings, including the coverage minimum, are in .simplecov
 
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'

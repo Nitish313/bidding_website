@@ -13,6 +13,7 @@ All notable changes to this project are documented here. The format follows
 
 ### Changed
 
+- CI shows line coverage and the minimum in the test job's summary, and SimpleCov is started from `test/test_helper.rb` with `.simplecov` holding settings only, as SimpleCov 1.x requires.
 - Request logging (one JSON line per request) is configured in `config/initializers/lograge.rb` and on in every environment except development, including tests.
 - Forms that fail validation (signup, profile, gigs, login, password reset) now answer HTTP 422 Unprocessable Content instead of 200, as current Rails expects.
 - Upgraded sass-rails 5 → 6, which compiles stylesheets with SassC (LibSass) instead of the end-of-life Ruby Sass. The 422 responses use the current status name `:unprocessable_content`.
