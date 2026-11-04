@@ -62,7 +62,7 @@ Outside development, each request is logged as a single JSON line ([lograge](htt
 
 ### Error tracking
 
-Unexpected errors are reported to [Sentry](https://sentry.io) (or a Sentry-compatible service such as GlitchTip) when `SENTRY_DSN` is set; without it nothing is sent. Reports carry the logged-in user's id but no personal data. Routine errors such as missing records (404) and malformed requests (400) are not reported. Optional: `SENTRY_TRACES_SAMPLE_RATE` (0 to 1) for performance tracing and `SENTRY_RELEASE` to tag reports with a version.
+In production, unexpected errors are reported to [Sentry](https://sentry.io) (or a Sentry-compatible service such as GlitchTip) when `SENTRY_DSN` is set; without it nothing is sent. Development and test runs never report, even with `SENTRY_DSN` in `.env`. Reports carry the logged-in user's id but no personal data. Routine errors such as missing records (404) and malformed requests (400) are not reported. Optional: `SENTRY_TRACES_SAMPLE_RATE` (0 to 1) for performance tracing and `SENTRY_RELEASE` to tag reports with a version.
 
 ## Running the tests
 

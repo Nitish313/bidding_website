@@ -1,6 +1,7 @@
 require "test_helper"
 require "minitest/mock"
 require "sentry/test_helper"
+require "open3"
 
 # Unexpected errors are reported to Sentry; routine 404s and 400s are not. The test
 # helper captures events in memory instead of sending them anywhere.
@@ -44,5 +45,25 @@ class ErrorTrackingTest < ActionDispatch::IntegrationTest
 
   test "no personal data is sent by default" do
     assert_not Sentry.configuration.send_default_pii
+  end
+end
+
+# Only production reports errors, so local test and development runs never send events,
+# even when SENTRY_DSN is set in .env. Sentry's test helper above swaps in its own
+# configuration for the rest of the run, so this boots the app in a fresh process.
+class ErrorTrackingEnvironmentsTest < ActiveSupport::TestCase
+  def reporting_enabled_in?(environment)
+    env = { "RAILS_ENV" => environment, "SENTRY_DSN" => "https://public@sentry.example.invalid/1",
+            "SECRET_KEY_BASE_DUMMY" => "1" }
+    output, status = Open3.capture2e(env, "bin/rails", "runner",
+                                     "puts Sentry.configuration.enabled_in_current_env?", chdir: Rails.root.to_s)
+    assert_predicate status, :success?, output
+    output.lines.last.strip == "true"
+  end
+
+  test "errors are reported from production only, even with a DSN set" do
+    assert reporting_enabled_in?("production")
+    assert_not reporting_enabled_in?("test")
+    assert_not reporting_enabled_in?("development")
   end
 end
