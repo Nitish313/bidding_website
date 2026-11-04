@@ -205,7 +205,7 @@ GEM
     prettyprint (0.2.1)
     prism (1.9.0)
     public_suffix (7.0.5)
-    puma (7.2.1)
+    puma (8.0.2)
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (2.2.25)
@@ -369,7 +369,7 @@ DEPENDENCIES
   minitest (~> 5.25)
   mysql2 (>= 0.4.4, < 0.6.0)
   pg
-  puma (~> 7.2)
+  puma (~> 8.0)
   rails (~> 8.1.4, >= 8.1.4.1)
   rubocop (~> 1.92.0)
   rubocop-minitest (~> 0.41.0)
