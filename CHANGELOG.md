@@ -25,6 +25,7 @@ All notable changes to this project are documented here. The format follows
 
 ### Security
 
+- Rails 8.1.4 → 8.1.4.1, the security release fixing 21 advisories, including arbitrary file read and write in Active Storage image analysis (critical), a Strong Parameters bypass and IP spoofing in `RemoteIp` (high), and several XSS issues in Action View helpers. The Gemfile now requires at least 8.1.4.1.
 - Patch updates for newly published advisories: rack 2.2.25 (multipart denial of service, `Rack::Static` header bypass), nokogiri 1.19.7, loofah 2.25.3, rails-html-sanitizer 1.7.2 and crass 1.0.8 (sanitizer bypasses and XSS), and addressable 2.9.2 (regular-expression denial of service).
 - Gig and solution attachments only accept document, archive and image types (no HTML or SVG, which would run as pages on this site) and are limited to 20 MB. Profile pictures must be real images, not other files renamed to `.png`.
 
