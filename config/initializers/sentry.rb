@@ -4,6 +4,9 @@
 Sentry.init do |config|
   config.dsn = ENV["SENTRY_DSN"].presence
   config.environment = Rails.env
+  # Report from production only, so local test and development runs never send events
+  # even when SENTRY_DSN is set in .env.
+  config.enabled_environments = %w[production]
   config.release = ENV["SENTRY_RELEASE"].presence
   config.breadcrumbs_logger = [:active_support_logger, :http_logger]
   # Never send cookies, form contents, IP addresses or other personal data.
