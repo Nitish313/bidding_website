@@ -29,8 +29,13 @@ jobs:
       - name: Run tests
         run: docker compose run --rm -e RAILS_ENV=test web bin/rails test
 
+      # The container can't see the runner's summary file, so the script writes the
+      # coverage table into the mounted coverage/ folder and the next step publishes it.
       - name: Check coverage minimum
-        run: docker compose run --rm --no-deps web bin/check-coverage
+        run: docker compose run --rm --no-deps -e GITHUB_STEP_SUMMARY=/app/coverage/job-summary.md web bin/check-coverage
+      - name: Show coverage in the job summary
+        if: always()
+        run: if [ -f coverage/job-summary.md ]; then cat coverage/job-summary.md >> "$GITHUB_STEP_SUMMARY"; fi
 
       - name: Upload coverage report
         if: always()

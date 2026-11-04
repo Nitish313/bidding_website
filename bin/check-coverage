@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 # Fails (exit 1) when the last test run's line coverage is below the minimum set in
-# .simplecov. CI runs this as its own step so the coverage gate is visible.
+# .simplecov. CI runs this as its own step so the coverage gate is visible, and when
+# GITHUB_STEP_SUMMARY is set it also adds a coverage table to the job's summary page.
 #
 #   bin/check-coverage [path/to/.last_run.json]
 require "json"
@@ -16,10 +17,16 @@ end
 
 coverage = JSON.parse(File.read(result_path)).dig("result", "line").to_f
 minimum = minimum.to_f
-message = "Line coverage #{coverage.round(2)}% (minimum #{minimum.to_s.delete_suffix('.0')}%)"
+minimum_text = "#{minimum.to_s.delete_suffix('.0')}%"
+verdict = coverage < minimum ? "below the minimum" : "ok"
 
-if coverage < minimum
-  abort "#{message}: below the minimum"
-else
-  puts "#{message}: ok"
+summary_path = ENV.fetch("GITHUB_STEP_SUMMARY", "")
+unless summary_path.empty?
+  File.open(summary_path, "a") do |summary|
+    summary.puts "### Test coverage", "", "| | |", "|---|---|",
+                 "| Line coverage | #{coverage.round(2)}% |", "| Minimum | #{minimum_text} |", "| Result | #{verdict} |"
+  end
 end
+
+message = "Line coverage #{coverage.round(2)}% (minimum #{minimum_text}): #{verdict}"
+coverage < minimum ? abort(message) : puts(message)
