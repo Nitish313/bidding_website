@@ -16,7 +16,7 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.new(user_params)   
+    @user = User.new(user_params)
     if @user.save
       @user.send_activation_email
       flash[:info] = "Please check your email to activate your account"
@@ -27,7 +27,7 @@ class UsersController < ApplicationController
     end
   end
 
-  def edit 
+  def edit
   end
 
   def update
@@ -67,20 +67,20 @@ class UsersController < ApplicationController
 
   private
 
-    def user_params
-      params.expect(user: [:name, :email, :password, :password_confirmation, :education, :experience, :industry, :role, :profile_picture])
-    end
+  def user_params
+    params.expect(user: [:name, :email, :password, :password_confirmation, :education, :experience, :industry, :role, :profile_picture])
+  end
 
-    def set_user
-      @user = User.find(params.expect(:id))
-    end
+  def set_user
+    @user = User.find(params.expect(:id))
+  end
 
-    def proper_user
-      @user = User.find(params.expect(:id))
-      redirect_to root_path unless owner_or_admin?(@user)
-    end
+  def proper_user
+    @user = User.find(params.expect(:id))
+    redirect_to root_path unless owner_or_admin?(@user)
+  end
 
-    def admin_user
-      redirect_to root_path unless current_user.admin?
-    end
+  def admin_user
+    redirect_to root_path unless current_user.admin?
+  end
 end

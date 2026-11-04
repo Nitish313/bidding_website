@@ -1,7 +1,7 @@
 class Gig < ApplicationRecord
   belongs_to :user
   belongs_to :category
-  
+
   has_many :proposals, dependent: :destroy
   has_many :abilities, dependent: :destroy
   has_many :skills, through: :abilities
@@ -21,10 +21,10 @@ class Gig < ApplicationRecord
   after_update :create_notification, if: :saved_change_to_awarded_proposal?
   after_create :create_skills
   after_update :create_skills
-  
+
   scope :order_by_date, -> { order(created_at: :desc) }
   scope :includes_categories, -> { includes(:category) }
-  
+
   SKILL_SEPARATORS = /[,;\r\n]+/
 
   def self.search(params)
