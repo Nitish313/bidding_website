@@ -59,12 +59,10 @@ jobs:
       - name: Run RuboCop
         run: docker compose run --rm --no-deps web bundle exec rubocop
 
-      # Tests run in the test environment only; these catch breaks in the other two.
+      # Tests run in the test environment only; this catches breaks in development, and
+      # the production-image job covers production.
       - name: Boot in development mode
         run: docker compose run --rm --no-deps web bin/rails runner 'puts "development boots"'
-
-      - name: Precompile production assets
-        run: docker compose run --rm --no-deps -e RAILS_ENV=production -e SECRET_KEY_BASE_DUMMY=1 web bin/rails assets:precompile
 
   audit:
     runs-on: ubuntu-24.04
@@ -79,3 +77,31 @@ jobs:
 
       - name: Check gems for known vulnerabilities
         run: docker compose run --rm --no-deps web bundle exec bundle-audit check --update
+
+  production-image:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+
+      # Builds Dockerfile.prod, precompiling assets, and boots it against an empty
+      # MySQL the way Render does.
+      - name: Build and start the production image
+        run: bin/smoke-test-production-image
+
+  # Deploys master to Render once every check has passed. Needs the repository secret
+  # RENDER_DEPLOY_HOOK_URL (see "Deploying" in README.md); without it nothing is deployed.
+  deploy:
+    needs: [test, lint, audit, production-image]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Trigger a Render deploy
+        env:
+          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$RENDER_DEPLOY_HOOK_URL" ]; then
+            echo "::notice::RENDER_DEPLOY_HOOK_URL is not set, so nothing was deployed."
+            exit 0
+          fi
+          curl --silent --show-error --fail --request POST --output /dev/null "$RENDER_DEPLOY_HOOK_URL"
+          echo "Deploy of ${GITHUB_SHA::7} started on Render." >> "$GITHUB_STEP_SUMMARY"

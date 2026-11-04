@@ -6,3 +6,5 @@ storage/*
 public/uploads
 public/assets
 node_modules
+.env
+coverage

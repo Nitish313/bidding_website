@@ -10,6 +10,9 @@ module BiddingWebsite
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 8.1
+    # Uploads use CarrierWave, not Active Storage; point Active Storage at the image
+    # library that is installed (MiniMagick) instead of libvips, which is not.
+    config.active_storage.variant_processor = :mini_magick
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers

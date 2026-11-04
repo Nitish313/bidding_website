@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Starts the production container: brings the database schema up to date (loading it,
+# with the seed data, into an empty database), then runs Puma on $PORT.
+set -euo pipefail
+
+bin/rails db:prepare
+exec bin/rails server -b 0.0.0.0 -p "${PORT:-3000}"

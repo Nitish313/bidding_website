@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# Builds the production image (Dockerfile.prod) and starts it the way Render does,
+# against an empty MySQL from docker compose with TLS required, as on Aiven. Passes when
+# the schema loads, /health answers 200 and a page renders. CI runs it before deploying.
+set -euo pipefail
+
+project=smoke-production
+image=bidding-website:production
+port=${SMOKE_TEST_PORT:-3999}
+
+cleanup() {
+  docker rm -f "$project-app" >/dev/null 2>&1 || true
+  docker compose -p "$project" down -v >/dev/null 2>&1 || true
+}
+trap cleanup EXIT
+
+docker build -f Dockerfile.prod -t "$image" .
+docker compose -p "$project" up -d --wait db
+docker run -d --name "$project-app" --network "${project}_default" -p "127.0.0.1:$port:3000" \
+  -e DATABASE_URL="mysql2://root@db/bidding_website_production" \
+  -e SECRET_KEY_BASE="$(openssl rand -hex 64)" \
+  -e SEED_ADMIN_PASSWORD="$(openssl rand -hex 12)" \
+  "$image" >/dev/null
+
+fail() {
+  echo "Smoke test failed: $1" >&2
+  docker logs "$project-app" >&2
+  exit 1
+}
+
+for _ in $(seq 1 60); do
+  if curl --silent --fail --output /dev/null "http://127.0.0.1:$port/health"; then
+    break
+  fi
+  sleep 2
+done
+health=$(curl --silent --fail "http://127.0.0.1:$port/health") || fail "/health did not answer 200"
+echo "/health: $health"
+curl --silent --fail --output /dev/null "http://127.0.0.1:$port/gigs" || fail "/gigs did not render"
+echo "/gigs: 200"
+echo "Production image smoke test passed."

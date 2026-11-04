@@ -91,11 +91,13 @@ Existing offenses are recorded in [.rubocop_todo.yml](.rubocop_todo.yml); new co
 
 ## Continuous integration
 
-[GitHub Actions](.github/workflows/ci.yml) runs on every pull request, every push to `master` and once a week, with three jobs:
+[GitHub Actions](.github/workflows/ci.yml) runs on every pull request, every push to `master` and once a week, with these jobs:
 
 - **test**: builds the Docker image, starts MySQL, loads the schema and runs the test suite.
-- **lint**: runs RuboCop.
+- **lint**: runs RuboCop and checks that the app boots in development mode.
 - **audit**: checks every gem in `Gemfile.lock` against the [Ruby Advisory Database](https://github.com/rubysec/ruby-advisory-db) with bundler-audit. The weekly run catches advisories published between pull requests.
+- **production-image**: builds the production image and starts it against an empty MySQL the way Render does ([bin/smoke-test-production-image](bin/smoke-test-production-image)): the schema must load, `/health` must answer and a page must render.
+- **deploy**: on pushes to `master` only, once all the jobs above pass, asks Render to deploy (see [Deploying](#deploying-render--aiven)).
 
 Run the audit locally with:
 
@@ -122,6 +124,38 @@ The database connection is configured with environment variables:
 | `DB_PASSWORD` | empty | MySQL password |
 | `DB_HOST` | unset | MySQL host; when unset, the local socket `/var/run/mysqld/mysqld.sock` is used |
 | `DB_PORT` | `3306` | MySQL port, used only with `DB_HOST` |
+
+## Deploying (Render + Aiven)
+
+The app runs on [Render](https://render.com) from the production image in [Dockerfile.prod](Dockerfile.prod), with MySQL on [Aiven](https://aiven.io). Uploads go to S3-compatible object storage, because Render's disk is wiped on every deploy, and emails go out over SMTP. All four have free plans. [render.yaml](render.yaml) describes the service.
+
+On start, the container runs `bin/rails db:prepare`: on an empty database it loads the schema and the seed data (categories and the admin account), and later it runs any new migrations.
+
+One-time setup:
+
+1. **Database:** create a MySQL service on Aiven and copy its **Service URI** (`mysql://avnadmin:…@….aivencloud.com:…/defaultdb?ssl-mode=REQUIRED`).
+2. **Uploads:** create a bucket and an access key with read and write access to it, for example in Cloudflare R2 (**R2 → Create bucket**, then **Manage R2 API tokens**). Keep the bucket private; the app hands out signed links that expire after ten minutes.
+3. **Email:** create an SMTP login with any provider (for example Brevo, Mailgun or a Gmail app password) and verify the sender address you will send from.
+4. **Render:** choose **New → Blueprint**, pick this repository, and fill in the variables below when asked.
+5. **Automatic deploys:** in the Render service, open **Settings → Deploy Hook** and copy the URL. In GitHub, add it as the repository secret `RENDER_DEPLOY_HOOK_URL` (**Settings → Secrets and variables → Actions**). From then on, CI deploys every push to `master` that passes all checks.
+
+| Variable | Example | Purpose |
+|---|---|---|
+| `DATABASE_URL` | Aiven's Service URI | MySQL connection; encrypted unless `DB_SSL_MODE=disabled` |
+| `SEED_ADMIN_EMAIL`, `SEED_ADMIN_PASSWORD` | your own | Admin account created on the first start |
+| `STORAGE_BUCKET` | `bidding-uploads` | Bucket for uploads; without it files are stored on the container's disk |
+| `STORAGE_ENDPOINT` | `https://<account-id>.r2.cloudflarestorage.com` | S3 API endpoint; leave unset for AWS S3 |
+| `STORAGE_ACCESS_KEY_ID`, `STORAGE_SECRET_ACCESS_KEY` | from the access key | Bucket credentials |
+| `STORAGE_REGION` | `auto` (default) | Needed for AWS S3 only, for example `ap-south-1` |
+| `SMTP_ADDRESS`, `SMTP_PORT` | `smtp-relay.brevo.com`, `587` | SMTP server; port defaults to 587 |
+| `SMTP_USERNAME`, `SMTP_PASSWORD` | from the provider | SMTP login |
+| `MAIL_FROM` | `Bidding Website <you@example.com>` | Sender of activation and password reset emails |
+| `APP_HOST` | `bids.example.com` | Address used in email links; defaults to the Render address |
+| `SENTRY_DSN` | from Sentry | Optional error reporting |
+
+Render sets `SECRET_KEY_BASE` and `PORT` itself. To try the production image locally, run `bin/smoke-test-production-image`.
+
+On the free plan, Render stops the app after 15 minutes without traffic, so the first request after a pause takes up to a minute.
 
 ## Contributing and changes
 

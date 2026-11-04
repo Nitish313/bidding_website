@@ -1,0 +1,44 @@
+# Production image: gems without the development and test groups, precompiled assets,
+# and a non-root user. Render builds it from render.yaml; see "Deploying" in README.md.
+FROM ruby:3.3.12-slim-bookworm AS base
+
+WORKDIR /app
+ENV RAILS_ENV=production \
+    BUNDLE_DEPLOYMENT=1 \
+    BUNDLE_PATH=/usr/local/bundle \
+    BUNDLE_WITHOUT=development:test \
+    RAILS_LOG_TO_STDOUT=1
+
+# Runtime libraries: the MySQL client library, ImageMagick for profile picture checks,
+# and the MIME database used to detect upload types.
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends libmariadb3 imagemagick shared-mime-info \
+ && rm -rf /var/lib/apt/lists/*
+
+RUN gem install bundler -v 2.5.22
+
+FROM base AS build
+
+# Compilers and headers for native gems, and Node.js for compressing JavaScript.
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends build-essential pkg-config git default-libmysqlclient-dev nodejs \
+ && rm -rf /var/lib/apt/lists/*
+
+COPY Gemfile Gemfile.lock ./
+RUN bundle _2.5.22_ install && rm -rf /usr/local/bundle/cache
+
+COPY . .
+RUN SECRET_KEY_BASE_DUMMY=1 bin/rails assets:precompile
+
+FROM base
+
+COPY --from=build /usr/local/bundle /usr/local/bundle
+COPY --from=build /app /app
+
+RUN useradd --create-home --uid 1000 rails \
+ && mkdir -p tmp/pids log public/uploads \
+ && chown -R rails:rails tmp log public/uploads
+USER rails
+
+EXPOSE 3000
+CMD ["bin/docker-start"]
