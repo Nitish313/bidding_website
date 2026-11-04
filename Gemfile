@@ -43,7 +43,7 @@ gem 'mini_magick'
 gem 'carrierwave', '~> 3.1'
 gem 'lograge', '~> 0.15.1'
 # Error reporting; does nothing until SENTRY_DSN is set.
-gem 'sentry-ruby', '~> 7.1'
+gem 'sentry-ruby', '~> 7.2'
 gem 'sentry-rails', '~> 7.1'
 
 group :development, :test do
