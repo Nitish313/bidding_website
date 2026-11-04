@@ -41,7 +41,7 @@ gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'mini_magick'
 gem 'carrierwave', '~> 3.1'
-gem 'lograge', '~> 0.14.0'
+gem 'lograge', '~> 0.15.1'
 # Error reporting; does nothing until SENTRY_DSN is set.
 gem 'sentry-ruby', '~> 7.1'
 gem 'sentry-rails', '~> 7.1'
