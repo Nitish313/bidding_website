@@ -7,7 +7,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "logging in with the right password, ignoring email case" do
-    post login_path, params: { session: { email: "FIONA@example.com", password: "test-password" } }
+    post login_path, params: { session: { email: "FIONA@example.com", password: FIXTURE_PASSWORD } }
     assert_redirected_to user_path(users(:freelancer))
     assert_equal users(:freelancer).id, session[:user_id]
   end
@@ -20,7 +20,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "logging in with an unknown email shows an error" do
-    post login_path, params: { session: { email: "nobody@example.com", password: "test-password" } }
+    post login_path, params: { session: { email: "nobody@example.com", password: FIXTURE_PASSWORD } }
     assert_response :unprocessable_content
     assert_select "div", text: /Invalid login credentials!/
     assert_nil session[:user_id]

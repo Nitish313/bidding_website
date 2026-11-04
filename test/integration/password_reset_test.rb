@@ -69,7 +69,7 @@ class PasswordResetTest < ActionDispatch::IntegrationTest
     submit_new_password(token, "new-pass-1", "new-pass-2")
     assert_response :unprocessable_content
     assert_select "#error_explanation"
-    assert @user.reload.authenticate("test-password")
+    assert @user.reload.authenticate(FIXTURE_PASSWORD)
   end
 
   test "a valid new password logs the user in and the link stops working" do

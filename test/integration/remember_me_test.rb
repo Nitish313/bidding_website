@@ -5,12 +5,6 @@ class RememberMeTest < ActionDispatch::IntegrationTest
     @user = users(:freelancer)
   end
 
-  def log_in_as(user, remember_me:)
-    post login_path, params: { session: { email: user.email,
-                                          password: 'test-password',
-                                          remember_me: remember_me } }
-  end
-
   test "login with remember me stores a remember token" do
     log_in_as(@user, remember_me: '1')
     assert_not cookies[:remember_token].blank?

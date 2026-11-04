@@ -14,6 +14,8 @@ All notable changes to this project are documented here. The format follows
 
 ### Changed
 
+- Dependabot's commits and pull requests follow Conventional Commits (`build(deps): ...` for gems, `ci(deps): ...` for GitHub Actions).
+- Test users sign in with a password generated for each test run instead of one written in the repository.
 - CI shows line coverage and the minimum in the test job's summary, and SimpleCov is started from `test/test_helper.rb` with `.simplecov` holding settings only, as SimpleCov 1.x requires.
 - Request logging (one JSON line per request) is configured in `config/initializers/lograge.rb` and on in every environment except development, including tests.
 - Forms that fail validation (signup, profile, gigs, login, password reset) now answer HTTP 422 Unprocessable Content instead of 200, as current Rails expects.

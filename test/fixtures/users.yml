@@ -1,7 +1,7 @@
 admin:
   name: Admin User
   email: admin@example.com
-  password_digest: <%= User.digest('test-password') %>
+  password_digest: <%= User.digest(ActiveSupport::TestCase::FIXTURE_PASSWORD) %>
   admin: true
   activated: true
   activated_at: <%= Time.zone.now %>
@@ -9,7 +9,7 @@ admin:
 freelancer:
   name: Fiona Freelancer
   email: fiona@example.com
-  password_digest: <%= User.digest('test-password') %>
+  password_digest: <%= User.digest(ActiveSupport::TestCase::FIXTURE_PASSWORD) %>
   role: Freelancer
   industry: Software
   education: BSc Computer Science
@@ -21,7 +21,7 @@ freelancer:
 client:
   name: Carl Client
   email: carl@example.com
-  password_digest: <%= User.digest('test-password') %>
+  password_digest: <%= User.digest(ActiveSupport::TestCase::FIXTURE_PASSWORD) %>
   role: Client
   industry: Retail
   profile_picture: avatar.png
@@ -31,7 +31,7 @@ client:
 inactive:
   name: Ivan Inactive
   email: ivan@example.com
-  password_digest: <%= User.digest('test-password') %>
+  password_digest: <%= User.digest(ActiveSupport::TestCase::FIXTURE_PASSWORD) %>
   role: Client
   industry: Retail
   profile_picture: avatar.png
@@ -40,7 +40,7 @@ inactive:
 rival:
   name: Rita Rival
   email: rita@example.com
-  password_digest: <%= User.digest('test-password') %>
+  password_digest: <%= User.digest(ActiveSupport::TestCase::FIXTURE_PASSWORD) %>
   role: Freelancer
   industry: Software
   education: BSc Design

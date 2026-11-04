@@ -9,6 +9,10 @@ class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
 
+  # Every fixture user signs in with this password. It is made up afresh for each run,
+  # so no password is written down anywhere in the repository.
+  FIXTURE_PASSWORD = SecureRandom.alphanumeric(20).freeze
+
   FIXTURE_USER_NAMES = YAML.safe_load(ERB.new(Rails.root.join("test/fixtures/users.yml").read).result).keys
 
   # Fixture users reference avatar.png. Put the file where CarrierWave expects it so
@@ -26,7 +30,7 @@ class ActiveSupport::TestCase
 end
 
 class ActionDispatch::IntegrationTest
-  def log_in_as(user, password: "test-password", remember_me: "0")
+  def log_in_as(user, password: FIXTURE_PASSWORD, remember_me: "0")
     post login_path, params: { session: { email: user.email, password: password, remember_me: remember_me } }
   end
 end
