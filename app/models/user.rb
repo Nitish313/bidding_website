@@ -4,24 +4,24 @@ class User < ApplicationRecord
   has_many :proposals, dependent: :destroy
   has_many :notifications, foreign_key: :receiver_id, dependent: :destroy
   has_many :conversation_participants, dependent: :destroy
-  
+
   attr_accessor :remember_token, :activation_token, :reset_token
-  
+
   before_save :downcase_email
   before_create :create_activation_digest
-  
-  validates :name, presence: true, length: {maximum: 50}
+
+  validates :name, presence: true, length: { maximum: 50 }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
-  validates :email, presence: true, length: { maximum: 255 }, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }  
+  validates :email, presence: true, length: { maximum: 255 }, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
   validates :education, :experience, presence: true, if: Proc.new { |u| u.role == "Freelancer" }
   ROLES = %w[Client Freelancer].freeze
   validates :role, inclusion: { in: ROLES }, unless: :admin?
   validates :experience, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 80 },
                          allow_nil: true
-  validates :education, :industry, length: { maximum: 255 }               
-  
+  validates :education, :industry, length: { maximum: 255 }
+
   has_secure_password
-  
+
   scope :activated_freelancers, -> { where(activated: true, role: "Freelancer") }
 
   with_options unless: :admin? do |user|
@@ -32,7 +32,7 @@ class User < ApplicationRecord
     cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST : BCrypt::Engine.cost
     BCrypt::Password.create(string, cost: cost)
   end
-  
+
   def User.new_token
     SecureRandom.urlsafe_base64
   end
@@ -45,6 +45,7 @@ class User < ApplicationRecord
   def authenticated?(attribute, token)
     digest = send("#{attribute}_digest")
     return false if digest.nil?
+
     BCrypt::Password.new(digest).is_password?(token)
   end
 
@@ -79,12 +80,12 @@ class User < ApplicationRecord
 
   private
 
-    def downcase_email
-      self.email = email.downcase
-    end
+  def downcase_email
+    self.email = email.downcase
+  end
 
-    def create_activation_digest
-      self.activation_token = User.new_token
-      self.activation_digest = User.digest(activation_token)
-    end
+  def create_activation_digest
+    self.activation_token = User.new_token
+    self.activation_digest = User.digest(activation_token)
+  end
 end

@@ -68,33 +68,33 @@ class GigsController < ApplicationController
 
   private
 
-    def gig_params
-      params.expect(gig: [:name, :description, :budget, :location, :open, :category_id, :skill_list, :awarded_proposal, { attachments: [] }])
+  def gig_params
+    params.expect(gig: [:name, :description, :budget, :location, :open, :category_id, :skill_list, :awarded_proposal, { attachments: [] }])
+  end
+
+  def search_params
+    params.permit(:category, :search).to_h
+  end
+
+  def not_awarded
+    return unless @gig.awarded_proposal?
+
+    flash[:danger] = "An awarded gig can't be deleted."
+    redirect_to @gig
+  end
+
+  def only_clients
+    unless current_user.role == "Client"
+      flash[:warning] = "You can't post a gig unless you are a Client."
+      redirect_to gigs_path(@gigs)
     end
+  end
 
-    def search_params
-      params.permit(:category, :search).to_h
-    end
-
-    def not_awarded
-      return unless @gig.awarded_proposal?
-
-      flash[:danger] = "An awarded gig can't be deleted."
+  def correct_user
+    @gig = Gig.find(params.expect(:id))
+    unless owner_or_admin?(@gig.user)
+      flash[:warning] = "You are neither the admin nor the owner of this gig!"
       redirect_to @gig
     end
-
-    def only_clients
-      unless current_user.role == "Client"
-        flash[:warning] = "You can't post a gig unless you are a Client."
-        redirect_to gigs_path(@gigs)
-      end
-    end
-
-    def correct_user
-      @gig = Gig.find(params.expect(:id))
-      unless owner_or_admin?(@gig.user)
-        flash[:warning] = "You are neither the admin nor the owner of this gig!"
-        redirect_to @gig
-      end
-    end
+  end
 end

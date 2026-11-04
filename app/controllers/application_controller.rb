@@ -41,7 +41,7 @@ class ApplicationController < ActionController::Base
   def unread_notification_counts
     @unread_notification_counts = 0
     current_user.notifications.each do |notification|
-      @unread_notification_counts+=1 if !notification.is_read?
+      @unread_notification_counts += 1 if !notification.is_read?
     end
   end
 

@@ -39,33 +39,33 @@ class ProposalsController < ApplicationController
     elsif current_user.admin?
       redirect_to proposals_path
     end
-        
   end
 
   private
-    def proposal_params
-      params.expect(proposal: [:name, :bid, :description])
-    end
 
-    def only_freelancers
-      unless current_user.role == "Freelancer"
-        flash[:warning] = "You need to be the owner as well as a freelancer to view this page."
-        redirect_to current_user
-      end
-    end
+  def proposal_params
+    params.expect(proposal: [:name, :bid, :description])
+  end
 
-    def correct_user
-      @proposal = Proposal.find(params.expect(:id))
-      unless owner_or_admin?(@proposal.user)
-        flash[:warning] = "You are neither the owner of this proposal nor the admin"
-        redirect_to current_user
-      end
+  def only_freelancers
+    unless current_user.role == "Freelancer"
+      flash[:warning] = "You need to be the owner as well as a freelancer to view this page."
+      redirect_to current_user
     end
+  end
 
-    def only_admin
-      unless current_user.admin?
-        flash[:warning] = "Only accessible to admins."
-        redirect_to current_user
-      end
+  def correct_user
+    @proposal = Proposal.find(params.expect(:id))
+    unless owner_or_admin?(@proposal.user)
+      flash[:warning] = "You are neither the owner of this proposal nor the admin"
+      redirect_to current_user
     end
+  end
+
+  def only_admin
+    unless current_user.admin?
+      flash[:warning] = "Only accessible to admins."
+      redirect_to current_user
+    end
+  end
 end
