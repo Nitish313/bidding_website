@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class GigsControllerTest < ActionDispatch::IntegrationTest
   test "search by keyword lists only matching gigs" do
