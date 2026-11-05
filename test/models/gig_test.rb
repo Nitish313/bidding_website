@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class GigTest < ActiveSupport::TestCase
   def build_gig(skill_list:)

@@ -56,11 +56,6 @@ Metrics/AbcSize:
 Metrics/MethodLength:
   Max: 34
 
-# This cop supports safe autocorrection (--autocorrect).
-Minitest/AssertPredicate:
-  Exclude:
-    - 'test/integration/remember_me_test.rb'
-
 Naming/AccessorMethodName:
   Exclude:
     - 'app/controllers/password_resets_controller.rb'
@@ -267,17 +262,6 @@ Style/StringLiterals:
   Exclude:
     - 'db/migrate/20200223064131_create_mailboxer.mailboxer_engine.rb'
     - 'db/migrate/20200223064133_add_missing_indices.mailboxer_engine.rb'
-    - 'test/controllers/account_activations_controller_test.rb'
-    - 'test/controllers/gigs_controller_test.rb'
-    - 'test/controllers/password_resets_controller_test.rb'
-    - 'test/helpers/sessions_helper_test.rb'
-    - 'test/integration/remember_me_test.rb'
-    - 'test/mailers/user_mailer_test.rb'
-    - 'test/models/gig_test.rb'
-    - 'test/models/notification_test.rb'
-    - 'test/models/solution_test.rb'
-    - 'test/models/user_test.rb'
-    - 'test/test_helper.rb'
 
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: MinSize.
