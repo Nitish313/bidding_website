@@ -16,7 +16,7 @@ class PasswordResetsController < ApplicationController
       redirect_to root_path
     else
       flash[:danger] = "Email address not found"
-      render 'new', status: :unprocessable_content
+      render "new", status: :unprocessable_content
     end
   end
 
@@ -26,14 +26,14 @@ class PasswordResetsController < ApplicationController
   def update
     if user_params[:password].blank?
       @user.errors.add(:password, "can't be empty")
-      render 'edit', status: :unprocessable_content
+      render "edit", status: :unprocessable_content
     elsif @user.update(user_params)
       log_in @user
       @user.update_attribute(:reset_digest, nil)
       flash[:success] = "Password has been reset"
       redirect_to @user
     else
-      render 'edit', status: :unprocessable_content
+      render "edit", status: :unprocessable_content
     end
   end
 

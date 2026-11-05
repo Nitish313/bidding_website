@@ -23,7 +23,7 @@ class UsersController < ApplicationController
       # In development, emails are only viewable through letter_opener_web.
       redirect_to Rails.env.development? ? letter_opener_web_path : root_url
     else
-      render 'new', status: :unprocessable_content
+      render "new", status: :unprocessable_content
     end
   end
 
@@ -35,7 +35,7 @@ class UsersController < ApplicationController
       flash[:success] = "Profile updated"
       redirect_to @user
     else
-      render 'edit', status: :unprocessable_content
+      render "edit", status: :unprocessable_content
     end
   end
 
@@ -44,14 +44,14 @@ class UsersController < ApplicationController
       flash[:danger] = "You can't deactivate your own account"
     else
       @user.deactivate
-      flash[:success] = 'User deactivated'
+      flash[:success] = "User deactivated"
     end
     redirect_to users_path
   end
 
   def activate
     @user.activate
-    flash[:success] = 'User activated'
+    flash[:success] = "User activated"
     redirect_to users_path
   end
 

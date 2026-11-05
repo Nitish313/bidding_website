@@ -1,4 +1,4 @@
-require 'carrierwave/orm/activerecord'
+require "carrierwave/orm/activerecord"
 
 # Keep files uploaded by the test suite out of public/.
 if Rails.env.test?

@@ -7,7 +7,7 @@ class SessionsController < ApplicationController
     if user && user.authenticate(session_params[:password].to_s)
       if user.activated?
         log_in user
-        session_params[:remember_me] == '1' ? remember(user) : forget(user)
+        session_params[:remember_me] == "1" ? remember(user) : forget(user)
         redirect_to(user)
       else
         message  = "Account not activated. "
@@ -17,7 +17,7 @@ class SessionsController < ApplicationController
       end
     else
       flash.now[:danger] = "Invalid login credentials!"
-      render 'new', status: :unprocessable_content
+      render "new", status: :unprocessable_content
     end
   end
 

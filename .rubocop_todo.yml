@@ -265,22 +265,6 @@ Style/SoleNestedConditional:
 # SupportedStyles: single_quotes, double_quotes
 Style/StringLiterals:
   Exclude:
-    - 'Gemfile'
-    - 'Rakefile'
-    - 'app/controllers/gigs_controller.rb'
-    - 'app/controllers/password_resets_controller.rb'
-    - 'app/controllers/sessions_controller.rb'
-    - 'app/controllers/users_controller.rb'
-    - 'app/mailers/application_mailer.rb'
-    - 'config.ru'
-    - 'config/application.rb'
-    - 'config/boot.rb'
-    - 'config/environment.rb'
-    - 'config/environments/development.rb'
-    - 'config/environments/test.rb'
-    - 'config/initializers/assets.rb'
-    - 'config/initializers/carrier_wave.rb'
-    - 'config/routes.rb'
     - 'db/migrate/20200223064131_create_mailboxer.mailboxer_engine.rb'
     - 'db/migrate/20200223064133_add_missing_indices.mailboxer_engine.rb'
     - 'test/controllers/account_activations_controller_test.rb'
