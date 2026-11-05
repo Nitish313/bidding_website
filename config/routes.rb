@@ -1,13 +1,13 @@
 Rails.application.routes.draw do
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
-  get 'password_resets/new'
-  get 'password_resets/edit'
-  get 'sessions/new'
-  get 'signup', to: 'users#new'
-  post 'signup', to: 'users#create'
-  get '/login', to: 'sessions#new'
-  post '/login', to: 'sessions#create'
-  delete '/logout', to: 'sessions#destroy' 
+  get "password_resets/new"
+  get "password_resets/edit"
+  get "sessions/new"
+  get "signup", to: "users#new"
+  post "signup", to: "users#create"
+  get "/login", to: "sessions#new"
+  post "/login", to: "sessions#create"
+  delete "/logout", to: "sessions#destroy" 
   resources :account_activations, only: [:edit]
   resources :users
   resources :password_resets, only: [:new, :create, :edit, :update]
@@ -22,11 +22,11 @@ Rails.application.routes.draw do
     resources :solutions, only: [:create]
   end
   
-  root to: 'home#index'
-  get '/health', to: 'health#show'
-  get '/mygigs', to: 'gigs#mygigs'
-  get '/myproposals', to: 'proposals#myproposals'
-  get '/my_solutions', to: 'solutions#my_solutions'
+  root to: "home#index"
+  get "/health", to: "health#show"
+  get "/mygigs", to: "gigs#mygigs"
+  get "/myproposals", to: "proposals#myproposals"
+  get "/my_solutions", to: "solutions#my_solutions"
 
   resources :users do
     member do
