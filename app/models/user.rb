@@ -13,7 +13,7 @@ class User < ApplicationRecord
   validates :name, presence: true, length: { maximum: 50 }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :email, presence: true, length: { maximum: 255 }, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
-  validates :education, :experience, presence: true, if: Proc.new { |u| u.role == "Freelancer" }
+  validates :education, :experience, presence: true, if: proc { |u| u.role == "Freelancer" }
   ROLES = %w[Client Freelancer].freeze
   validates :role, inclusion: { in: ROLES }, unless: :admin?
   validates :experience, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 80 },
@@ -24,16 +24,16 @@ class User < ApplicationRecord
 
   scope :activated_freelancers, -> { where(activated: true, role: "Freelancer") }
 
-  with_options unless: :admin? do |user|
-    user.validates :industry, :profile_picture, :role, presence: true
+  with_options unless: :admin? do
+    validates :industry, :profile_picture, :role, presence: true
   end
 
-  def User.digest(string)
+  def self.digest(string)
     cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST : BCrypt::Engine.cost
     BCrypt::Password.create(string, cost: cost)
   end
 
-  def User.new_token
+  def self.new_token
     SecureRandom.urlsafe_base64
   end
 

@@ -5,7 +5,7 @@ class Proposal < ApplicationRecord
   has_many :solutions, dependent: :destroy
   has_many :notifications, as: :notifiable, dependent: :destroy
 
-  validates_presence_of :name, :bid, :description
+  validates :name, :bid, :description, presence: true
   validate :gig_accepts_proposal_from_user, on: :create
   validates :bid, numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: Gig::MAX_AMOUNT },
                   allow_nil: true
@@ -16,7 +16,7 @@ class Proposal < ApplicationRecord
   scope :includes_associations, -> { includes(:gig, :user) }
 
   def create_notification
-    Notification.create(actor_id: self.user.id, receiver_id: self.gig.user.id, action: "proposed", notifiable: self)
+    Notification.create(actor_id: user.id, receiver_id: gig.user.id, action: "proposed", notifiable: self)
   end
 
   private

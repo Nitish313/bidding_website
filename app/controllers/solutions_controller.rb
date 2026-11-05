@@ -5,8 +5,7 @@ class SolutionsController < ApplicationController
   before_action :correct_user, only: [:destroy]
   before_action :only_for_owners, only: [:index]
 
-  def index
-  end
+  def index; end
 
   def create
     @solution = @proposal.solutions.build(solution_params)
@@ -64,11 +63,10 @@ class SolutionsController < ApplicationController
 
   def only_for_owners
     @solutions = Solution.where(gig_id: params[:gig_id])
-    if @solutions.any?
-      unless owner_or_admin?(@solutions.first.gig.user) || owner_or_admin?(@solutions.first.proposal.user)
-        flash[:warning] = "Only accessible to the owners."
-        redirect_to current_user
-      end
-    end
+    first = @solutions.first
+    return if first.nil? || owner_or_admin?(first.gig.user) || owner_or_admin?(first.proposal.user)
+
+    flash[:warning] = "Only accessible to the owners."
+    redirect_to current_user
   end
 end

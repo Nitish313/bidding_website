@@ -3,10 +3,6 @@ class UsersController < ApplicationController
   before_action :proper_user, only: [:edit, :update]
   before_action :admin_user, only: [:destroy, :deactivate, :activate]
   before_action :set_user, only: [:show, :edit, :update, :destroy, :deactivate, :activate]
-  def new
-    @user = User.new
-  end
-
   def index
     @users = User.paginate(page: params[:page])
   end
@@ -14,6 +10,12 @@ class UsersController < ApplicationController
   def show
     redirect_to root_path and return unless @user.activated?
   end
+
+  def new
+    @user = User.new
+  end
+
+  def edit; end
 
   def create
     @user = User.new(user_params)
@@ -25,9 +27,6 @@ class UsersController < ApplicationController
     else
       render "new", status: :unprocessable_content
     end
-  end
-
-  def edit
   end
 
   def update

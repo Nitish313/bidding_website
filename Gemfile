@@ -36,32 +36,32 @@ gem "bcrypt", "~> 3.1.7"
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.4.2", require: false
 gem "bootstrap-sass"
-gem "jquery-rails", "~> 4.6"
-gem "will_paginate"
 gem "bootstrap-will_paginate"
-gem "mini_magick"
 gem "carrierwave", "~> 3.1"
+gem "jquery-rails", "~> 4.6"
+gem "mini_magick"
+gem "will_paginate"
 # S3-compatible object storage for uploads in production (Cloudflare R2, AWS S3, ...).
 gem "fog-aws", "~> 3.33"
 gem "lograge", "~> 0.15.1"
 # Error reporting; does nothing until SENTRY_DSN is set.
-gem "sentry-ruby", "~> 7.2"
 gem "sentry-rails", "~> 7.1"
+gem "sentry-ruby", "~> 7.2"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem "bundler-audit", "~> 0.9", require: false
   gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
   gem "rubocop", "~> 1.92.2", require: false
-  gem "rubocop-rails", "~> 2.38.0", require: false
   gem "rubocop-minitest", "~> 0.41.0", require: false
-  gem "bundler-audit", "~> 0.9", require: false
+  gem "rubocop-rails", "~> 2.38.0", require: false
 end
 
 group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
-  gem "web-console", ">= 4.1.0"
-  gem "listen", "~> 3.5"
   gem "letter_opener_web", "~> 3.0"
+  gem "listen", "~> 3.5"
+  gem "web-console", ">= 4.1.0"
 end
 
 group :test do
