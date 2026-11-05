@@ -7,9 +7,17 @@ class GigsController < ApplicationController
     @gigs = Gig.order_list(params[:sort_by]).includes_categories.paginate(page: params[:page])
   end
 
+  def show
+    @gig = Gig.find(params.expect(:id))
+    @proposals = @gig.proposals.order_by_date
+    @awarded_proposal = Proposal.where(id: @gig.awarded_proposal).first
+  end
+
   def new
     @gig = Gig.new
   end
+
+  def edit; end
 
   def create
     @gig = Gig.new(gig_params)
@@ -20,15 +28,6 @@ class GigsController < ApplicationController
     else
       render "new", status: :unprocessable_content
     end
-  end
-
-  def show
-    @gig = Gig.find(params.expect(:id))
-    @proposals = @gig.proposals.order_by_date
-    @awarded_proposal = Proposal.where(id: @gig.awarded_proposal).first
-  end
-
-  def edit
   end
 
   def update

@@ -8,7 +8,7 @@ class Gig < ApplicationRecord
   has_many :solutions, dependent: :destroy
   has_many :notifications, as: :notifiable, dependent: :destroy
   mount_uploaders :attachments, AttachmentUploader
-  validates_presence_of :name, :description, :budget, :location
+  validates :name, :description, :budget, :location, presence: true
   # Amounts are whole currency units; the cap keeps them inside the integer column.
   MAX_AMOUNT = 1_000_000_000
   validates :budget, numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: MAX_AMOUNT },
@@ -18,8 +18,8 @@ class Gig < ApplicationRecord
   validates :skill_list, length: { maximum: 1000 }
   validate :skill_names_fit
   validate :award_is_one_of_this_gigs_proposals, if: :awarded_proposal_changed?
-  after_update :create_notification, if: :saved_change_to_awarded_proposal?
   after_create :create_skills
+  after_update :create_notification, if: :saved_change_to_awarded_proposal?
   after_update :create_skills
 
   scope :order_by_date, -> { order(created_at: :desc) }
@@ -67,8 +67,8 @@ class Gig < ApplicationRecord
   end
 
   def create_notification
-    @proposal = Proposal.find_by(id: self.awarded_proposal)
-    Notification.create(actor_id: self.user_id, receiver_id: @proposal.user_id, action: "awarded", notifiable: self)
+    @proposal = Proposal.find_by(id: awarded_proposal)
+    Notification.create(actor_id: user_id, receiver_id: @proposal.user_id, action: "awarded", notifiable: self)
   end
 
   private

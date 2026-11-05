@@ -9,6 +9,8 @@ class ConversationsController < ApplicationController
     @unread_ids = Conversation.unread_by(@user).ids.to_set
   end
 
+  def show; end
+
   def new
     @recipients = User.all - [@user]
   end
@@ -25,8 +27,6 @@ class ConversationsController < ApplicationController
   rescue ActiveRecord::RecordInvalid => e
     refuse_new_conversation(e.record.errors.full_messages.to_sentence)
   end
-
-  def show; end
 
   def mark_as_read
     @conversation.mark_as_read(@user)

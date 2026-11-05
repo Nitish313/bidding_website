@@ -3,8 +3,9 @@ class PasswordResetsController < ApplicationController
   before_action :valid_user, only: [:edit, :update]
   before_action :check_expiration, only: [:edit, :update]
 
-  def new
-  end
+  def new; end
+
+  def edit; end
 
   def create
     @user = User.find_by(email: params.expect(password_reset: [:email])[:email].to_s.downcase)
@@ -18,9 +19,6 @@ class PasswordResetsController < ApplicationController
       flash[:danger] = "Email address not found"
       render "new", status: :unprocessable_content
     end
-  end
-
-  def edit
   end
 
   def update
@@ -44,9 +42,7 @@ class PasswordResetsController < ApplicationController
   end
 
   def valid_user
-    unless @user&.activated? && @user.authenticated?(:reset, params[:id])
-      redirect_to root_url
-    end
+    redirect_to root_url unless @user&.activated? && @user.authenticated?(:reset, params[:id])
   end
 
   def user_params

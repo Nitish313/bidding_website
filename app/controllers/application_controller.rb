@@ -19,11 +19,7 @@ class ApplicationController < ActionController::Base
   end
 
   def correct_user
-    if current_user.admin?
-      @user = User.find(params.expect(:user_id))
-    else
-      @user = current_user
-    end
+    @user = current_user.admin? ? User.find(params.expect(:user_id)) : current_user
   end
 
   # Admins may view other users' conversations and notifications, but only act as themselves.
@@ -41,7 +37,7 @@ class ApplicationController < ActionController::Base
   def unread_notification_counts
     @unread_notification_counts = 0
     current_user.notifications.each do |notification|
-      @unread_notification_counts += 1 if !notification.is_read?
+      @unread_notification_counts += 1 unless notification.is_read?
     end
   end
 

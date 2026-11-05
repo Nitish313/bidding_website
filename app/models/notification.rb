@@ -3,7 +3,7 @@ class Notification < ApplicationRecord
   belongs_to :receiver, class_name: "User"
   belongs_to :notifiable, polymorphic: true
 
-  validates_presence_of :action
+  validates :action, presence: true
   scope :order_by_date, -> { order(created_at: :desc) }
   scope :includes_associations, -> { includes(:actor, :receiver, :notifiable) }
 end

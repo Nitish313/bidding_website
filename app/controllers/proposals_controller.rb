@@ -9,6 +9,10 @@ class ProposalsController < ApplicationController
     @proposals = Proposal.paginate(page: params[:page], per_page: 20)
   end
 
+  def show
+    @proposal = Proposal.includes_associations.find(params.expect(:id))
+  end
+
   def create
     @gig = Gig.find(params.expect(:gig_id))
     @proposal = @gig.proposals.build(proposal_params)
@@ -24,10 +28,6 @@ class ProposalsController < ApplicationController
 
   def myproposals
     @proposals = Proposal.where(user_id: current_user.id).order_by_date.includes_associations
-  end
-
-  def show
-    @proposal = Proposal.includes_associations.find(params.expect(:id))
   end
 
   def destroy
