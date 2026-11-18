@@ -10,7 +10,7 @@ gem "sprockets-rails", "~> 3.5"
 # Use mysql as the database for Active Record
 gem "mysql2", ">= 0.4.4", "< 0.6.0"
 # Use Puma as the app server
-gem "puma", "~> 8.0"
+gem "puma", "~> 8.1"
 # Use SCSS for stylesheets
 gem "sass-rails", "~> 6.0"
 # Use Terser to minify JavaScript assets in production
