@@ -52,7 +52,7 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem "bundler-audit", "~> 0.9", require: false
   gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
-  gem "rubocop", "~> 1.92.2", require: false
+  gem "rubocop", "~> 1.92.3", require: false
   gem "rubocop-minitest", "~> 0.41.0", require: false
   gem "rubocop-rails", "~> 2.38.0", require: false
 end
