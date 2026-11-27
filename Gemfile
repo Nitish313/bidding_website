@@ -43,7 +43,7 @@ gem "mini_magick"
 gem "will_paginate"
 # S3-compatible object storage for uploads in production (Cloudflare R2, AWS S3, ...).
 gem "fog-aws", "~> 3.33"
-gem "lograge", "~> 0.15.1"
+gem "lograge", "~> 0.16.0"
 # Error reporting; does nothing until SENTRY_DSN is set.
 gem "sentry-rails", "~> 7.1"
 gem "sentry-ruby", "~> 7.2"
