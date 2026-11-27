@@ -45,7 +45,7 @@ gem "will_paginate"
 gem "fog-aws", "~> 3.33"
 gem "lograge", "~> 0.16.0"
 # Error reporting; does nothing until SENTRY_DSN is set.
-gem "sentry-rails", "~> 7.1"
+gem "sentry-rails", "~> 7.3"
 gem "sentry-ruby", "~> 7.2"
 
 group :development, :test do
